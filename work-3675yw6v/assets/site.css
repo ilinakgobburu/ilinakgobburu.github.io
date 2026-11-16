@@ -143,10 +143,11 @@ a.card:hover,a.card:focus-visible{border-color:var(--tint-line);box-shadow:0 2px
 .card .go{font-family:var(--font);font-size:14px;color:var(--accent);font-weight:600}
 .card .status{font-family:var(--font);font-size:12.5px;color:var(--faint)}
 
-/* topic tiles + one section per topic. A tile or a role link (index.html#ml, #trading, ...) lifts
-   that section to sit right under the tiles: CSS order on :target, no JavaScript. The big
-   scroll-margin keeps the header and tiles in view instead of jumping past them. */
-.topic-nav{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+/* topic tiles + one section per topic. A tile or a role link (index.html#ml, ...) shows only that
+   topic; #trading shows Quant + Options; "All Topics" (#all) or no hash shows every topic. Plain CSS
+   (:target and :has), no JavaScript. Browsers without :has() fall back to lifting the chosen topic
+   to the top (CSS order). The big scroll-margin keeps the header and tiles in view. */
+.topic-nav{display:grid;grid-template-columns:minmax(0,.7fr) repeat(4,minmax(0,1fr));gap:12px}
 .topic-nav a{display:flex;flex-direction:column;gap:4px;background:var(--panel);border-radius:var(--radius);
   box-shadow:var(--shadow);border:1px solid transparent;padding:14px 16px;color:inherit;text-decoration:none;
   transition:border-color .15s}
@@ -157,10 +158,13 @@ body:has(#quant:target,#trading:target) .topic-nav a[href="#quant"],
 body:has(#ml:target) .topic-nav a[href="#ml"],
 body:has(#options:target,#trading:target) .topic-nav a[href="#options"],
 body:has(#engineering:target) .topic-nav a[href="#engineering"]{box-shadow:inset 0 0 0 2px var(--accent),var(--shadow)}
+body:not(:has(.topic:target,#trading:target)) .topic-nav a[href="#all"]{box-shadow:inset 0 0 0 2px var(--accent),var(--shadow)}
 .work{display:flex;flex-direction:column}
-.work > [id]{scroll-margin-top:640px}
+.work > [id],#all{scroll-margin-top:640px}
 .work > .anchor{order:-2;display:block;height:0}
 .topic:target,#trading:target ~ #quant,#trading:target ~ #options{order:-1}
+.work:has(> .topic:target) > .topic:not(:target){display:none}
+#trading:target ~ .topic:not(#quant):not(#options){display:none}
 .topic h2{margin:44px 0 14px}
 .topic-body{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px;align-items:start}
 .rows{display:flex;flex-direction:column;gap:10px}
@@ -181,6 +185,7 @@ a.row.also:hover,a.row.also:focus-visible{border-color:var(--tint-line);backgrou
   .tiles{grid-template-columns:repeat(2,minmax(0,1fr))}
   .g-1-1,.g-3-2{grid-template-columns:minmax(0,1fr)}
   .topic-nav{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .topic-nav a.all{grid-column:1 / -1}
   .topic-body{grid-template-columns:minmax(0,1fr)}
 }
 @media (max-width:640px){
