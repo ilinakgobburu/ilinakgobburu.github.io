@@ -49,6 +49,9 @@ h1 .accent,h2 .accent{color:var(--accent)}
 header .lede{color:var(--muted);margin:0;font-size:var(--fs-sub);line-height:1.55;max-width:72ch}
 header .byline{margin:0 0 18px;text-align:right;font-family:var(--serif);font-size:19px;font-weight:600;
   color:var(--heading);letter-spacing:-.005em}
+header .byline a{color:inherit;text-decoration:underline;text-decoration-color:var(--tint-line);
+  text-decoration-thickness:1px;text-underline-offset:4px;transition:color .15s,text-decoration-color .15s}
+header .byline a:hover,header .byline a:focus-visible{color:var(--accent);text-decoration-color:var(--accent)}
 .prov{display:flex;flex-wrap:wrap;gap:6px 20px;margin-top:16px;font-family:var(--font);font-size:14px;color:var(--faint)}
 .prov b{color:var(--text);font-weight:600}
 
