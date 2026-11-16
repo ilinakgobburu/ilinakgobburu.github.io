@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<meta name="referrer" content="no-referrer">
+<title>Covered Call · AAPL</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<div class="wrap">
+
+<nav aria-label="Page">
+  <a class="brand" href="index.html">Portfolio of work</a>
+  <div class="links">
+    <a href="#how">How it was tested</a>
+    <a href="#limits">Limits</a>
+  </div>
+</nav>
+
+<header>
+  <div class="eyebrow">Options · Apple · Course project, Fall 2026</div>
+  <h1>A weekly covered call, and <span class="accent">which decisions mattered</span></h1>
+  <p class="lede">Hold 100 Apple shares, sell one call that expires at the end of the week, hold it to
+    expiry, and repeat. With the strategy fixed, the project measures how much three implementation
+    choices move the result: the strike, the fill price and the time of the order. The backtest covers
+    10 weekly cycles in summer 2026 on hourly option data from LSEG.</p>
+  <div class="prov">
+    <span><b>10</b> weekly cycles</span>
+    <span><b>387</b> call series</span>
+    <span><b>Jun–Sep 2026</b> hourly backtest</span>
+    <span>market data from <b>LSEG</b></span>
+  </div>
+</header>
+
+<div class="tiles">
+  <div class="tile hero">
+    <div class="label">Strike choice</div>
+    <div class="value">$2,514</div>
+    <div class="sub">range in final P&amp;L across six strike rules, the decision that mattered most</div>
+  </div>
+  <div class="tile">
+    <div class="label">Order time</div>
+    <div class="value">$710</div>
+    <div class="sub">range across seven order times. The time fixed in advance ranked last and was kept, to
+      avoid look-ahead bias.</div>
+  </div>
+  <div class="tile">
+    <div class="label">Fill price</div>
+    <div class="value">$61.50</div>
+    <div class="sub">less premium over 10 weeks had every call filled at the bid instead of the mid, a distant third</div>
+  </div>
+  <div class="tile">
+    <div class="label">Booked result</div>
+    <div class="value">+$657</div>
+    <div class="sub">2.4% after margin interest, against +$3,843 for simply holding the shares</div>
+  </div>
+</div>
+
+<h2 id="how">How it was tested</h2>
+<section class="panel">
+  <div class="pb prose">
+    <ul>
+      <li><strong>Rules fixed before testing.</strong> Every parameter was set before any result was
+        seen; none was chosen afterward.</li>
+      <li><strong>Event-driven backtest.</strong> Every trade is booked, and the account is marked at each
+        close from that trade record, so the two cannot disagree.</li>
+      <li><strong>Reg T margin accounting,</strong> including interest on borrowed cash. Available funds
+        never went negative, so every trade was fundable when booked.</li>
+      <li><strong>Fill check.</strong> The mid was tested against actual trade prices by price band,
+        moneyness and liquidity, and validated against a one-minute re-pull of the same contracts.</li>
+      <li><strong>Sensitivity runs on the same engine:</strong> every order time in the session, and
+        alternative strike rules, two of them set from implied volatility (Black-76).</li>
+    </ul>
+  </div>
+</section>
+
+<h2 id="limits">Limits</h2>
+<section class="panel">
+  <div class="pb prose">
+    <ul>
+      <li><strong>It did not beat buy-and-hold.</strong> Apple rose 16.0% over the 10 weeks, so on the 8
+        assigned weeks the cap gave up $7,306 of upside for $3,567 of premium. None of the six strike rules
+        beat holding the shares.</li>
+      <li><strong>One price path.</strong> Ten weekly cycles on one stock in one quarter, with no substantial
+        drawdown in the window, are closer to one observation than ten. The ranking of rules may not hold in another
+        quarter.</li>
+      <li><strong>The mid fill holds only at small size.</strong> The mid tracked trade prices closely, but
+        only 27.4% of trades printed within a quarter-spread of it: fine for one contract a week on a liquid
+        chain, not for larger orders.</li>
+    </ul>
+  </div>
+</section>
+
+<div style="height:14px"></div>
+
+<section class="panel">
+  <div class="ph">Tools and skills</div>
+  <div class="pb card">
+    <div class="tags"><span>options</span><span>backtesting</span><span>Reg T margin</span><span>implied volatility</span><span>Black-76</span><span>Python</span><span>automated tests</span><span>LSEG data</span></div>
+  </div>
+</section>
+
+<p class="reach">For further details or the full analysis, please reach out.</p>
+
+<footer>
+  Course project, algorithmic trading, Fall 2026. Market data from LSEG.
+</footer>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<meta name="referrer" content="no-referrer">
+<title>Option Surface Lab</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js" charset="utf-8"></script>
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<div class="wrap">
+
+<nav aria-label="Page">
+  <a class="brand" href="index.html">Portfolio of work</a>
+  <div class="links">
+    <a href="#how">How it was tested</a>
+    <a href="#results">The control</a>
+    <a href="#limits">Limits</a>
+  </div>
+</nav>
+
+<header>
+  <div class="eyebrow">Options · UUUU and CCJ · Course project, Fall 2026</div>
+  <h1>Where listed option prices <span class="accent">actually exist</span></h1>
+  <p class="lede">A listed option chain looks like a full grid of prices. It isn't: many contracts carry
+    a mark, the midpoint of the closing bid and ask, with no trade behind it, and the mark itself is not
+    a price anyone could trade at. This project measures both problems on options on UUUU, a thinly
+    traded small-cap, with CCJ, a far larger and more liquid name, as a control.</p>
+  <div class="prov">
+    <span><b>460</b> UUUU option contracts</span>
+    <span><b>53</b> sessions, summer 2026</span>
+    <span><b>9</b> expiries</span>
+    <span>market data from <b>LSEG</b></span>
+  </div>
+</header>
+
+<div class="tiles">
+  <div class="tile hero">
+    <div class="label">No-arbitrage test</div>
+    <div class="value">32.8% → 0</div>
+    <div class="sub">of call butterflies priced at the mark imply free money (1,200 of 3,661). At prices you
+      could actually trade, none survive.</div>
+  </div>
+  <div class="tile">
+    <div class="label">Fills at the mid</div>
+    <div class="value">29.3%</div>
+    <div class="sub">of 6,014 trades printed near the mid, so the mid is the wrong fill price most of the time</div>
+  </div>
+  <div class="tile">
+    <div class="label">Cost of a spread</div>
+    <div class="value">117%</div>
+    <div class="sub">how much the mark understated the cost of the median adjacent-strike vertical, across 2,861</div>
+  </div>
+  <div class="tile">
+    <div class="label">Filled with no model</div>
+    <div class="value">88%</div>
+    <div class="sub">of one-sided holes (a call quoted but not its put, or the reverse) are filled exactly by
+      put-call parity: 1,709 of 1,936</div>
+  </div>
+</div>
+
+<h2 id="how">How it was tested</h2>
+<section class="panel">
+  <div class="pb prose">
+    <ul>
+      <li><strong>Mark against last trade.</strong> For every listed contract on every session: is there a
+        mark, a trade, both or neither, and how far apart are they?</li>
+      <li><strong>Model-free no-arbitrage checks.</strong> Strike monotonicity, butterfly convexity and the
+        intrinsic-value floor, tested at the mid and again at prices you could actually trade at.</li>
+      <li><strong>Leave-one-out interpolation test.</strong> Hide a known price, rebuild it from its
+        neighbors and measure the miss, once in price and once in implied volatility (Black-76).</li>
+      <li><strong>Put-call parity fit.</strong> The forward and the discount factor are backed out of the
+        option prices themselves, with no rate or dividend assumed.</li>
+      <li><strong>The same pipeline on a control.</strong> CCJ runs through identical code.</li>
+    </ul>
+  </div>
+</section>
+
+<h2 id="results">Does it generalize? <span class="accent">CCJ as a control</span></h2>
+<p class="lede">The obvious guess was that a more liquid name would close the holes. CCJ's quotes were
+  tighter and more of its trades printed near the mid, yet a larger share of its listed contracts never
+  traded. Liquidity improved each quote without filling the grid: a bigger name lists more strikes,
+  market makers quote all of them, and more contracts end up marked but never traded.</p>
+
+<section class="panel">
+  <div class="ph">UUUU against CCJ<span class="tag">all sessions pooled</span></div>
+  <div class="pb flush">
+    <div id="plot-control" class="plot" style="height:320px" role="img"
+      aria-label="UUUU against CCJ. Listed series with a mark but no trade: 30.5% and 46.1%. Trades printed near the mid: 29.3% and 33.4%. Median spread as a share of the mark: 20.3% and 18.7%. Median gap between mark and trade as a share of the mark: 4.4% and 5.2%."></div>
+    <div class="cap">UUUU against CCJ. Listed series with a mark but no trade: 30.5% vs 46.1%. Trades
+      printed near the mid: 29.3% vs 33.4%. Median bid-ask spread: 20.3% vs 18.7% of the mark. Median
+      gap between mark and trade: 4.4% vs 5.2% of the mark.</div>
+  </div>
+</section>
+
+<h2 id="limits">Limits</h2>
+<section class="panel">
+  <div class="pb prose">
+    <ul>
+      <li><strong>Executable prices are not perfectly clean.</strong> 16 of 4,147 put-call parity
+        conversions survived paying the spread on all four legs. Early exercise and borrowing costs on
+        these American options were not modeled.</li>
+      <li><strong>A suggestive control, not a matched one.</strong> The two names differ in strike spacing
+        and price level, so the direction is informative but the magnitudes are not strictly comparable.</li>
+      <li><strong>Sparsity is a lower bound.</strong> A contract listed with neither a quote nor a trade
+        leaves no trace in the data, so the real holes are at least this large.</li>
+    </ul>
+  </div>
+</section>
+
+<div style="height:14px"></div>
+
+<section class="panel">
+  <div class="ph">Tools and skills</div>
+  <div class="pb card">
+    <div class="tags"><span>options</span><span>implied volatility</span><span>Black-76</span><span>put-call parity</span><span>no-arbitrage checks</span><span>Python</span><span>Plotly</span><span>LSEG data</span></div>
+  </div>
+</section>
+
+<p class="reach">For further details or the full analysis, please reach out.</p>
+
+<footer>
+  Course project, algorithmic trading, Fall 2026. Market data from LSEG.
+</footer>
+
+</div>
+
+<script>
+// Results only: summary statistics per name, all sessions pooled. No market data series.
+const ROWS = [
+  ['Mark, no trade', 'listed series with a mark but no trade', 30.5, 46.1],
+  ['Trades near the mid', 'trades that printed near the mid', 29.3, 33.4],
+  ['Spread, % of mark', 'median bid-ask spread, as a share of the mark', 20.3, 18.7],
+  ['Mark–trade gap', 'median gap between mark and trade, as a share of the mark', 4.4, 5.2]
+];
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+function drawControl(){
+  const el = document.getElementById('plot-control');
+  const narrow = el.clientWidth < 560;
+  const trace = (name, col, color) => ({
+    type: 'bar', orientation: 'h', name,
+    y: ROWS.map(r => r[0]), x: ROWS.map(r => r[col]), customdata: ROWS.map(r => r[1]),
+    text: ROWS.map(r => r[col].toFixed(1) + '%'), textposition: 'outside', cliponaxis: false,
+    textfont: {family: css('--font'), color: css('--text'), size: 12},
+    marker: {color, cornerradius: 4},
+    hovertemplate: '<b>%{x:.1f}%</b> · ' + name + '<br>%{customdata}<extra></extra>'
+  });
+  const layout = {
+    paper_bgcolor: css('--panel'), plot_bgcolor: css('--panel'),
+    font: {family: css('--font'), color: css('--muted'), size: 12},
+    margin: {l: narrow ? 128 : 150, r: 40, t: 10, b: narrow ? 64 : 56},
+    dragmode: false, hovermode: 'closest', barmode: 'group', bargap: 0.32, bargroupgap: 0.12,
+    showlegend: true,
+    hoverlabel: {bgcolor: css('--panel-hi'), bordercolor: css('--line'),
+      font: {family: css('--font'), color: css('--text'), size: 12}},
+    legend: {orientation: 'h', x: 0, y: narrow ? -0.2 : -0.16, traceorder: 'normal', font: {color: css('--muted')}},
+    xaxis: {range: [0, 54], dtick: narrow ? 20 : 10, ticksuffix: '%', gridcolor: css('--line-soft'),
+      zeroline: true, zerolinecolor: css('--line'), fixedrange: true},
+    yaxis: {autorange: 'reversed', categoryorder: 'array', categoryarray: ROWS.map(r => r[0]),
+      ticks: '', ticksuffix: '  ', fixedrange: true, tickfont: {color: css('--text')}}
+  };
+  Plotly.react(el, [trace('UUUU', 2, css('--mark')), trace('CCJ', 3, css('--both'))], layout,
+    {displayModeBar: false, responsive: true});
+}
+
+if (typeof Plotly !== 'undefined') {
+  drawControl();
+  let t; window.addEventListener('resize', () => { clearTimeout(t); t = setTimeout(drawControl, 150); });
+} else {
+  document.getElementById('plot-control').textContent = 'Chart could not load. The values are listed below.';
+}
+</script>
+</body>
+</html>

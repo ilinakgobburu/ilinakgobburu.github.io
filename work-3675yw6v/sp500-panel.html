@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<meta name="referrer" content="no-referrer">
+<title>Survivorship-Free S&amp;P 500 Panel</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<div class="wrap">
+
+<nav aria-label="Page">
+  <a class="brand" href="index.html">Portfolio of work</a>
+  <div class="links">
+    <a href="#why">Why it's needed</a>
+    <a href="#built">What's built</a>
+    <a href="#firm-ids">Firm IDs</a>
+    <a href="#limits">Limits</a>
+    <a href="#tools">Tools</a>
+  </div>
+</nav>
+
+<header>
+  <div class="eyebrow">Data engineering · Team course project, Fall 2026 · Work in progress</div>
+  <h1>A <span class="accent">survivorship-bias-free</span> S&amp;P 500 panel, point in time since 1996</h1>
+  <p class="lede">Every firm in the S&amp;P 500 on each date since 1996, including the ones later removed,
+    merged or delisted. Each firm sits under one permanent SEC ID, its CIK, so renamed and reused
+    tickers never split one company or splice two together. Index membership and, from 2016 on,
+    firm IDs are built; a daily volatility layer is being added on top.</p>
+  <div class="prov">
+    <span><b>Work in progress</b></span>
+    <span>status as of the <b>2026-11-11</b> build</span>
+    <span>membership <b>1996-01-02</b> to <b>2026-11-04</b></span>
+  </div>
+</header>
+
+<div class="tiles">
+  <div class="tile">
+    <div class="label">Index history</div>
+    <div class="value">1,269</div>
+    <div class="sub">stays in the index since 1996, every one kept; 503 still open</div>
+  </div>
+  <div class="tile">
+    <div class="label">Survivorship</div>
+    <div class="value">125 of 453</div>
+    <div class="sub">firms in the index on 2016-01-04 (with an ID so far) that have left it since</div>
+  </div>
+  <div class="tile hero">
+    <div class="label">Firm IDs, 2016 on</div>
+    <div class="value">93%</div>
+    <div class="sub">707 of 764 firm segments carry a checked SEC CIK; every current member has one</div>
+  </div>
+  <div class="tile">
+    <div class="label">The LLM's own ID guesses</div>
+    <div class="value">0 of 273</div>
+    <div class="sub">were right, so none is used. The model names the company; SEC EDGAR supplies the ID</div>
+  </div>
+</div>
+
+<h2 id="why">Why it is needed: <span class="accent">free index lists only know the survivors</span></h2>
+<section class="panel">
+  <div class="pb prose">
+    <ul>
+      <li><strong>Today's list hides the losers.</strong> Free S&amp;P 500 lists give only today's
+        members. A backtest built on them quietly drops every firm that failed or was acquired, so
+        the strategy looks better than it was.</li>
+      <li><strong>Tickers are not firms.</strong> CCI was Citicorp in 1996 and is Crown Castle today;
+        FB became META. A join on ticker either splices two companies together or loses one.</li>
+      <li><strong>The free volatility source closed.</strong> The standard free library of daily
+        realized volatility closed in 2022, and the closest current one covers only today's large
+        caps, so it has the same survivor problem.</li>
+    </ul>
+  </div>
+</section>
+
+<h2 id="built">What is built, and what is not yet</h2>
+<div class="grid g-1-1">
+  <section class="panel">
+    <div class="ph">Built</div>
+    <div class="pb prose">
+      <ul>
+        <li><strong>Index membership, 1996 to 2026.</strong> Every stay kept, including firms that
+          left; today's members match Wikipedia's current list.</li>
+        <li><strong>Permanent firm IDs from 2016 on,</strong> with the evidence for each ID, or the
+          reason it was withheld, stored next to it.</li>
+        <li><strong>One documented SQLite database,</strong> rebuilt from the raw inputs in one step;
+          211 automated tests pass.</li>
+        <li><strong>Daily macro series from FRED.</strong></li>
+      </ul>
+    </div>
+  </section>
+  <section class="panel">
+    <div class="ph">In progress</div>
+    <div class="pb prose">
+      <ul>
+        <li><strong>Daily realized volatility from intraday trades:</strong> code and a 20-firm pilot;
+          the full pull has not run yet.</li>
+        <li><strong>A covariance network between firms:</strong> planned.</li>
+        <li><strong>Wikipedia attention data:</strong> an 18-firm sample so far.</li>
+        <li><strong>Firm IDs before 2016:</strong> those exits are listed but not resolved yet.</li>
+      </ul>
+      <p style="margin-top:12px">The aim: test whether a firm's attention or its place in the network
+        leads its realized volatility, and how much dropping delisted firms distorts a volatility
+        backtest.</p>
+    </div>
+  </section>
+</div>
+
+<h2 id="firm-ids">Firm IDs: <span class="accent">an LLM proposes, two sources check</span></h2>
+<div class="grid g-3-2">
+  <section class="panel">
+    <div class="ph">How one ID is decided</div>
+    <div class="pb prose">
+      <ul>
+        <li><strong>A local LLM names the company</strong> that traded under the ticker on its last
+          day in the index. That is its only job.</li>
+        <li><strong>SEC EDGAR supplies the ID.</strong> The CIK is the one EDGAR's records give for
+          that name, never a number the model wrote.</li>
+        <li><strong>Wikipedia is the second witness.</strong> Its record of index changes says which
+          firm S&amp;P removed that day. When it disagrees with the model, the model's answer is
+          dropped and Wikipedia's name is searched instead.</li>
+        <li><strong>Conflicts are withheld, not guessed.</strong> When the evidence disagrees, the ID
+          stays empty and the reason is recorded.</li>
+      </ul>
+    </div>
+  </section>
+  <section class="panel">
+    <div class="ph">Why the checks matter</div>
+    <div class="pb prose">
+      <p>The model was also asked for each CIK. None of its 273 was right, and it rated every one
+        "high" confidence. It fits names to letters: TAP became Atmos Energy (it is Molson Coors).</p>
+      <p>An early version trusted an EDGAR name match alone. An audit found that 44 of its 144 IDs
+        (31%) were the wrong firm, real companies whose names happen to fit the ticker. With the second
+        source and rules for known traps, the current build finds 212 of the 273 IDs and withholds 61.</p>
+    </div>
+  </section>
+</div>
+
+<h2 id="limits">Limits</h2>
+<section class="panel">
+  <div class="pb prose">
+    <ul>
+      <li><strong>Firm IDs start in 2016.</strong> Exits before 2016 are listed but unresolved, and
+        57 segments from 2016 on still have no ID.</li>
+      <li><strong>The hand check is small and was not blind.</strong> On a 30-stay random sample, 24
+        IDs agreed, none was wrong and 6 were blank. The answers were drafted by an AI assistant after
+        seeing the pipeline's output and reviewed by a team member. With 30 rows, these are estimates.</li>
+      <li><strong>Licensed data stays licensed.</strong> The membership and firm-ID layers use only
+        public sources; nothing from the licensed intraday data is published.</li>
+    </ul>
+  </div>
+</section>
+
+<div style="height:14px"></div>
+
+<section class="panel" id="tools">
+  <div class="ph">Tools and sources</div>
+  <div class="pb card">
+    <div class="tags"><span>point-in-time data</span><span>survivorship bias</span><span>SQLite</span><span>SEC EDGAR</span><span>local LLM</span><span>FRED</span><span>WRDS TAQ</span><span>automated tests</span></div>
+    <p style="margin-top:12px">Sources as of the 2026-11-11 build: an open-source S&amp;P 500
+      membership history (MIT license), updated from S&amp;P Dow Jones Indices press releases;
+      Wikipedia, "Historical components of the S&amp;P 500" (CC BY-SA 4.0); SEC EDGAR; FRED (Federal
+      Reserve Bank of St. Louis).</p>
+  </div>
+</section>
+
+<p class="reach">For further details or the full analysis, please reach out.</p>
+
+<footer>
+  Team course project, data wrangling, Fall 2026. Work in progress; every figure is as of the
+  2026-11-11 build unless a date says otherwise.
+</footer>
+
+</div>
+</body>
+</html>

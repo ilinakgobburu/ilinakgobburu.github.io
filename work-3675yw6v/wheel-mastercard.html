@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<meta name="referrer" content="no-referrer">
+<title>The Wheel · Mastercard</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js" charset="utf-8"></script>
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<div class="wrap">
+
+<nav aria-label="Page">
+  <a class="brand" href="index.html">Portfolio of work</a>
+  <div class="links">
+    <a href="#how">How it was tested</a>
+    <a href="#results">Mastercard results</a>
+    <a href="#five-stocks">Five stocks</a>
+    <a href="#limits">Limits</a>
+  </div>
+</nav>
+
+<header>
+  <div class="eyebrow">Options · Mastercard · Course project, Fall 2026</div>
+  <h1>The wheel on <span class="accent">Mastercard</span>, then five stocks</h1>
+  <p class="lede">The wheel sells cash-secured puts, takes the shares if a put is assigned, then sells calls
+    against them until they are called away. It is short volatility: like selling insurance, it is paid a
+    premium up front, and it should profit when implied volatility is above what the stock then realizes.
+    The thesis was a higher Sharpe ratio than holding Mastercard; part two runs the same wheel on five
+    stocks as one portfolio.</p>
+  <div class="prov">
+    <span>settings chosen on <b>2024–2025</b></span>
+    <span>tested once on <b>2026</b>, Jan 2 to Oct 16</span>
+    <span><b>$100,000</b> starting cash</span>
+    <span>market data from <b>LSEG</b></span>
+  </div>
+</header>
+
+<div class="tiles">
+  <div class="tile hero">
+    <div class="label">Sharpe ratio, 2026</div>
+    <div class="value">2.55</div>
+    <div class="sub">vs 0.45 for holding Mastercard</div>
+  </div>
+  <div class="tile">
+    <div class="label">Return, 2026</div>
+    <div class="value">+10.1%</div>
+    <div class="sub">vs +10.2% holding Mastercard and +10.5% for the Cboe PutWrite index</div>
+  </div>
+  <div class="tile">
+    <div class="label">Worst drawdown</div>
+    <div class="value">−1.3%</div>
+    <div class="sub">vs −18.4% for Mastercard itself</div>
+  </div>
+  <div class="tile">
+    <div class="label">Implied above realized</div>
+    <div class="value">9 of 9</div>
+    <div class="sub">test cycles, 27.7% against 21.8% on average</div>
+  </div>
+</div>
+
+<h2 id="how">How it was tested</h2>
+<section class="panel">
+  <div class="pb prose">
+    <ul>
+      <li><strong>Survivorship-bias-free stock screen.</strong> Mastercard came out of a mean-reversion
+        screen of the S&amp;P 500 as it stood at the end of 2023, including stocks later removed.</li>
+      <li><strong>Settings fixed before testing.</strong> Chosen on 2024–2025 and locked in before 2026
+        was run, once. A walk-forward test checked the choice.</li>
+      <li><strong>Black-Scholes valuation.</strong> Implied volatility and delta for each option come from
+        its quoted price.</li>
+      <li><strong>Cash account under Reg T.</strong> Every put is cash-secured and every call covered;
+        T-bill interest and dividends are counted.</li>
+      <li><strong>Fill-price check</strong> against actual trades, plus a stress test selling at the bid.</li>
+    </ul>
+  </div>
+</section>
+
+<h2 id="results">Mastercard: about the same return, far less risk</h2>
+<section class="panel">
+  <div class="pb prose">
+    <ul>
+      <li><strong>Where the profit came from.</strong> Option premium was 60% of it and T-bill interest
+        on the cash 29%; the one assignment supplied the other 11%.</li>
+      <li><strong>Robust to worse fills.</strong> Selling every option at the bid cut the 2026 return
+        from +10.1% to +9.4%.</li>
+    </ul>
+  </div>
+</section>
+
+<h2 id="five-stocks">Part two: the same wheel on <span class="accent">five stocks</span></h2>
+<p class="lede">The wheel's real risk is one stock falling hard while it holds the shares: Fiserv's wheel
+  returned −48.7% in 2024–2025. So the same wheel ran on all five stocks the screen picked (Mastercard,
+  APA, Visa, Fiserv, Analog Devices), $100,000 each, as one $500,000 portfolio, against the five stocks
+  held, T-bills and the Cboe PutWrite index.</p>
+
+<div class="grid g-1-1">
+  <section class="panel">
+    <div class="ph">What it shows</div>
+    <div class="pb prose">
+      <ul>
+        <li><strong>Spreading it out cut risk.</strong> In 2024–2025 the portfolio's volatility was 9.8%
+          against 15.5% for one wheel on average, and its worst drawdown −14.5% against −26.3%. The five
+          wheels' monthly results barely moved together (median correlation 0.12).</li>
+        <li><strong>The volatility premium showed up across stocks.</strong> In 2026, 36 of the 45
+          options sold were priced above the volatility that followed, by 6.8 points on average. In
+          2024–2025 a few large misses pulled the average gap to −1.1 points.</li>
+        <li><strong>Holding won on return in 2026,</strong> +28.4% against +14.0%, at about the same
+          Sharpe ratio. Once the wheel owns a stock, the call it sells caps the gain: APA returned
+          +96.8% held, but +33.4% in its wheel.</li>
+      </ul>
+    </div>
+  </section>
+  <section class="panel">
+    <div class="ph">Sharpe ratio, 2026 test</div>
+    <div class="pb flush">
+      <div id="plot-sharpe" class="plot" style="height:330px" role="img"
+        aria-label="Sharpe ratio in the 2026 test. Mastercard: wheel 2.55, buy and hold 0.45, Cboe PutWrite 1.70. Five stocks: wheel portfolio 1.55, five stocks held 1.59, Cboe PutWrite 1.70."></div>
+      <div class="cap">Mastercard: wheel 2.55, held 0.45. Five stocks: wheel portfolio 1.55, held 1.59.
+        Cboe PutWrite index 1.70.</div>
+    </div>
+  </section>
+</div>
+
+<h2 id="limits">Limits</h2>
+<section class="panel">
+  <div class="pb prose">
+    <ul>
+      <li><strong>No real crash in the test.</strong> Selling volatility means many small wins and a rare
+        large loss. Mastercard's worst drop in 2026 was −18.4%, so about ten months of one stock does not
+        show how the wheel would handle a crash.</li>
+      <li><strong>Choosing the setting did not help.</strong> The chosen setting's 2026 Sharpe ratio was
+        2.55, against 2.59 for the default fixed before looking at any data. The result depends much more
+        on the stock and the period than on the setting.</li>
+      <li><strong>Prices and costs.</strong> Daily closing quotes, no commissions.</li>
+    </ul>
+  </div>
+</section>
+
+<div style="height:14px"></div>
+
+<section class="panel">
+  <div class="ph">Tools and skills</div>
+  <div class="pb card">
+    <div class="tags"><span>options</span><span>short volatility</span><span>Black-Scholes</span><span>walk-forward</span><span>Reg T</span><span>backtesting</span><span>PutWrite benchmark</span><span>LSEG data</span></div>
+  </div>
+</section>
+
+<p class="reach">For further details or the full analysis, please reach out.</p>
+
+<footer>
+  Course project, algorithmic trading, Fall 2026. Market data from LSEG.
+</footer>
+
+</div>
+
+<script>
+// Results only: Sharpe ratio of each book in the 2026 test (monthly, T-bill as risk-free).
+const GROUPS = ['Mastercard', 'Five stocks'];
+const SERIES = [
+  ['Wheel', [2.55, 1.55], '--mark'],
+  ['Buy and hold', [0.45, 1.59], '--both'],
+  ['Cboe PutWrite index', [1.70, 1.70], '--reverted']
+];
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+function drawSharpe(){
+  const el = document.getElementById('plot-sharpe');
+  const traces = SERIES.map(([name, vals, color]) => ({
+    type: 'bar', orientation: 'h', name, x: vals, y: GROUPS,
+    text: vals.map(v => v.toFixed(2)), textposition: 'outside', cliponaxis: false,
+    textfont: {family: css('--font'), color: css('--text'), size: 12},
+    marker: {color: css(color), cornerradius: 4, line: {color: css('--panel'), width: 2}},
+    hovertemplate: '<b>%{x:.2f}</b> Sharpe<br>%{y}<extra>' + name + '</extra>'}));
+  const layout = {
+    paper_bgcolor: css('--panel'), plot_bgcolor: css('--panel'),
+    font: {family: css('--font'), color: css('--muted'), size: 12},
+    margin: {l: 92, r: 22, t: 8, b: 92},
+    dragmode: false, hovermode: 'closest', barmode: 'group', bargap: 0.28, bargroupgap: 0.08,
+    showlegend: true,
+    hoverlabel: {bgcolor: css('--panel-hi'), bordercolor: css('--line'),
+      font: {family: css('--font'), color: css('--text'), size: 12}},
+    legend: {orientation: 'h', x: 0, y: -0.24, traceorder: 'normal', font: {color: css('--muted')}},
+    xaxis: {title: {text: 'Sharpe ratio', standoff: 6}, range: [0, 3], dtick: 0.5,
+      gridcolor: css('--line-soft'), zeroline: false, fixedrange: true},
+    yaxis: {autorange: 'reversed', ticks: '', fixedrange: true, tickfont: {color: css('--text')}}
+  };
+  Plotly.react(el, traces, layout, {displayModeBar: false, responsive: true});
+}
+
+if (typeof Plotly !== 'undefined') {
+  drawSharpe();
+  let t; window.addEventListener('resize', () => { clearTimeout(t); t = setTimeout(drawSharpe, 150); });
+} else {
+  document.getElementById('plot-sharpe').textContent = 'Chart could not load. The values are listed below.';
+}
+</script>
+</body>
+</html>

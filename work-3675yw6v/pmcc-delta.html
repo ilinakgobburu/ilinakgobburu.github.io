@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<meta name="referrer" content="no-referrer">
+<title>Poor Man's Covered Call · DAL</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js" charset="utf-8"></script>
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<div class="wrap">
+
+<nav aria-label="Page">
+  <a class="brand" href="index.html">Portfolio of work</a>
+  <div class="links">
+    <a href="#how">How it was tested</a>
+    <a href="#results">Results</a>
+    <a href="#limits">Limits</a>
+  </div>
+</nav>
+
+<header>
+  <div class="eyebrow">Options · Delta Air Lines · Course project, Fall 2026</div>
+  <h1>Poor Man's Covered Call on <span class="accent">Delta Air Lines</span></h1>
+  <p class="lede">A covered call needs 100 shares. A Poor Man's Covered Call holds one long-dated call
+    (a LEAP) in their place and sells a one-month call against it each month, so it costs far less to
+    open, but the LEAP loses time value every day and shares do not. Delta was the test case because
+    airline demand is seasonal, and this structure does best when one month is priced richly against
+    the year as a whole.</p>
+  <div class="prov">
+    <span><b>2019–2023</b> daily backtest</span>
+    <span><b>59</b> monthly cycles</span>
+    <span><b>36</b> engine tests</span>
+    <span>market data from <b>LSEG</b></span>
+  </div>
+</header>
+
+<div class="tiles">
+  <div class="tile hero">
+    <div class="label">PMCC profit</div>
+    <div class="value">+$324</div>
+    <div class="sub">+25.7% on $1,262 of cash to open, one contract</div>
+  </div>
+  <div class="tile">
+    <div class="label">Covered call</div>
+    <div class="value">−$222</div>
+    <div class="sub">and −$476 for buy-and-hold, as Delta fell from $50.09 to $40.23</div>
+  </div>
+  <div class="tile">
+    <div class="label">Cash to open</div>
+    <div class="value">$1,262</div>
+    <div class="sub">vs $4,662 for the covered call, but staying within margin rules took $4,831</div>
+  </div>
+  <div class="tile">
+    <div class="label">Worst fall</div>
+    <div class="value">−33.6%</div>
+    <div class="sub">on the cash margin rules required, vs −63.4% for the covered call</div>
+  </div>
+</div>
+
+<h2 id="how">How it was tested</h2>
+<section class="panel">
+  <div class="pb prose">
+    <ul>
+      <li><strong>Daily backtest with no look-ahead.</strong> Every decision uses only that day's quotes.</li>
+      <li><strong>Black-Scholes valuation.</strong> Implied volatility and delta for each option come from its quoted price.</li>
+      <li><strong>Reg T margin, every day.</strong> The account is checked against margin rules on each day of the test, including nights after an assignment.</li>
+      <li><strong>Same engine, same data</strong> for the covered call and buy-and-hold benchmarks, plus a stress test at bid and ask prices.</li>
+      <li><strong>36 tests on the engine,</strong> checked against answers worked out by hand.</li>
+    </ul>
+  </div>
+</section>
+
+<h2 id="results">Results</h2>
+<p class="lede">The strategy made money over a period in which holding the stock lost it, and it needed far
+  less cash to open. It did not survive worse fills: at bid and ask prices it lost $170.</p>
+
+<section class="panel">
+  <div class="ph">Profit and loss, 2019–2023<span class="tag">one contract or 100 shares</span></div>
+  <div class="pb flush">
+    <div id="plot-pnl" class="plot" style="height:300px" role="img"
+      aria-label="Profit and loss by book. PMCC at mid prices plus $324; PMCC at bid and ask minus $170; covered call minus $222; covered call at bid and ask minus $402; buy and hold minus $476."></div>
+    <div class="cap">PMCC +$324 at mid prices and −$170 at bid and ask. Covered call −$222 and −$402.
+      Buy-and-hold, with dividends, −$476.</div>
+  </div>
+</section>
+
+<h2 id="limits">Limits</h2>
+<section class="panel">
+  <div class="pb prose">
+    <ul>
+      <li><strong>One stock, one period.</strong> A single stock over one five-year window.</li>
+      <li><strong>Prices.</strong> Daily closing quotes rather than guaranteed execution prices; the profit
+        depends on filling near the mid.</li>
+      <li><strong>Costs left out.</strong> No commissions, and no interest on cash.</li>
+    </ul>
+  </div>
+</section>
+
+<div style="height:14px"></div>
+
+<section class="panel">
+  <div class="ph">Tools and skills</div>
+  <div class="pb card">
+    <div class="tags"><span>options</span><span>LEAPs</span><span>Black-Scholes</span><span>Reg T margin</span><span>backtesting</span><span>testing</span><span>LSEG data</span></div>
+  </div>
+</section>
+
+<p class="reach">For further details or the full analysis, please reach out.</p>
+
+<footer>
+  Course project, algorithmic trading, Fall 2026. Market data from LSEG.
+</footer>
+
+</div>
+
+<script>
+// Results only: final profit and loss of each book, one contract or 100 shares.
+// [label, P&L, group, short label for phone widths]
+const BOOKS = [
+  ['PMCC', 324, 'pmcc', 'PMCC'],
+  ['PMCC, bid/ask', -170, 'pmcc', 'PMCC,<br>bid/ask'],
+  ['Covered call', -222, 'bench', 'Covered<br>call'],
+  ['Covered call, bid/ask', -402, 'bench', 'Covered call,<br>bid/ask'],
+  ['Buy and hold', -476, 'bench', 'Buy and<br>hold']
+];
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const usd = v => (v < 0 ? '−' : '+') + '$' + Math.abs(v).toLocaleString('en-US');
+
+function drawPnl(){
+  const el = document.getElementById('plot-pnl');
+  const narrow = el.clientWidth < 560;
+  const lab = b => narrow ? b[3] : b[0];
+  const trace = (grp, name, color) => {
+    const rows = BOOKS.filter(b => b[2] === grp);
+    return {type: 'bar', orientation: 'h', name, x: rows.map(b => b[1]), y: rows.map(lab),
+      customdata: rows.map(b => b[0]),
+      text: rows.map(b => usd(b[1])), textposition: 'outside', cliponaxis: false,
+      textfont: {family: css('--font'), color: css('--text'), size: 12},
+      marker: {color, cornerradius: 4}, width: 0.56,
+      hovertemplate: '<b>%{text}</b><extra>%{customdata}</extra>'};
+  };
+  const layout = {
+    paper_bgcolor: css('--panel'), plot_bgcolor: css('--panel'),
+    font: {family: css('--font'), color: css('--muted'), size: 12},
+    margin: {l: narrow ? 92 : 150, r: 14, t: 10, b: narrow ? 74 : 62},
+    dragmode: false, hovermode: 'closest', barmode: 'overlay', showlegend: true,
+    hoverlabel: {bgcolor: css('--panel-hi'), bordercolor: css('--line'),
+      font: {family: css('--font'), color: css('--text'), size: 12}},
+    legend: {orientation: 'h', x: 0, y: narrow ? -0.36 : -0.26, font: {color: css('--muted')}},
+    xaxis: {title: {text: 'profit and loss ($)', standoff: 6}, range: narrow ? [-820, 560] : [-640, 480],
+      dtick: narrow ? 400 : 200,
+      tickformat: ',d', gridcolor: css('--line-soft'), zeroline: true, zerolinecolor: css('--faint'),
+      zerolinewidth: 1, fixedrange: true},
+    yaxis: {autorange: 'reversed', categoryorder: 'array', categoryarray: BOOKS.map(lab),
+      ticks: '', fixedrange: true, tickfont: {color: css('--text')}}
+  };
+  Plotly.react(el, [trace('pmcc', 'PMCC', css('--mark')),
+    trace('bench', 'Covered call and buy-and-hold', css('--reverted'))], layout,
+    {displayModeBar: false, responsive: true});
+}
+
+if (typeof Plotly !== 'undefined') {
+  drawPnl();
+  let t; window.addEventListener('resize', () => { clearTimeout(t); t = setTimeout(drawPnl, 150); });
+} else {
+  document.getElementById('plot-pnl').textContent = 'Chart could not load. The values are listed below.';
+}
+</script>
+</body>
+</html>

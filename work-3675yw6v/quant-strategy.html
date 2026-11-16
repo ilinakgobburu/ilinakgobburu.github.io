@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<meta name="referrer" content="no-referrer">
+<title>Multi-Asset Strategy · Live Paper Run</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<div class="wrap">
+
+<nav aria-label="Page">
+  <a class="brand" href="index.html">Portfolio of work</a>
+  <div class="links">
+    <a href="#strategy">Strategy</a>
+    <a href="#research">Research</a>
+    <a href="#backtest">Backtest</a>
+    <a href="#live">Live run</a>
+    <a href="#limits">Limits</a>
+  </div>
+</nav>
+
+<header>
+  <div class="eyebrow">Quant trading · Live paper run · Course project, Fall 2026</div>
+  <h1>A multi-asset strategy, traded live on a <span class="accent">paper $50M</span> account</h1>
+  <p class="lede">One book with four parts: futures trend-following, merger arbitrage, selling put options
+    on ETFs, and a crash hedge, chosen from 60+ tests whose rules were written before they ran. It is
+    trading on an Interactive Brokers paper (simulated) account from Nov 2 to Dec 1, 2026, against a simple
+    benchmark of one-third SPY, two-thirds T-bills. The case for it is lower risk, not higher return.</p>
+  <div class="prov">
+    <span><b>$50M</b> paper (simulated)</span>
+    <span><b>2005–2025</b> history</span>
+    <span><b>3</b> backtest windows</span>
+    <span><b>21</b> live sessions</span>
+  </div>
+</header>
+
+<div class="tiles">
+  <div class="tile hero">
+    <div class="label">Max drawdown</div>
+    <div class="value">−8.3%</div>
+    <div class="sub">Backtest, 2015–22 design window, vs −33.7% for SPY. Smaller than SPY's drawdown in all three windows.</div>
+  </div>
+  <div class="tile">
+    <div class="label">Backtest Sharpe</div>
+    <div class="value">0.99</div>
+    <div class="sub">vs 0.75 for the benchmark, 2015–22 design window. Cash assumed to earn 0%. The edge is not statistically significant.</div>
+  </div>
+  <div class="tile">
+    <div class="label">Research</div>
+    <div class="value">60+</div>
+    <div class="sub">strategy and overlay tests, rules written before each ran. Most were rejected.</div>
+  </div>
+  <div class="tile">
+    <div class="label">Live return</div>
+    <div class="value" id="tile-live-value">—</div>
+    <div class="sub" id="tile-live-sub">Return on the paper account since the start. Live numbers load with the page.</div>
+  </div>
+</div>
+
+<h2 id="strategy">The strategy: <span class="accent">four sleeves</span>, one book</h2>
+
+<div class="grid g-1-1">
+  <section class="panel">
+    <div class="ph">The four sleeves</div>
+    <div class="pb prose">
+      <ul>
+        <li><strong>Trend-following.</strong> Long or short futures on stock indexes, bonds, currencies and
+          commodities, following each market's price trend.</li>
+        <li><strong>Merger arbitrage.</strong> Buys announced takeover targets to earn the small gap to the
+          offer price if the deal closes.</li>
+        <li><strong>Put-writing.</strong> Sells cash-secured put options on four ETFs and collects the premium.</li>
+        <li><strong>Crash hedge.</strong> Part of the put premium buys far out-of-the-money puts that pay off
+          only in a large fall.</li>
+      </ul>
+    </div>
+  </section>
+  <section class="panel" id="research">
+    <div class="ph">How it was chosen and built</div>
+    <div class="pb prose">
+      <ul>
+        <li><strong>Rules written first.</strong> 60+ pre-registered strategy and overlay tests; most were rejected.</li>
+        <li><strong>Walk-forward backtests</strong> on three windows, with block-bootstrap Sharpe tests and Holm
+          correction for multiple testing.</li>
+        <li><strong>Bias checks</strong> caught a look-ahead bias that fully explained one variant's 1.15 Sharpe,
+          a data field that leaked deal outcomes, a futures-roll bug, and stale option quotes (re-marked, Sharpe
+          restated).</li>
+        <li><strong>Live trading</strong> through the Interactive Brokers API: automated scheduling with guarded
+          manual recovery.</li>
+        <li><strong>Who did what.</strong> The code was written with an AI coding assistant (Claude Code). I
+          directed it: I chose the strategy, set the rules and guardrails, and made the research and live-run
+          decisions.</li>
+      </ul>
+    </div>
+  </section>
+</div>
+
+<h2 id="backtest">Backtest: <span class="accent">lower drawdown than SPY</span>, not higher return</h2>
+<p class="lede">The final design in each window. The rules were designed on 2015–22 and frozen for a first
+  look at 2005–14; 2023–25 was a second look. Sharpe ratios assume cash earns 0%.</p>
+
+<div class="grid g-3-2">
+  <section class="panel">
+    <div class="ph">Final design, by window<span class="tag">cash earns 0%</span></div>
+    <div class="pb">
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead><tr><th class="l">Window</th><th>2005–14</th><th>2015–22</th><th>2023–25</th></tr></thead>
+          <tbody>
+            <tr><td class="l" colspan="4"><b>Sharpe ratio</b></td></tr>
+            <tr><td class="l">Strategy</td><td><b>0.70</b></td><td><b>0.99</b></td><td><b>1.69</b></td></tr>
+            <tr><td class="l muted">Benchmark</td><td class="muted">0.64</td><td class="muted">0.75</td><td class="muted">2.04</td></tr>
+            <tr><td class="l" colspan="4"><b>Max drawdown</b></td></tr>
+            <tr><td class="l">Strategy</td><td><b>−14.1%</b></td><td><b>−8.3%</b></td><td><b>−6.6%</b></td></tr>
+            <tr><td class="l muted">Benchmark</td><td class="muted">−20.9%</td><td class="muted">−11.5%</td><td class="muted">−6.1%</td></tr>
+            <tr><td class="l muted">SPY</td><td class="muted">−55.2%</td><td class="muted">−33.7%</td><td class="muted">−18.8%</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+  <section class="panel">
+    <div class="ph">How to read it</div>
+    <div class="pb prose">
+      <ul>
+        <li><strong>Lower risk.</strong> Drawdowns were far smaller than SPY's in every window, including 2008
+          (approximately −5.8% vs SPY −36.8%).</li>
+        <li><strong>Not higher return.</strong> Returns were well below SPY's in every window, and growth was
+          close to the benchmark's.</li>
+        <li><strong>Not ahead every time.</strong> In 2023–25 the benchmark had the higher Sharpe and the
+          smaller drawdown.</li>
+      </ul>
+    </div>
+  </section>
+</div>
+
+<h2 id="live">The live run: <span class="accent">Nov 2 – Dec 1, 2026</span>, on a paper account</h2>
+<section class="panel">
+  <div class="pb prose">
+    <p id="live-status">The same rules, trading $50M of paper (simulated) capital for 21 sessions. Live numbers load with the page.</p>
+    <p id="live-numbers"></p>
+    <p>A few sessions of paper trading are noise: these numbers say more about whether the system runs than
+      about the strategy. The live book also carries one extra option-selling sleeve that has no backtest.</p>
+  </div>
+</section>
+
+<h2 id="limits">Limits</h2>
+<section class="panel">
+  <div class="pb prose">
+    <ul>
+      <li><strong>No significant edge.</strong> The backtest Sharpe edge over the benchmark is not statistically
+        significant. "Competitive risk-adjusted returns (backtest)" is the fair summary.</li>
+      <li><strong>One window reused.</strong> 2023–25 was looked at again after the first look, so it is a second
+        look, not an untouched holdout.</li>
+      <li><strong>Paper money, short run.</strong> No real money is at risk, simulated fills may differ from real
+        ones, and 21 sessions can't confirm or reject a strategy.</li>
+    </ul>
+  </div>
+</section>
+
+<div style="height:14px"></div>
+
+<section class="panel card">
+  <div class="ph">Tools and skills</div>
+  <div class="pb">
+    <div class="tags"><span>Python</span><span>Interactive Brokers API</span><span>futures</span><span>options</span><span>merger arbitrage</span><span>walk-forward backtesting</span><span>block bootstrap</span><span>WRDS</span><span>LSEG</span><span>Claude Code</span></div>
+  </div>
+</section>
+
+<p class="reach">For further details or the full analysis, please reach out.</p>
+
+<footer>
+  Solo final project for a FinTech course, Fall 2026. All trading is on an Interactive Brokers paper (simulated)
+  account; no real money is involved. Live numbers are final only after the Dec 1 close.
+</footer>
+
+</div>
+
+
+<script>
+// Live numbers: updated by hand from the live-results CSVs (see the note above this script).
+const LIVE = {
+  final: false,            // true after the Dec 1 close
+  asOf: '2026-11-09',      // last close included
+  sessions: 6,
+  plannedSessions: 21,     // Nov 2 – Dec 1, 2026
+  ret:   {strategy: 0.001036, benchmark: -0.000618, spy: -0.004009},   // since the Oct 30 close
+  maxDD: {strategy: -0.008402, benchmark: -0.014764, spy: -0.044092}
+};
+
+(function () {
+  const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const DAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const [y, m, d] = LIVE.asOf.split('-').map(Number);
+  const short = MONTHS[m - 1] + ' ' + d;
+  const long = DAYS[new Date(Date.UTC(y, m - 1, d)).getUTCDay()] + ' ' + short + ', ' + y;
+  const pct = v => { const s = Math.abs(v * 100).toFixed(2); return (s === '0.00' ? '' : v < 0 ? '−' : '+') + s + '%'; };
+  const put = (id, t) => { const e = document.getElementById(id); if (e) e.textContent = t; };
+  const n = LIVE.sessions + ' of ' + LIVE.plannedSessions + ' sessions';
+
+  put('tile-live-value', pct(LIVE.ret.strategy));
+  put('tile-live-sub', 'Paper account, ' + (LIVE.final ? 'final' : 'through ' + short) + ' (' + n + '). Benchmark ' +
+    pct(LIVE.ret.benchmark) + ', SPY ' + pct(LIVE.ret.spy) + '. Too short to judge.');
+  put('live-status', LIVE.final
+    ? 'Run complete: Nov 2 – Dec 1, 2026, ' + LIVE.sessions + ' sessions on $50M of paper (simulated) capital. Final numbers.'
+    : 'In progress on $50M of paper (simulated) capital: numbers through the ' + long + ' close, after ' + n + '.');
+  put('live-numbers', 'Return since the Oct 30 close: ' + pct(LIVE.ret.strategy) + ', against ' +
+    pct(LIVE.ret.benchmark) + ' for the benchmark and ' + pct(LIVE.ret.spy) + ' for SPY. Max drawdown so far: ' +
+    pct(LIVE.maxDD.strategy) + ', against ' + pct(LIVE.maxDD.benchmark) + ' and ' + pct(LIVE.maxDD.spy) + '.');
+})();
+</script>
+</body>
+</html>

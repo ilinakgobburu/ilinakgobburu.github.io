@@ -1,0 +1,415 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<meta name="referrer" content="no-referrer">
+<title>MEV Bot Detection · ERC-20</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js" charset="utf-8"></script>
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<div class="wrap">
+
+<nav aria-label="Page">
+  <a class="brand" href="index.html">Portfolio of work</a>
+  <div class="links">
+    <a href="#loop">The Karpathy loop</a>
+    <a href="#results">Loop results</a>
+    <a href="#models">Five models</a>
+    <a href="#agree">What agrees</a>
+    <a href="#limits">Limits</a>
+  </div>
+</nav>
+
+<header>
+  <div class="eyebrow">Machine learning · Ethereum · Course project, Spring 2026</div>
+  <h1>Finding <span class="accent">MEV bots</span> in Ethereum token transfers</h1>
+  <p class="lede">MEV (maximal extractable value) bots are automated traders that profit from the order
+    of transactions in a block, often by paying high gas fees to go first. Only 0.04% of addresses
+    carry an MEV label, so this project asks how far behavior alone (gas, fees, value, who trades
+    with whom) can go toward finding them. Five models come at it from different angles. One of
+    them was tuned by an AI agent running Andrej Karpathy's <em>autoresearch</em> loop.</p>
+  <div class="prov">
+    <span><b>1.89M</b> ERC-20 transfers</span>
+    <span><b>720,599</b> transactions</span>
+    <span><b>369,109</b> addresses</span>
+    <span><b>5</b> models</span>
+  </div>
+</header>
+
+<div class="tiles">
+  <div class="tile">
+    <div class="label">Supervised · per transaction</div>
+    <div class="value">0.972</div>
+    <div class="sub">test ROC-AUC, logistic regression</div>
+  </div>
+  <div class="tile">
+    <div class="label">Supervised · per address</div>
+    <div class="value">9×</div>
+    <div class="sub">MEV PR-AUC of a two-stage XGBoost vs one flat model (0.185 vs 0.021)</div>
+  </div>
+  <div class="tile hero">
+    <div class="label">No labels at all</div>
+    <div class="value">3.17×</div>
+    <div class="sub">MEV share in the top 5% of an anomaly ranking vs overall, on all 720,599 transactions</div>
+  </div>
+  <div class="tile">
+    <div class="label">Behavior types</div>
+    <div class="value">6</div>
+    <div class="sub">address archetypes from KMeans, silhouette 0.40</div>
+  </div>
+</div>
+
+<h2 id="loop">An AI agent ran the experiments: <span class="accent">Karpathy's autoresearch</span>, repurposed</h2>
+
+<div class="grid g-3-2">
+  <section class="panel">
+    <div class="ph">The idea</div>
+    <div class="pb prose">
+      <p>In March 2026 Andrej Karpathy released
+        <a href="https://github.com/karpathy/autoresearch" rel="noopener">autoresearch</a>, a small
+        repo built on one idea: give an AI agent a real training setup and let it experiment on its
+        own overnight. The agent edits one file, runs a five-minute training job, keeps the change if
+        the validation score improved, reverts it if not, and repeats. The researcher stops editing
+        the Python. They write <code>program.md</code>, the agent's instructions, and read the log in
+        the morning.</p>
+      <p>Karpathy aimed the loop at training a small language model. This project aimed the same
+        loop at a different problem: ranking Ethereum transactions by how unusual they look,
+        without ever showing the model which ones are MEV.</p>
+    </div>
+  </section>
+  <section class="panel">
+    <div class="ph">Why only one of the five models</div>
+    <div class="pb prose">
+      <p>The loop needs one honest number to climb. Anomaly ranking has one: how concentrated the
+        known MEV transactions are at the top of the ranking. Clustering doesn't. Silhouette rewards
+        tidy shapes, and steering clusters toward MEV would undo the point of working without labels.</p>
+      <blockquote>Using a loop for the clustering half would produce a confident wrong answer.</blockquote>
+    </div>
+  </section>
+</div>
+
+<div style="height:14px"></div>
+
+<section class="panel">
+  <div class="ph">Same loop, different problem</div>
+  <div class="pb" style="padding:4px 4px 6px">
+    <table class="map">
+      <thead><tr><th></th><th>Karpathy's autoresearch</th><th class="ours">This project</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">The one file the agent edits</th>
+          <td data-h="Karpathy"><code>train.py</code>: the GPT model, optimizer and training loop</td>
+          <td data-h="This project"><code>pipeline.py</code>: feature choice, scaling, anomaly model</td></tr>
+        <tr><th scope="row">Locked, never edited</th>
+          <td data-h="Karpathy"><code>prepare.py</code>: data, tokenizer, evaluation</td>
+          <td data-h="This project"><code>prepare.py</code>: data loading and the metric. The MEV label is stripped here, before any model sees the data</td></tr>
+        <tr><th scope="row">Written by the human</th>
+          <td data-h="Karpathy"><code>program.md</code></td>
+          <td data-h="This project"><code>program.md</code>: what may change, the keep-or-revert rules, and "all else equal, simpler wins"</td></tr>
+        <tr><th scope="row">The score</th>
+          <td data-h="Karpathy">validation bits per byte, lower is better</td>
+          <td data-h="This project">lift at the top 5%, higher is better</td></tr>
+        <tr><th scope="row">Time per run</th>
+          <td data-h="Karpathy">a fixed 5-minute training budget</td>
+          <td data-h="This project">seconds; anything over 5 minutes counts as a crash</td></tr>
+        <tr><th scope="row">Keep or revert</th>
+          <td data-h="Karpathy">one git commit per experiment, reset if not better</td>
+          <td data-h="This project">the same</td></tr>
+        <tr><th scope="row">The record</th>
+          <td data-h="Karpathy"><code>results.tsv</code></td>
+          <td data-h="This project"><code>results.tsv</code>: the full log is <a href="#log">below</a></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<h2 id="results">What 19 experiments found</h2>
+<p class="lede"><strong style="color:var(--text);font-weight:600">Lift at the top 5%</strong> takes the 5%
+  of transactions the model calls most unusual and divides their MEV share by the MEV share overall
+  (10.2% in the sample). A random ranking scores 1.0. A perfect one scores 9.82.</p>
+
+<section class="panel">
+  <div class="ph">Lift at the top 5%, experiment by experiment<span class="tag">4,731-transaction sample</span></div>
+  <div class="pb flush">
+    <div id="plot-loop" class="plot" role="img"
+      aria-label="Lift by experiment. The baseline scores 1.12. Experiment 3, dropping noise features, jumps lift from 1.66 to 4.28. Experiment 12, a PowerTransformer, reaches the best score of 5.28. Seven changes were kept and twelve reverted. Full values in the experiment log table below."></div>
+    <div class="cap">Each dot is one experiment. Filled: kept, so the change became the new starting point.
+      Hollow: reverted. The line is the best score so far.</div>
+  </div>
+</section>
+
+<div style="height:14px"></div>
+
+<div class="grid g-3-2">
+  <section class="panel">
+    <div class="ph">What the loop learned</div>
+    <div class="pb prose">
+      <ul>
+        <li><strong>Pruning beat everything.</strong> Dropping features that carried no signal on
+          their own (single-feature AUC below 0.51) took lift from 1.66 to 4.28 in one step, +158%.
+          No other change gained more than 17%.</li>
+        <li><strong>The baseline was worse than one column.</strong> All 18 features through an
+          IsolationForest scored 1.12. Gas price alone scored 3.74. The problem was noise, not the model.</li>
+        <li><strong>Other models lost.</strong> Local outlier factor 1.25, PCA reconstruction error
+          0.91, summed z-scores 2.45, a one-class SVM 3.45.</li>
+        <li><strong>Tuning did nothing.</strong> More trees and fewer features per split scored lower.
+          The contamination setting moves the decision threshold, not the ranking, so it can't change lift.</li>
+        <li><strong>Returns diminished fast.</strong> The first three experiments took lift from 1.12
+          to 4.28. The next sixteen added one more point.</li>
+      </ul>
+    </div>
+  </section>
+  <section class="panel">
+    <div class="ph">Does it hold on the full data?</div>
+    <div class="pb stack">
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead><tr><th class="l"></th><th>Sample</th><th>Full</th></tr></thead>
+          <tbody>
+            <tr><td class="l muted">Transactions</td><td>4,731</td><td>720,599</td></tr>
+            <tr><td class="l muted">MEV share overall</td><td>10.2%</td><td>9.6%</td></tr>
+            <tr><td class="l muted">Lift at top 5%</td><td>5.28×</td><td><b>3.17×</b></td></tr>
+            <tr><td class="l muted">Precision, top 5%</td><td>53.8%</td><td>30.4%</td></tr>
+            <tr><td class="l muted">Recall, top 5%</td><td>26.3%</td><td>15.9%</td></tr>
+            <tr><td class="l muted">ROC-AUC</td><td>0.66</td><td>0.60</td></tr>
+            <tr><td class="l muted">PR-AUC</td><td>0.30</td><td>0.17</td></tr>
+            <tr><td class="l muted">Perfect-ranking lift</td><td>9.82</td><td>10.46</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="model-note">Scores drop at full scale, as expected for settings picked on a sample. MEV
+        transactions are still three times as common in the top 5% as overall. Final pipeline: five
+        features (gas price, an ENS-name flag for the sender, log fee, log value, gas × ENS), a Yeo-Johnson
+        power transform, and an IsolationForest with 100 trees.</p>
+    </div>
+  </section>
+</div>
+
+<div style="height:14px"></div>
+
+<section class="panel" id="log">
+  <details>
+    <summary>Full experiment log (<code>results.tsv</code>): 20 runs, 8 kept including the baseline</summary>
+    <div class="tbl-wrap">
+      <table class="tbl" id="log-table">
+        <thead><tr><th>#</th><th class="l hide-sm">commit</th><th>lift</th><th class="l">status</th><th class="l">change</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </details>
+</section>
+
+<h2 id="models">Five models, three units of analysis</h2>
+<p class="lede">The same data supports very different questions depending on what one row is: a
+  transaction, an address, or a token. Labeled and label-free methods each cover a gap in the other.</p>
+
+<div class="models">
+  <section class="panel">
+    <div class="ph">Per transaction<span class="tag">supervised</span></div>
+    <div class="pb">
+      <h3>Logistic regression</h3>
+      <div class="metric">0.9717<small>test ROC-AUC</small></div>
+      <p class="model-note">Classifies each of 720,599 transactions from structure, fees, gas, timing and
+        contract method, with SMOTENC to rebalance. PR-AUC 0.858. At a 0.82 threshold: precision 0.73,
+        recall 0.82. Validation and test scores match, so it generalizes.</p>
+    </div>
+  </section>
+  <section class="panel">
+    <div class="ph">Per address<span class="tag">supervised</span></div>
+    <div class="pb">
+      <h3>Two-stage XGBoost</h3>
+      <div class="metric">0.185<small>MEV PR-AUC, vs 0.021 flat</small></div>
+      <p class="model-note">Stage one separates MEV bots from everyone else; stage two sorts the rest into
+        whales, trading bots and retail. Outgoing transfer count is the top signal (importance 0.63).
+        It also flags 641 unlabeled addresses that behave like MEV bots.</p>
+    </div>
+  </section>
+  <section class="panel">
+    <div class="ph">Per token<span class="tag">supervised</span></div>
+    <div class="pb">
+      <h3>Verified-token XGBoost</h3>
+      <div class="metric">0.651<small>F1, verified tokens</small></div>
+      <p class="model-note">Predicts whether a token is verified from how it trades, never its name or
+        symbol. The strongest signal is how much of its flow goes to centralized exchanges.</p>
+    </div>
+  </section>
+  <section class="panel">
+    <div class="ph">Per address<span class="tag">no labels</span></div>
+    <div class="pb">
+      <h3>KMeans behavioral taxonomy</h3>
+      <div class="metric">6 types<small>silhouette 0.40, 6,618 addresses</small></div>
+      <p class="model-note">Passive verified holders (66%), passive unverified holders, active retail
+        swappers, casual DeFi traders, and two tiny extremes: 9 DEX arbitrage bots and 5 MEV searchers.</p>
+    </div>
+  </section>
+  <section class="panel featured">
+    <div class="ph">Per transaction<span class="tag">no labels</span></div>
+    <div class="pb">
+      <h3>IsolationForest, tuned by autoresearch</h3>
+      <div class="metric">3.17×<small>lift at top 5%, full data</small></div>
+      <p class="model-note">Ranks transactions by how unusual they look and never reads the MEV label.
+        Built by the agent loop <a href="#loop">above</a>.</p>
+    </div>
+  </section>
+</div>
+
+<h2 id="agree">Where the methods agree, and where they don't</h2>
+<section class="panel">
+  <div class="pb prose">
+    <ul>
+      <li><strong>Gas price is the shared MEV signature.</strong> The supervised model weights it
+        positively. The DEX-arbitrage cluster's median gas price is 229 gwei. In the anomaly ranker's
+        top 5%, transactions above 200 gwei are 93 times more common than in the rest (9.3% vs 0.1%).</li>
+      <li><strong>Two sides of the same trade.</strong> The transaction-level models flag senders with ENS
+        names; the bots the clustering finds have none. The MEV label marks a transaction if either side
+        is a known bot, so the transaction models learn the people trading with bots, and the clustering
+        finds the bots themselves.</li>
+      <li><strong>Features beat models, in all five pipelines.</strong> Feature engineering and selection
+        moved results more than the choice of algorithm.</li>
+    </ul>
+  </div>
+</section>
+
+<h2 id="limits">Limits</h2>
+<section class="panel">
+  <div class="pb prose">
+    <ul>
+      <li><strong>Sample optimism.</strong> The anomaly ranker was tuned on 4,731 transactions. Lift fell
+        from 5.28 to 3.17 at full scale; the full-scale number is the honest one.</li>
+      <li><strong>No held-out set for the ranker.</strong> Normal for unsupervised ranking, but it limits
+        claims about new data.</li>
+      <li><strong>The label is a proxy.</strong> A transaction counts as MEV if either side is on a known
+        bot list, which mixes bot-side and user-side activity.</li>
+      <li><strong>Few MEV addresses.</strong> The address-level test set holds 22 of them; the two-stage
+        model finds 8.</li>
+    </ul>
+  </div>
+</section>
+
+<p class="reach">For further details or the full analysis, please reach out.</p>
+
+<footer>
+  Team course project, Machine Learning for FinTech, Spring 2026.
+  The experiment loop is adapted from Andrej Karpathy's
+  <a href="https://github.com/karpathy/autoresearch" rel="noopener">autoresearch</a>.
+</footer>
+
+</div>
+
+<script>
+// results.tsv from the loop, one row per run. Descriptions shortened for readers.
+const RUNS = [
+  ["f124a90",1.122943,"keep","Baseline: StandardScaler + IsolationForest on all 18 features"],
+  ["48dac1c",1.414076,"keep","RobustScaler instead of StandardScaler"],
+  ["efb2d94",1.663619,"keep","Drop raw-value features, keep the log versions"],
+  ["7ce4328",4.283819,"keep","Drop noise features (single-feature AUC < 0.51)"],
+  ["fdb28c9",4.367000,"keep","QuantileTransformer instead of RobustScaler"],
+  ["c4566f7",1.247714,"discard","Local outlier factor instead of IsolationForest"],
+  ["b9abfc7",4.491772,"keep","Only 4 high-signal features"],
+  ["f1716b2",3.701553,"discard","500 trees, 1 feature per split"],
+  ["6eb8201",0.914991,"discard","PCA reconstruction error"],
+  ["a075c97",2.453838,"discard","Sum of absolute z-scores, no model"],
+  ["3e83fe8",4.533362,"keep","Add a gas price × ENS sender interaction"],
+  ["40818fe",4.533362,"discard","Contamination 0.1 (identical ranking)"],
+  ["ffa0377",5.281991,"keep","PowerTransformer (Yeo-Johnson) instead of QuantileTransformer"],
+  ["c40597e",5.032448,"discard","Re-add unique tokens and unique senders"],
+  ["468f4f5",4.907676,"discard","Drop log total value"],
+  ["6e7e626",3.452010,"discard","One-class SVM instead of IsolationForest"],
+  ["58ab788",2.994514,"discard","Add contract-method one-hots"],
+  ["0c117ef",5.032448,"discard","Add gas price percentile rank"],
+  ["4f75de7",4.824495,"discard","Add gas price squared"],
+  ["60bb312",5.032448,"discard","Add |gas price − median|"]
+];
+
+// table view: every value on the chart is also readable here
+(function(){
+  const tb = document.querySelector('#log-table tbody');
+  RUNS.forEach(([commit, lift, status, desc], i) => {
+    const tr = document.createElement('tr');
+    tr.className = status === 'keep' ? 'kept' : 'rev';
+    const cells = [
+      [String(i), ''], [commit, 'l hide-sm'], [lift.toFixed(2), 'lift'], [null, 'l'], [desc, 'desc']
+    ];
+    cells.forEach(([txt, cls]) => {
+      const td = document.createElement('td');
+      if (cls) td.className = cls;
+      if (txt === null) {
+        const s = document.createElement('span');
+        s.className = 'st ' + (status === 'keep' ? 'k' : 'r');
+        s.appendChild(document.createElement('i'));
+        s.appendChild(document.createTextNode(status === 'keep' ? 'kept' : 'reverted'));
+        td.appendChild(s);
+      } else td.textContent = txt;
+      tr.appendChild(td);
+    });
+    tb.appendChild(tr);
+  });
+})();
+
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+function drawLoop(){
+  const el = document.getElementById('plot-loop');
+  const narrow = el.clientWidth < 560;
+  const x = RUNS.map((_, i) => i);
+  let best = -Infinity;
+  const bestSoFar = RUNS.map(r => (r[2] === 'keep' ? (best = Math.max(best, r[1])) : best));
+  const pick = s => RUNS.map((r, i) => ({i, r})).filter(o => o.r[2] === s);
+  const kept = pick('keep'), rev = pick('discard');
+  const hover = '<b>%{y:.2f}</b> lift<br>#%{x} · %{customdata}<extra>%{fullData.name}</extra>';
+
+  const traces = [
+    {x, y: bestSoFar, name: 'Best so far', mode: 'lines', line: {color: css('--mark'), width: 2, shape: 'hv'},
+     hoverinfo: 'skip'},
+    {x: rev.map(o => o.i), y: rev.map(o => o.r[1]), customdata: rev.map(o => o.r[3]),
+     name: 'Reverted', mode: 'markers', hovertemplate: hover,
+     marker: {symbol: 'circle-open', size: 10, color: css('--reverted'), line: {width: 2}}},
+    {x: kept.map(o => o.i), y: kept.map(o => o.r[1]), customdata: kept.map(o => o.r[3]),
+     name: 'Kept', mode: 'markers', hovertemplate: hover,
+     marker: {size: 11, color: css('--mark'), line: {color: css('--panel'), width: 2}}}
+  ];
+
+  const note = (xv, yv, text, ax, ay) => ({x: xv, y: yv, text, ax, ay, showarrow: true, arrowhead: 0,
+    arrowwidth: 1, arrowcolor: css('--faint'), font: {color: css('--text'), size: 12}, align: 'left'});
+  const ref = (yv, text) => ({xref: 'paper', x: 1, y: yv, text, showarrow: false, xanchor: 'right',
+    yanchor: 'bottom', font: {color: css('--faint'), size: 11}});
+
+  const layout = {
+    paper_bgcolor: css('--panel'), plot_bgcolor: css('--panel'),
+    font: {family: css('--font'), color: css('--muted'), size: 12},
+    margin: {l: 48, r: 14, t: 18, b: narrow ? 64 : 58},
+    hovermode: 'closest', hoverdistance: 24, dragmode: false,
+    hoverlabel: {bgcolor: css('--panel-hi'), bordercolor: css('--line'),
+      font: {family: css('--font'), color: css('--text'), size: 12}},
+    showlegend: true,
+    legend: {orientation: 'h', x: 0, y: narrow ? -0.24 : -0.18, traceorder: 'reversed', font: {color: css('--muted')}},
+    xaxis: {title: {text: 'experiment', standoff: 6}, range: [-0.6, 19.6], dtick: narrow ? 5 : 1,
+      gridcolor: css('--line-soft'), linecolor: css('--line'), zeroline: false, fixedrange: true},
+    yaxis: {title: {text: 'lift at top 5%', standoff: 4}, range: [0, 10.4], dtick: 2,
+      gridcolor: css('--line-soft'), zeroline: false, fixedrange: true},
+    shapes: [1, 9.82].map(v => ({type: 'line', xref: 'paper', x0: 0, x1: 1, y0: v, y1: v,
+      line: {color: css('--line'), width: 1}})),
+    annotations: [
+      ref(1, 'random = 1.0'), ref(9.82, 'perfect ranking = 9.82'),
+      note(3, 4.284, narrow ? 'Drop noise<br>features, +158%' : 'Drop noise features<br>1.66 → 4.28, +158%',
+        narrow ? -14 : -56, narrow ? -70 : -74),
+      note(12, 5.282, narrow ? 'Best: 5.28' : 'PowerTransformer<br>best: 5.28', 0, -56)
+    ]
+  };
+  Plotly.react(el, traces, layout, {displayModeBar: false, responsive: true});
+}
+
+if (typeof Plotly !== 'undefined') {
+  drawLoop();
+  let t; window.addEventListener('resize', () => { clearTimeout(t); t = setTimeout(drawLoop, 150); });
+} else {
+  document.getElementById('plot-loop').textContent = 'Chart could not load. The full experiment log is in the table below.';
+}
+</script>
+</body>
+</html>

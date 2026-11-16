@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<meta name="referrer" content="no-referrer">
+<title>Portfolio of work</title>
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body class="home">
+<div class="wrap">
+  <header>
+    <h1>Portfolio of work</h1>
+    <p class="lede">Course projects in quantitative finance and machine learning.</p>
+  </header>
+
+  <div class="topic-nav" role="navigation" aria-label="Topics">
+    <a href="#quant"><b>Quant Trading &amp; Research</b><span>Systematic strategies with rules fixed before testing; one is trading live on a paper account.</span></a>
+    <a href="#ml"><b>Machine Learning</b><span>Finding MEV bots in 1.9M Ethereum token transfers with five models.</span></a>
+    <a href="#options"><b>Options &amp; Volatility</b><span>Where listed option prices actually exist, and option-selling strategies backtested.</span></a>
+    <a href="#engineering"><b>Data &amp; Software Engineering</b><span>A point-in-time S&amp;P 500 database keyed on permanent SEC firm IDs.</span></a>
+  </div>
+
+  <div class="work" id="all">
+    <span id="trading" class="anchor" aria-hidden="true"></span>
+
+    <section class="topic" id="quant" aria-labelledby="h-quant">
+      <h2 id="h-quant">Quant Trading &amp; Research</h2>
+      <div class="topic-body">
+        <a class="card" href="quant-strategy.html">
+          <div class="eyebrow">Quant trading · live</div>
+          <h3>A $50M multi-asset strategy, run live</h3>
+          <p>Trend, merger arbitrage and put-writing, chosen from 60+ pre-registered tests and traded on an Interactive
+            Brokers paper account, Nov 2 – Dec 1, 2026.</p>
+          <div class="tags"><span>futures</span><span>merger arb</span><span>options</span><span>IBKR</span></div>
+          <div class="status">live until Dec 1</div>
+          <div class="go">Open project →</div>
+        </a>
+        <div class="rows">
+          
+          <a class="row also" href="sp500-panel.html#why">
+            <h3>A survivorship-bias-free S&amp;P 500 panel</h3>
+            <p><b>Also here for</b> a point-in-time S&amp;P 500 universe, so a backtest keeps the firms that later left the index.</p>
+          </a>
+          <a class="row also" href="wheel-mastercard.html#five-stocks">
+            <h3>The wheel on five stocks</h3>
+            <p><b>Also here for</b> the same option-selling strategy run on five stocks as one portfolio, against buy-and-hold, T-bills and the Cboe PutWrite index.</p>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="topic" id="ml" aria-labelledby="h-ml">
+      <h2 id="h-ml">Machine Learning</h2>
+      <div class="topic-body">
+        <a class="card" href="erc20-mev.html">
+          <div class="eyebrow">Machine learning · Ethereum</div>
+          <h3>Finding MEV bots in Ethereum token transfers</h3>
+          <p>Five models on 1.9M ERC-20 transfers, including an anomaly ranker tuned by an AI agent running
+            Andrej Karpathy's autoresearch loop.</p>
+          <div class="tags"><span>IsolationForest</span><span>XGBoost</span><span>KMeans</span><span>autoresearch</span></div>
+          <div class="go">Open project →</div>
+        </a>
+      </div>
+    </section>
+
+    <section class="topic" id="options" aria-labelledby="h-options">
+      <h2 id="h-options">Options &amp; Volatility</h2>
+      <div class="topic-body">
+        <a class="card" href="wheel-mastercard.html">
+          <div class="eyebrow">Algorithmic trading · options</div>
+          <h3>The wheel on Mastercard, then five stocks</h3>
+          <p>Sell puts, get assigned, sell calls. Implied volatility beat realized in 9 of 9 test cycles; part two runs the
+            same wheel on five stocks as one portfolio.</p>
+          <div class="tags"><span>short volatility</span><span>walk-forward</span><span>PutWrite benchmark</span></div>
+          <div class="go">Open project →</div>
+        </a>
+        <div class="rows">
+          <a class="row" href="pmcc-delta.html">
+            <h3>Poor Man's Covered Call on Delta Air Lines</h3>
+            <p>A long-dated call in place of 100 shares, 2019–2023: +$324 on $1,262 to open, against −$222 for the covered call.</p>
+            <div class="tags"><span>LEAPs</span><span>Black-Scholes</span><span>36 tests</span></div>
+          </a>
+          <a class="row" href="option-surface.html">
+            <h3>Option Surface Lab</h3>
+            <p>Where listed option prices actually exist: the mark against the last trade on UUUU, with CCJ as a control.</p>
+            <div class="tags"><span>LSEG</span><span>implied volatility</span></div>
+          </a>
+          <a class="row" href="covered-call.html">
+            <h3>Covered call backtest</h3>
+            <p>Long 100 shares, short one weekly call held to expiry, isolating the strike, the fill price and the time of the order.</p>
+            <div class="tags"><span>backtest</span><span>Reg T</span><span>fills</span></div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="topic" id="engineering" aria-labelledby="h-engineering">
+      <h2 id="h-engineering">Data &amp; Software Engineering</h2>
+      <div class="topic-body">
+        <a class="card" href="sp500-panel.html">
+          <div class="eyebrow">Data wrangling</div>
+          <h3>A survivorship-bias-free S&amp;P 500 panel</h3>
+          <p>Every firm in the index since 1996, including the ones that left, under a permanent SEC ID that
+            survives renamed and reused tickers.</p>
+          <div class="tags"><span>SQLite</span><span>SEC EDGAR</span><span>WRDS TAQ</span><span>local LLM</span></div>
+          <div class="status">in progress</div>
+          <div class="go">Open project →</div>
+        </a>
+      </div>
+    </section>
+  </div>
+</div>
+</body>
+</html>
