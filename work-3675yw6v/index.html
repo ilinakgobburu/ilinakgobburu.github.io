@@ -24,7 +24,7 @@
   <div class="topic-nav" role="navigation" aria-label="Topics">
     <a href="#all" class="all"><b>All Topics</b><span>Every project, grouped by topic.</span></a>
     <a href="#quant"><b>Quant Trading &amp; Research</b><span>Systematic strategies with rules fixed before testing; one is trading live on a paper account.</span></a>
-    <a href="#ml"><b>Machine Learning</b><span>Finding MEV bots in 1.9M Ethereum token transfers with five models.</span></a>
+    <a href="#ml"><b>Machine Learning</b><span>MEV bots in 1.9M Ethereum transfers, and ML against a simple rule for picking overpriced options.</span></a>
     <a href="#options"><b>Options &amp; Volatility</b><span>Where listed option prices actually exist, and option-selling strategies backtested.</span></a>
     <a href="#engineering"><b>Data &amp; Software Engineering</b><span>A point-in-time S&amp;P 500 database keyed on permanent SEC firm IDs.</span></a>
   </div>
@@ -46,6 +46,11 @@
         </a>
         <div class="rows">
           
+          <a class="row" href="research-log.html">
+            <h3>Research log: ideas tested and rejected</h3>
+            <p>About two dozen trading ideas, each with a pass bar fixed before any data was pulled. Most failed, and they're listed with their bars.</p>
+            <div class="tags"><span>pre-registration</span><span>options</span><span>momentum</span></div>
+          </a>
           <a class="row also" href="sp500-panel.html#why">
             <h3>A survivorship-bias-free S&amp;P 500 panel</h3>
             <p><b>Also relevant:</b> a point-in-time S&amp;P 500 universe, so a backtest keeps the firms that later left the index.</p>
@@ -69,6 +74,13 @@
           <div class="tags"><span>IsolationForest</span><span>XGBoost</span><span>KMeans</span><span>autoresearch</span></div>
           <div class="go">Open project →</div>
         </a>
+        <div class="rows">
+          <a class="row" href="stock-premium-ml.html">
+            <h3>Which stocks' options are most overpriced? A one-line rule beat the ML</h3>
+            <p>Logistic regression and a random forest against a simple ratio rule, 494 stocks, with a final test run once: the simple rule held up and the ML added nothing reliable.</p>
+            <div class="tags"><span>logistic regression</span><span>random forest</span><span>walk-forward</span></div>
+          </a>
+        </div>
       </div>
     </section>
 
@@ -98,6 +110,16 @@
             <h3>Covered call backtest</h3>
             <p>Long 100 shares, short one weekly call held to expiry, isolating the strike, the fill price and the time of the order.</p>
             <div class="tags"><span>backtest</span><span>Reg T</span><span>fills</span></div>
+          </a>
+          <a class="row" href="single-stock-vol-premium.html">
+            <h3>A decade of single-stock option premium, erased by one month</h3>
+            <p>The typical S&amp;P 500 stock's options were overpriced in 87 of 120 months, yet in variance March 2020 wiped out the decade, and "options look rich" couldn't time it.</p>
+            <div class="tags"><span>vol premium</span><span>Newey-West</span><span>LSEG</span></div>
+          </a>
+          <a class="row" href="pmcc-delta-hedged.html">
+            <h3>Hedging the direction out of a PMCC</h3>
+            <p>Hedged to zero delta, what's left is a volatility premium of 1–2 points a year against 2–4 points of spreads: 0 of 3 screened stocks beat T-bills.</p>
+            <div class="tags"><span>delta hedging</span><span>T-bills</span><span>LSEG</span></div>
           </a>
         </div>
       </div>

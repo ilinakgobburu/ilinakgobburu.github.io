@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<meta name="referrer" content="no-referrer">
+<title>Research Log</title>
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<div class="wrap">
+
+<nav aria-label="Page">
+  <a class="brand" href="index.html">Portfolio of work</a>
+  <div class="links">
+    <a href="#honest">How</a>
+    <a href="#wheel">Option selling</a>
+    <a href="#pmcc">PMCC</a>
+    <a href="#vol">Volatility and ML</a>
+    <a href="#other">Other</a>
+  </div>
+</nav>
+
+<header>
+  <div class="eyebrow">Research log · Fall 2026</div>
+  <h1>Research log: <span class="accent">ideas tested and rejected</span></h1>
+  <p class="lede">About two dozen trading ideas tested in October and November 2026. For each, the question,
+    the rules and a pass bar were committed before any data was pulled; it was run once, and the result was
+    recorded as it came out. Most failed. They're listed here with their bars, because a list of only the
+    winners would hide how they were found.</p>
+</header>
+
+<h2 id="honest">How the tests were kept honest</h2>
+<section class="panel">
+  <div class="pb prose">
+    <ul>
+      <li><strong>Pass bars fixed in advance,</strong> with any later change dated and explained.</li>
+      <li><strong>One-shot final tests,</strong> and gates that stop a weak idea before it can spend one.</li>
+      <li><strong>Chance baselines:</strong> random stocks, permutation and rotation tests.</li>
+      <li><strong>Mid and stress fills</strong> for every trading result.</li>
+      <li><strong>Independent reviews and tested code</strong> before each run; after-the-fact results are
+        labeled as such.</li>
+    </ul>
+  </div>
+</section>
+
+<h2 id="wheel">Option selling: the wheel</h2>
+<section class="panel">
+  <div class="pb prose">
+    <ul>
+      <li><strong>Timing the wheel with RSI.</strong> Skip puts when the stock looked stretched, or calls when
+        it looked weak. Bar: beat the plain wheel in 7 of 9 windows. Result: 2, 0 and 2 of 9; stretched stocks
+        kept going.</li>
+      <li><strong>Pairs-traded wheels, four versions.</strong> Bar: beat both plain wheels in 4 of 5 years.
+        Result: 0 of 5 each; in one version a short leg ran away and was margin-called.</li>
+      <li><strong>Sell only when implied beats realized vol.</strong> Bar: 5 of 9 windows, deliberately weak.
+        Result: passed on its second, adjusted version, then held 5 of 9 (6 at stress fills) on the test
+        windows, mostly by sitting out the 2022 sell-off. It skipped nearly half the puts. A weak pass, not
+        adopted.</li>
+      <li><strong>The pair of wheels whose losses coincided least.</strong> Result: it ranked below the median
+        pair afterward, and the ranking didn't persist (p 0.30 and 0.21).</li>
+      <li><strong>A barbell: wheel the mean-reverting stock, hold the momentum stock.</strong> Bar: beat the
+        alternatives in 6 of 8 folds. Result: 3, 2 and 5 of 8.</li>
+      <li><strong>Practitioner management:</strong> early closes, rolls and a trend filter. Result: beat the
+        plain wheel's Sharpe ratio in only 7 and 8 of 18 stock-windows.</li>
+      <li><strong>Selling puts when market-wide option premium is high.</strong> Result: better on 4 of 5 stocks,
+        until a rotation test gave p 0.31: one crash entry carried the whole difference.</li>
+      <li><strong>A jet-fuel hedge for an airline.</strong> Result: Delta and fuel moved together, so the hedge
+        had nothing to offset; it never beat the plain wheel.</li>
+    </ul>
+  </div>
+</section>
+
+<h2 id="pmcc">The Poor Man's Covered Call</h2>
+<section class="panel">
+  <div class="pb prose">
+    <ul>
+      <li><strong>Seasonality screens for the stock choice.</strong> Two screens (Apple, then Delta) passed
+        their rules (p 0.023 and 0.020), but every peak month contained earnings and the ranking didn't
+        persist: an earnings effect, not seasonality.</li>
+      <li><strong>The best in-sample option setting.</strong> Result: it lost to the baseline on all four cost
+        bases in both out-of-sample samples.</li>
+      <li><strong>Hedging the direction out.</strong> Result: 0 of 3 screened stocks beat T-bills on all four
+        cost bases. <a href="pmcc-delta-hedged.html">Full write-up →</a></li>
+    </ul>
+  </div>
+</section>
+
+<h2 id="vol">Volatility and machine learning</h2>
+<section class="panel">
+  <div class="pb prose">
+    <ul>
+      <li><strong>Can ML pick the most overpriced options?</strong> The pre-chosen logistic regression trailed a
+        one-line ratio rule by 0.42 vol points and failed its bar; the simple rule held up on held-out years
+        (t 4.1). The one signal here that survived. <a href="stock-premium-ml.html">Full write-up →</a></li>
+      <li><strong>Can you time selling single-stock volatility?</strong> "Options look rich against last month"
+        had no relation to the next month's premium over 120 months (r = −0.01).
+        <a href="single-stock-vol-premium.html">Full write-up →</a></li>
+      <li><strong>A screen for options that look too rich.</strong> The top of the list was special situations
+        (pending deals, new listings, earnings timing), not mispricing.</li>
+    </ul>
+  </div>
+</section>
+
+<h2 id="other">Momentum, reversal and data</h2>
+<section class="panel">
+  <div class="pb prose">
+    <ul>
+      <li><strong>Switching between reversal and momentum, three published signals.</strong> Bar: t ≥ 1 and a
+        Sharpe ratio above a fixed blend. Result: the best had t 0.52, and its whole edge was one month,
+        April 2020, so the final-test window was left unused.</li>
+      <li><strong>Data traps caught before any backtest:</strong> a stock split that showed a false 74% loss on
+        a long option, and missing bids returned in a type the code had to read as zero bids.</li>
+      <li><strong>A survivor-only universe:</strong> a data check found the vendor has no implied vol for firms
+        that left the index, so an ML panel built on it would hold only survivors.</li>
+    </ul>
+  </div>
+</section>
+
+<p class="reach">For further details or the full analysis, please reach out.</p>
+
+<footer>
+  Research alongside an algorithmic trading course, Fall 2026. Option data from LSEG.
+</footer>
+
+</div>
+</body>
+</html>

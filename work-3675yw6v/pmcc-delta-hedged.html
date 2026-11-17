@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<meta name="referrer" content="no-referrer">
+<title>Delta-Hedged PMCC</title>
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<div class="wrap">
+
+<nav aria-label="Page">
+  <a class="brand" href="index.html">Portfolio of work</a>
+  <div class="links">
+    <a href="#results">Results</a>
+    <a href="#found">What it found</a>
+    <a href="#limits">Limits</a>
+  </div>
+</nav>
+
+<header>
+  <div class="eyebrow">Options · Volatility · Research, Fall 2026</div>
+  <h1>Hedging the direction out of a PMCC: <span class="accent">a premium too small to pay its spreads</span></h1>
+  <p class="lede">A follow-up to the <a href="pmcc-delta.html">Poor Man's Covered Call on Delta Air Lines</a>,
+    prompted by a question in the course. Trade the stock every day to hold the position's delta at zero, so
+    the only income left is the short call's implied volatility beating the volatility the stock then
+    delivers. Does that premium beat T-bills? Tested on five stocks and two windows, each test registered
+    before it ran.</p>
+  <div class="prov">
+    <span><b>5</b> stocks</span>
+    <span><b>6</b> samples</span>
+    <span><b>4</b> cost bases</span>
+    <span>option data from <b>LSEG</b></span>
+  </div>
+</header>
+
+<div class="tiles">
+  <div class="tile hero">
+    <div class="label">Screened stocks that passed</div>
+    <div class="value">0 of 3</div>
+    <div class="sub">stocks a registered premium screen picked (Disney, Marriott, Southwest) beat T-bills on all
+      four cost bases</div>
+  </div>
+  <div class="tile">
+    <div class="label">Costs vs premium</div>
+    <div class="value">2–4 vs 1–2</div>
+    <div class="sub">points a year: bid/ask spreads against the premium the hedged book earned</div>
+  </div>
+  <div class="tile">
+    <div class="label">The one pass</div>
+    <div class="value">$840</div>
+    <div class="sub">of the design sample's $1,190 above T-bills came from 2020 alone</div>
+  </div>
+  <div class="tile">
+    <div class="label">What it does well</div>
+    <div class="value">3–8%</div>
+    <div class="sub">drawdowns, against 22–34% for SPY, with almost no market exposure: roughly T-bills with
+      extra work</div>
+  </div>
+</div>
+
+<h2 id="results">Results</h2>
+<section class="panel">
+  <div class="pb">
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th class="l">Sample</th><th>Mid</th><th>Bid/ask</th><th>Mid, no rebate</th><th>Bid/ask, no rebate</th><th class="l">Beat T-bills on all four?</th></tr></thead>
+        <tbody>
+          <tr><td class="l">Delta 2019–23 (design sample)</td><td>+4.47%</td><td>+2.45%</td><td>+3.42%</td><td>+1.42%</td><td class="l">Yes, but in-sample, mostly 2020</td></tr>
+          <tr><td class="l">Delta 2022–24</td><td>+0.07%</td><td>−0.82%</td><td>−1.99%</td><td>−2.84%</td><td class="l">No</td></tr>
+          <tr><td class="l">Nvidia 2019–23</td><td>+0.19%</td><td>−0.31%</td><td>−0.37%</td><td>−0.86%</td><td class="l">No</td></tr>
+          <tr><td class="l">Disney 2019–23 (screen pick)</td><td>+0.93%</td><td>−0.71%</td><td>+0.10%</td><td>−1.50%</td><td class="l">No</td></tr>
+          <tr><td class="l">Southwest 2019–23 (screen pick)</td><td>+3.97%</td><td>−0.01%</td><td>+3.03%</td><td>−0.83%</td><td class="l">No, fails 2 of 4</td></tr>
+          <tr><td class="l">Marriott 2019–23 (screen pick)</td><td>+1.24%</td><td>−1.52%</td><td>−0.02%</td><td>−2.63%</td><td class="l">No, fails 3 of 4</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="pb prose">
+    <p>Return a year above 3-month T-bills, compounded, on the cash the margin rules required at the tightest
+      point. Fills at mid or at bid/ask, each with and without interest on short-sale proceeds (a retail
+      account usually doesn't get it). The pass bar was registered for the three screen picks; applying it to
+      the other samples is after the fact.</p>
+  </div>
+</section>
+
+<h2 id="found">What it found</h2>
+<section class="panel">
+  <div class="pb prose">
+    <ul>
+      <li><strong>One source of income.</strong> With direction hedged away, the book earns only the short
+        call's volatility premium, and the long-dated call pays for the same richness the short call sells.</li>
+      <li><strong>Past premium doesn't pick stocks.</strong> Disney, the screen's top pick, went from an 8.0%
+        premium in 2010–18 to −0.3% in 2019–23. Even where the premium held, spreads ate it.</li>
+      <li><strong>No tweak helped.</strong> The best setting found in-sample lost to the baseline on all four
+        cost bases in both out-of-sample samples. Volatility filters, protective legs and a jet-fuel hedge
+        didn't help either.</li>
+      <li><strong>No free lunch in the synthetic stock.</strong> Put-call parity held; adding a synthetic
+        future cancels the volatility income.</li>
+    </ul>
+  </div>
+</section>
+
+<h2 id="limits">Limits</h2>
+<section class="panel">
+  <div class="pb prose">
+    <ul>
+      <li><strong>Single stocks at retail spreads.</strong> Index options have tighter spreads and a more
+        reliable premium; they weren't tested here.</li>
+      <li><strong>Few samples.</strong> Five stocks, and the only pass is the sample the setup was built on.</li>
+      <li><strong>Daily closing quotes,</strong> one contract, no commissions.</li>
+    </ul>
+  </div>
+</section>
+
+<div style="height:14px"></div>
+
+<section class="panel">
+  <div class="ph">Tools and skills</div>
+  <div class="pb card">
+    <div class="tags"><span>delta hedging</span><span>options</span><span>volatility risk premium</span><span>Reg T margin</span><span>pre-registration</span><span>Python</span><span>LSEG data</span></div>
+  </div>
+</section>
+
+<p class="reach">For further details or the full analysis, please reach out.</p>
+
+<footer>
+  Research alongside an algorithmic trading course, Fall 2026. Option data from LSEG.
+</footer>
+
+</div>
+</body>
+</html>

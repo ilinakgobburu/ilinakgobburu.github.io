@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<meta name="referrer" content="no-referrer">
+<title>Option Richness · Rule vs ML</title>
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<div class="wrap">
+
+<nav aria-label="Page">
+  <a class="brand" href="index.html">Portfolio of work</a>
+  <div class="links">
+    <a href="#results">Results</a>
+    <a href="#how">How it was tested</a>
+    <a href="#limits">Limits</a>
+  </div>
+</nav>
+
+<header>
+  <div class="eyebrow">Machine learning · Options · Research, Fall 2026</div>
+  <h1>Which stocks' options are most overpriced? <span class="accent">A one-line rule beat the ML</span></h1>
+  <p class="lede">Each month, rank S&amp;P 500 stocks by how overpriced their one-month at-the-money options
+    look, then check against the volatility the stock actually delivered. Four contenders, from simple to
+    complex: sell everything, a one-line ratio rule, logistic regression and a shallow random forest. The
+    models, the scoring, the pass bar and the rule for which model goes to the final test were all
+    registered before any data was computed. The final test was then run once.</p>
+  <div class="prov">
+    <span><b>494</b> stocks</span>
+    <span><b>2017–20</b> development</span>
+    <span><b>2021–23</b> final test, run once</span>
+    <span>option data from <b>LSEG</b></span>
+  </div>
+</header>
+
+<div class="tiles">
+  <div class="tile hero">
+    <div class="label">Simple rule, final test</div>
+    <div class="value">+1.03</div>
+    <div class="sub">vol points richer than the average stock's options (t 4.1), positive in 29 of 36 months.
+      The rule ranks stocks by implied vol over last month's realized vol.</div>
+  </div>
+  <div class="tile">
+    <div class="label">The pre-chosen model</div>
+    <div class="value">−0.42</div>
+    <div class="sub">points behind the simple rule for logistic regression (t −1.5). It had to beat the rule, so
+      it failed its bar.</div>
+  </div>
+  <div class="tile">
+    <div class="label">Development</div>
+    <div class="value">+0.1</div>
+    <div class="sub">points added by either model over the simple rule in 2017–20 (t 0.3–0.4): noise, before
+      the final test confirmed it.</div>
+  </div>
+</div>
+
+<h2 id="results">Results</h2>
+<section class="panel">
+  <div class="pb">
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th class="l">Contender</th><th>2017–20</th><th>2021–23</th><th>vs simple rule, 2021–23</th></tr></thead>
+        <tbody>
+          <tr><td class="l">Simple rule: implied ÷ last month's realized vol</td><td>+1.99 (t 6.1)</td><td>+1.03 (t 4.1)</td><td></td></tr>
+          <tr><td class="l">Logistic regression, the pre-chosen model</td><td>+2.12 (t 6.5)</td><td>+0.61 (t 3.9)</td><td>−0.42 (t −1.5)</td></tr>
+          <tr><td class="l">Random forest, reported only</td><td>+2.10 (t 8.2)</td><td>+1.20 (t 5.7)</td><td>+0.17 (t 0.6)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="pb prose">
+    <p>Each month, the top fifth of stocks a contender picks, minus the average stock, in how far implied
+      vol ended above the realized vol that followed (vol points). "Sell everything" scores zero by
+      construction. The forest edged the rule in the final test, but by noise, and it wasn't the
+      pre-chosen model, so it can't be claimed.</p>
+  </div>
+</section>
+
+<h2 id="how">How it was tested</h2>
+<section class="panel">
+  <div class="pb prose">
+    <ul>
+      <li><strong>Registered first.</strong> The question, the contenders, the scoring, the pass bar and
+        the choice rule were committed before any code or data.</li>
+      <li><strong>Walk-forward.</strong> An expanding window refit every January, with any row whose
+        outcome wasn't yet known purged from training.</li>
+      <li><strong>Reviewed before the run.</strong> An independent review added tests for possible
+        look-ahead paths before the development run.</li>
+      <li><strong>One shot at the final test.</strong> The development result was recomputed exactly first,
+        then 2021–23 was run once.</li>
+      <li><strong>Honest error bars.</strong> t-statistics come from the monthly results, not from tens of
+        thousands of stock-months that all move with the market.</li>
+    </ul>
+  </div>
+</section>
+
+<h2 id="limits">Limits</h2>
+<section class="panel">
+  <div class="pb prose">
+    <ul>
+      <li><strong>Relative, not profit.</strong> "Richer than the average stock" is a ranking result, not a
+        trading P&amp;L.</li>
+      <li><strong>Fading edge.</strong> The simple rule scored about half its development size in the final
+        test, and only +0.35 in 2023.</li>
+      <li><strong>Survivorship.</strong> The stocks are the S&amp;P 500 as of the end of 2023; the data
+        vendor has no implied vol for firms that left.</li>
+      <li><strong>Weak classifiers.</strong> As yes/no predictors the models were weak (AUC 0.52–0.53);
+        any value is in the ranking's top fifth.</li>
+    </ul>
+  </div>
+</section>
+
+<div style="height:14px"></div>
+
+<section class="panel">
+  <div class="ph">Tools and skills</div>
+  <div class="pb card">
+    <div class="tags"><span>logistic regression</span><span>random forest</span><span>walk-forward</span><span>pre-registration</span><span>implied volatility</span><span>Python</span><span>LSEG data</span></div>
+  </div>
+</section>
+
+<p class="reach">For further details or the full analysis, please reach out.</p>
+
+<footer>
+  Research alongside an algorithmic trading course, Fall 2026. Option data from LSEG.
+</footer>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<meta name="referrer" content="no-referrer">
+<title>Single-Stock Vol Premium</title>
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<div class="wrap">
+
+<nav aria-label="Page">
+  <a class="brand" href="index.html">Portfolio of work</a>
+  <div class="links">
+    <a href="#found">What it found</a>
+    <a href="#how">How it was tested</a>
+    <a href="#limits">Limits</a>
+  </div>
+</nav>
+
+<header>
+  <div class="eyebrow">Options · Volatility · Research, Fall 2026</div>
+  <h1>A decade of single-stock option premium, <span class="accent">erased by one month</span></h1>
+  <p class="lede">Is a one-month at-the-money option on a typical S&amp;P 500 stock priced above the
+    volatility the stock then delivers, and by how much? Each month, take the median stock (about 460
+    stocks, 2014–2023) and compare its implied vol with the next 21 trading days' realized vol: in vol
+    points, and in variance, the unit a delta-hedged option seller's P&amp;L is actually built on. The rules
+    were registered before anything was computed.</p>
+  <div class="prov">
+    <span><b>120</b> months</span>
+    <span><b>~460</b> stocks a month</span>
+    <span><b>2014–2023</b></span>
+    <span>option data from <b>LSEG</b></span>
+  </div>
+</header>
+
+<div class="tiles">
+  <div class="tile hero">
+    <div class="label">Usually overpriced</div>
+    <div class="value">87 of 120</div>
+    <div class="sub">months in which the typical stock's options were priced above the moves that followed</div>
+  </div>
+  <div class="tile">
+    <div class="label">But small on average</div>
+    <div class="value">+1.4</div>
+    <div class="sub">vol points over the decade (t 1.8), not statistically different from zero</div>
+  </div>
+  <div class="tile">
+    <div class="label">March 2020</div>
+    <div class="value">−78</div>
+    <div class="sub">vol points: every one of 475 stocks moved more than its options priced. In variance, that
+      month equals 62 average good months.</div>
+  </div>
+  <div class="tile">
+    <div class="label">Timing gauge</div>
+    <div class="value">r = −0.01</div>
+    <div class="sub">between "options look rich against last month" and the next month's premium</div>
+  </div>
+</div>
+
+<h2 id="found">What it found</h2>
+<section class="panel">
+  <div class="pb prose">
+    <ul>
+      <li><strong>Usually a small premium.</strong> In the median month, the typical stock's options were
+        priced about 2.7 vol points above what followed, roughly a tenth of implied vol.</li>
+      <li><strong>Zero in the seller's own units.</strong> In variance, the decade's average was about zero,
+        because March 2020 wiped out the rest. Leaving that month out brings back a clear premium, but a
+        seller can't leave out the crash.</li>
+      <li><strong>The classic short-volatility shape.</strong> The average good month earned +4.1 vol
+        points; the average bad month lost −5.8, and a few were very large.</li>
+      <li><strong>Shocks start calm.</strong> The first month of every shock in the decade (August 2015,
+        February 2018, October 2018, February 2020) opened with options looking rich. The gauge turned
+        negative only after each crash, just as selling became profitable again.</li>
+    </ul>
+  </div>
+</section>
+
+<h2 id="how">How it was tested</h2>
+<section class="panel">
+  <div class="pb prose">
+    <ul>
+      <li><strong>Registered first.</strong> The question, the measures and the stress windows were
+        committed before anything was computed, and the study was run once.</li>
+      <li><strong>The typical company, not the index.</strong> The median stock each month, so the largest
+        tech names don't dominate.</li>
+      <li><strong>Honest error bars.</strong> Standard errors (with Newey-West) come from the 120 monthly
+        numbers, not from 55,000 stock-months that all move with the market.</li>
+      <li><strong>Checked by hand and for look-ahead.</strong> Worked examples recomputed by hand matched
+        the run exactly, and tests check that nothing after the formation date can move the gauge.</li>
+    </ul>
+  </div>
+</section>
+
+<h2 id="limits">Limits</h2>
+<section class="panel">
+  <div class="pb prose">
+    <ul>
+      <li><strong>Not a trading P&amp;L.</strong> No spreads or hedging costs; a seller earns less than
+        this premium.</li>
+      <li><strong>Survivorship.</strong> The stocks are the index as of the end of 2023.</li>
+      <li><strong>One option per stock.</strong> One-month, at-the-money only; earnings timing is
+        approximated by the calendar.</li>
+    </ul>
+  </div>
+</section>
+
+<div style="height:14px"></div>
+
+<section class="panel">
+  <div class="ph">Tools and skills</div>
+  <div class="pb card">
+    <div class="tags"><span>volatility risk premium</span><span>implied volatility</span><span>realized volatility</span><span>Newey-West</span><span>pre-registration</span><span>Python</span><span>LSEG data</span></div>
+  </div>
+</section>
+
+<p class="reach">For further details or the full analysis, please reach out.</p>
+
+<footer>
+  Research alongside an algorithmic trading course, Fall 2026. Option data from LSEG.
+</footer>
+
+</div>
+</body>
+</html>
