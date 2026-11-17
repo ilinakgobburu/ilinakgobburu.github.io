@@ -42,15 +42,15 @@
 
 <div class="tiles">
   <div class="tile hero">
-    <div class="label">Screened stocks that passed</div>
+    <div class="label">Screen picks that passed</div>
     <div class="value">0 of 3</div>
-    <div class="sub">stocks a registered premium screen picked (Disney, Marriott, Southwest) beat T-bills on all
-      four cost bases</div>
+    <div class="sub">the registered premium screen's pick (Disney) and two follow-ups (Marriott, Southwest) beat
+      T-bills on all four cost bases</div>
   </div>
   <div class="tile">
     <div class="label">Costs vs premium</div>
-    <div class="value">2–4 vs 1–2</div>
-    <div class="sub">points a year: bid/ask spreads against the premium the hedged book earned</div>
+    <div class="value">0.5–4 vs 1–2</div>
+    <div class="sub">points a year: bid/ask spreads, by stock, against the premium the hedged book earned</div>
   </div>
   <div class="tile">
     <div class="label">The one pass</div>
@@ -85,7 +85,7 @@
   <div class="pb prose">
     <p>Return a year above 3-month T-bills, compounded, on the cash the margin rules required at the tightest
       point. Fills at mid or at bid/ask, each with and without interest on short-sale proceeds (a retail
-      account usually doesn't get it). The pass bar was registered for the three screen picks; applying it to
+      account usually doesn't get it). The pass bar was registered for the screen's pick, Disney; applying it to
       the other samples is after the fact.</p>
   </div>
 </section>
@@ -99,7 +99,7 @@
       <li><strong>Past premium doesn't pick stocks.</strong> Disney, the screen's top pick, went from an 8.0%
         premium in 2010–18 to −0.3% in 2019–23. Even where the premium held, spreads ate it.</li>
       <li><strong>No tweak helped.</strong> The best setting found in-sample lost to the baseline on all four
-        cost bases in both out-of-sample samples. Volatility filters, protective legs and a jet-fuel hedge
+        cost bases in both out-of-sample samples. Volatility filters and protective legs
         didn't help either.</li>
       <li><strong>No free lunch in the synthetic stock.</strong> Put-call parity held; adding a synthetic
         future cancels the volatility income.</li>
@@ -111,10 +111,11 @@
 <section class="panel">
   <div class="pb prose">
     <ul>
-      <li><strong>Single stocks at retail spreads.</strong> Index options have tighter spreads and a more
-        reliable premium; they weren't tested here.</li>
+      <li><strong>Single stocks at retail spreads.</strong> Index options, with tighter spreads, weren't
+        tested here.</li>
       <li><strong>Few samples.</strong> Five stocks, and the only pass is the sample the setup was built on.</li>
-      <li><strong>Daily closing quotes,</strong> one contract, no commissions.</li>
+      <li><strong>Daily closing quotes,</strong> one contract. The stock hedge pays $0.005 a share, but a
+        per-order minimum isn't modeled (about $950 more over five years on Delta).</li>
     </ul>
   </div>
 </section>

@@ -31,9 +31,9 @@
     look, then check against the volatility the stock actually delivered. Four contenders, from simple to
     complex: sell everything, a one-line ratio rule, logistic regression and a shallow random forest. The
     models, the scoring, the pass bar and the rule for which model goes to the final test were all
-    registered before any data was computed. The final test was then run once.</p>
+    registered before any feature, label or model fit was computed. The final test was then run once.</p>
   <div class="prov">
-    <span><b>494</b> stocks</span>
+    <span><b>484–494</b> stocks</span>
     <span><b>2017–20</b> development</span>
     <span><b>2021–23</b> final test, run once</span>
     <span>option data from <b>LSEG</b></span>
@@ -42,7 +42,7 @@
 
 <div class="tiles">
   <div class="tile hero">
-    <div class="label">Simple rule, final test</div>
+    <div class="label">The bar the model had to beat</div>
     <div class="value">+1.03</div>
     <div class="sub">vol points richer than the average stock's options (t 4.1), positive in 29 of 36 months.
       The rule ranks stocks by implied vol over last month's realized vol.</div>
@@ -88,7 +88,8 @@
   <div class="pb prose">
     <ul>
       <li><strong>Registered first.</strong> The question, the contenders, the scoring, the pass bar and
-        the choice rule were committed before any code or data.</li>
+        the choice rule were committed before any code, feature or model fit. The underlying stock panel had
+        been built earlier, for <a href="single-stock-vol-premium.html">a related study</a>.</li>
       <li><strong>Walk-forward.</strong> An expanding window refit every January, with any row whose
         outcome wasn't yet known purged from training.</li>
       <li><strong>Reviewed before the run.</strong> An independent review added tests for possible
@@ -109,9 +110,9 @@
         trading P&amp;L.</li>
       <li><strong>Fading edge.</strong> The simple rule scored about half its development size in the final
         test, and only +0.35 in 2023.</li>
-      <li><strong>Survivorship.</strong> The stocks are the S&amp;P 500 as of the end of 2023; the data
-        vendor has no implied vol for firms that left.</li>
-      <li><strong>Weak classifiers.</strong> As yes/no predictors the models were weak (AUC 0.52–0.53);
+      <li><strong>Survivorship.</strong> The stocks are the S&amp;P 500 as of the end of 2023; none of
+        nine departed firms checked had implied vol in the vendor's data.</li>
+      <li><strong>Weak classifiers.</strong> As yes/no predictors the models were weak (AUC 0.50–0.52 in the final test);
         any value is in the ranking's top fifth.</li>
     </ul>
   </div>

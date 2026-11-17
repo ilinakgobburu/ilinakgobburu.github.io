@@ -31,7 +31,7 @@
   <p class="lede">One book with four parts: futures trend-following, merger arbitrage, selling put options
     on ETFs, and a crash hedge, chosen from 60+ tests whose rules were written before they ran. It is
     trading on an Interactive Brokers paper (simulated) account from Nov 2 to Dec 1, 2026, against a simple
-    benchmark of one-third SPY, two-thirds T-bills. The case for it is lower risk, not higher return.</p>
+    benchmark of one-third SPY, two-thirds T-bills. The case for it is lower drawdown than SPY, not higher return.</p>
   <div class="prov">
     <span><b>$50M</b> paper (simulated)</span>
     <span><b>2005–2025</b> history</span>
@@ -101,8 +101,8 @@
 </div>
 
 <h2 id="backtest">Backtest: <span class="accent">lower drawdown than SPY</span>, not higher return</h2>
-<p class="lede">The final design in each window. The rules were designed on 2015–22 and frozen for a first
-  look at 2005–14; 2023–25 was a second look. Sharpe ratios assume cash earns 0%.</p>
+<p class="lede">The final design in each window. The rules were designed on 2015–22. 2023–25 was tested
+  before the design was final, so it counts as a second look; 2005–14 was opened only after the design was frozen. Sharpe ratios assume cash earns 0%.</p>
 
 <div class="grid g-3-2">
   <section class="panel">
@@ -128,10 +128,10 @@
     <div class="ph">How to read it</div>
     <div class="pb prose">
       <ul>
-        <li><strong>Lower risk.</strong> Drawdowns were far smaller than SPY's in every window, including 2008
-          (approximately −5.8% vs SPY −36.8%).</li>
+        <li><strong>Lower drawdown than SPY.</strong> Drawdowns were far smaller than SPY's in every window,
+          including the 2008 crisis.</li>
         <li><strong>Not higher return.</strong> Returns were well below SPY's in every window, and growth was
-          close to the benchmark's.</li>
+          close to the benchmark's, except in 2023–25, when it was about 2.3 points a year lower.</li>
         <li><strong>Not ahead every time.</strong> In 2023–25 the benchmark had the higher Sharpe and the
           smaller drawdown.</li>
       </ul>
@@ -142,10 +142,11 @@
 <h2 id="live">The live run: <span class="accent">Nov 2 – Dec 1, 2026</span>, on a paper account</h2>
 <section class="panel">
   <div class="pb prose">
-    <p id="live-status">The same rules, trading $50M of paper (simulated) capital for 21 sessions. Live numbers load with the page.</p>
+    <p id="live-status">The same rules, plus one sleeve added mid-run (below), trading $50M of paper (simulated) capital for 21 sessions. Live numbers load with the page.</p>
     <p id="live-numbers"></p>
     <p>A few sessions of paper trading are noise: these numbers say more about whether the system runs than
-      about the strategy. The live book also carries one extra option-selling sleeve that has no backtest.</p>
+      about the strategy. On Nov 4, after seeing its 2026 test results, I added a small
+      option-selling sleeve (the wheel, about 10% of the account); it is not part of the 2005–25 backtest.</p>
   </div>
 </section>
 
@@ -186,11 +187,11 @@
 // Live numbers: updated by hand from the live-results CSVs (see the note above this script).
 const LIVE = {
   final: false,            // true after the Dec 1 close
-  asOf: '2026-11-09',      // last close included
-  sessions: 6,
+  asOf: '2026-11-16',      // last close included
+  sessions: 11,
   plannedSessions: 21,     // Nov 2 – Dec 1, 2026
-  ret:   {strategy: 0.001036, benchmark: -0.000618, spy: -0.004009},   // since the Oct 30 close
-  maxDD: {strategy: -0.008402, benchmark: -0.014764, spy: -0.044092}
+  ret:   {strategy: -0.008071, benchmark: -0.005733, spy: -0.020867},   // since the Oct 30 close
+  maxDD: {strategy: -0.011233, benchmark: -0.014764, spy: -0.044092}
 };
 
 (function () {

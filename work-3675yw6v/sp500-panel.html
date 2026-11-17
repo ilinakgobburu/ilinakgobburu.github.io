@@ -29,8 +29,8 @@
   <div class="eyebrow">Data engineering · Team course project, Fall 2026 · Work in progress</div>
   <h1>A <span class="accent">survivorship-bias-free</span> S&amp;P 500 panel, point in time since 1996</h1>
   <p class="lede">Every firm in the S&amp;P 500 on each date since 1996, including the ones later removed,
-    merged or delisted. Each firm sits under one permanent SEC ID, its CIK, so renamed and reused
-    tickers never split one company or splice two together. Index membership and, from 2016 on,
+    merged or delisted. Each firm is meant to sit under one permanent SEC ID, its CIK, so renamed and reused
+    tickers don't split one company or splice two together (a few known mismatches are being fixed). Index membership and, from 2016 on,
     firm IDs are built; a daily volatility layer is being added on top.</p>
   <div class="prov">
     <span><b>Work in progress</b></span>
@@ -53,7 +53,7 @@
   <div class="tile hero">
     <div class="label">Firm IDs, 2016 on</div>
     <div class="value">93%</div>
-    <div class="sub">707 of 764 firm segments carry a checked SEC CIK; every current member has one</div>
+    <div class="sub">707 of 764 firm segments carry an SEC CIK: 503 current members from Wikipedia's table, 204 checked through an LLM and SEC EDGAR</div>
   </div>
   <div class="tile">
     <div class="label">The LLM's own ID guesses</div>
@@ -89,7 +89,7 @@
         <li><strong>Permanent firm IDs from 2016 on,</strong> with the evidence for each ID, or the
           reason it was withheld, stored next to it.</li>
         <li><strong>One documented SQLite database,</strong> rebuilt from the raw inputs in one step;
-          211 automated tests pass.</li>
+          over 200 automated tests pass.</li>
         <li><strong>Daily macro series from FRED.</strong></li>
       </ul>
     </div>
@@ -105,7 +105,7 @@
         <li><strong>Firm IDs before 2016:</strong> those exits are listed but not resolved yet.</li>
       </ul>
       <p style="margin-top:12px">The aim: test whether a firm's attention or its place in the network
-        leads its realized volatility, and how much dropping delisted firms distorts a volatility
+        leads its realized volatility, and how much dropping delisted firms distorts a
         backtest.</p>
     </div>
   </section>
@@ -147,6 +147,8 @@
     <ul>
       <li><strong>Firm IDs start in 2016.</strong> Exits before 2016 are listed but unresolved, and
         57 segments from 2016 on still have no ID.</li>
+      <li><strong>Known mismatches being fixed.</strong> A few current members carry a successor company's
+        ID for years before that company existed, and two firms are missing from 2016 on.</li>
       <li><strong>The hand check is small and was not blind.</strong> On a 30-stay random sample, 24
         IDs agreed, none was wrong and 6 were blank. The answers were drafted by an AI assistant after
         seeing the pipeline's output and reviewed by a team member. With 30 rows, these are estimates.</li>

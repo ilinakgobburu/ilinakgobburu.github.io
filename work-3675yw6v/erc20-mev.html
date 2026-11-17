@@ -152,7 +152,7 @@
       <ul>
         <li><strong>Pruning beat everything.</strong> Dropping features that carried no signal on
           their own (single-feature AUC below 0.51) took lift from 1.66 to 4.28 in one step, +158%.
-          No other change gained more than 17%.</li>
+          The next largest gain was +26%, from a change of scaler.</li>
         <li><strong>The baseline was worse than one column.</strong> All 18 features through an
           IsolationForest scored 1.12. Gas price alone scored 3.74. The problem was noise, not the model.</li>
         <li><strong>Other models lost.</strong> Local outlier factor 1.25, PCA reconstruction error
@@ -216,7 +216,7 @@
       <div class="metric">0.9717<small>test ROC-AUC</small></div>
       <p class="model-note">Classifies each of 720,599 transactions from structure, fees, gas, timing and
         contract method, with SMOTENC to rebalance. PR-AUC 0.858. At a 0.82 threshold: precision 0.73,
-        recall 0.82. Validation and test scores match, so it generalizes.</p>
+        recall 0.82. Validation and test scores match, so it isn't overfitting; it wasn't tested on a later period.</p>
     </div>
   </section>
   <section class="panel">
@@ -226,7 +226,7 @@
       <div class="metric">0.185<small>MEV PR-AUC, vs 0.021 flat</small></div>
       <p class="model-note">Stage one separates MEV bots from everyone else; stage two sorts the rest into
         whales, trading bots and retail. Outgoing transfer count is the top signal (importance 0.63).
-        It also flags 641 unlabeled addresses that behave like MEV bots.</p>
+        It also flags 641 unlabeled addresses as possible MEV bots (probability above 0.5), though its precision on labeled MEV bots was low.</p>
     </div>
   </section>
   <section class="panel">
@@ -262,14 +262,13 @@
 <section class="panel">
   <div class="pb prose">
     <ul>
-      <li><strong>Gas price is the shared MEV signature.</strong> The supervised model weights it
-        positively. The DEX-arbitrage cluster's median gas price is 229 gwei. In the anomaly ranker's
-        top 5%, transactions above 200 gwei are 93 times more common than in the rest (9.3% vs 0.1%).</li>
-      <li><strong>Two sides of the same trade.</strong> The transaction-level models flag senders with ENS
-        names; the bots the clustering finds have none. The MEV label marks a transaction if either side
-        is a known bot, so the transaction models learn the people trading with bots, and the clustering
-        finds the bots themselves.</li>
-      <li><strong>Features beat models, in all five pipelines.</strong> Feature engineering and selection
+      <li><strong>Gas price marks some of the bots.</strong> The supervised model weights it
+        positively. The DEX-arbitrage cluster's median gas price is 229 gwei; the MEV searchers' cluster paid 6.5–11.8 gwei. In the anomaly ranker's
+        top 5% (on the 4,731-transaction sample), transactions above 200 gwei are 93 times more common than in the rest (9.3% vs 0.1%).</li>
+      <li><strong>Labels mark both sides of a trade.</strong> The MEV label marks a transaction if either
+        side is a known bot, so the transaction-level models can learn the bots' counterparties as well as
+        the bots.</li>
+      <li><strong>Features beat models in the anomaly loop.</strong> There, feature engineering and selection
         moved results more than the choice of algorithm.</li>
     </ul>
   </div>

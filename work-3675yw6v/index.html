@@ -26,7 +26,7 @@
     <a href="#quant"><b>Quant Trading &amp; Research</b><span>Systematic strategies with rules fixed before testing; one is trading live on a paper account.</span></a>
     <a href="#ml"><b>Machine Learning</b><span>MEV bots in 1.9M Ethereum transfers, and ML against a simple rule for picking overpriced options.</span></a>
     <a href="#options"><b>Options &amp; Volatility</b><span>Where listed option prices actually exist, and option-selling strategies backtested.</span></a>
-    <a href="#engineering"><b>Data &amp; Software Engineering</b><span>A point-in-time S&amp;P 500 database keyed on permanent SEC firm IDs.</span></a>
+    <a href="#engineering"><b>Data &amp; Software Engineering</b><span>A point-in-time S&amp;P 500 database keyed on SEC firm IDs.</span></a>
   </div>
 
   <div class="work" id="all">
@@ -36,8 +36,8 @@
       <h2 id="h-quant">Quant Trading &amp; Research</h2>
       <div class="topic-body">
         <a class="card" href="quant-strategy.html">
-          <div class="eyebrow">Quant trading · live</div>
-          <h3>A $50M multi-asset strategy, run live</h3>
+          <div class="eyebrow">Quant trading · live paper run</div>
+          <h3>A $50M multi-asset strategy, run live on a paper account</h3>
           <p>Trend, merger arbitrage and put-writing, chosen from 60+ pre-registered tests and traded on an Interactive
             Brokers paper account, Nov 2 – Dec 1, 2026.</p>
           <div class="tags"><span>futures</span><span>merger arb</span><span>options</span><span>IBKR</span></div>
@@ -48,7 +48,7 @@
           
           <a class="row" href="research-log.html">
             <h3>Research log: ideas tested and rejected</h3>
-            <p>About two dozen trading ideas, each with a pass bar fixed before any data was pulled. Most failed, and they're listed with their bars.</p>
+            <p>About fifteen trading ideas, most with a pass bar written down before the run. Most failed, and they're listed with their bars.</p>
             <div class="tags"><span>pre-registration</span><span>options</span><span>momentum</span></div>
           </a>
           <a class="row also" href="sp500-panel.html#why">
@@ -90,7 +90,7 @@
         <a class="card" href="wheel-mastercard.html">
           <div class="eyebrow">Algorithmic trading · options</div>
           <h3>The wheel on Mastercard, then five stocks</h3>
-          <p>Sell puts, get assigned, sell calls. Implied volatility beat realized in 9 of 9 test cycles; part two runs the
+          <p>Sell puts, get assigned, sell calls. Implied volatility was above realized in 9 of 9 test cycles (8 of 9 for the options sold); part two runs the
             same wheel on five stocks as one portfolio.</p>
           <div class="tags"><span>short volatility</span><span>walk-forward</span><span>PutWrite benchmark</span></div>
           <div class="go">Open project →</div>
@@ -118,7 +118,7 @@
           </a>
           <a class="row" href="pmcc-delta-hedged.html">
             <h3>Hedging the direction out of a PMCC</h3>
-            <p>Hedged to zero delta, what's left is a volatility premium of 1–2 points a year against 2–4 points of spreads: 0 of 3 screened stocks beat T-bills.</p>
+            <p>Hedged to zero delta, what's left is a volatility premium of 1–2 points a year against up to 4 points of spreads: the screen's pick and two follow-ups all failed to beat T-bills.</p>
             <div class="tags"><span>delta hedging</span><span>T-bills</span><span>LSEG</span></div>
           </a>
         </div>
@@ -131,8 +131,8 @@
         <a class="card" href="sp500-panel.html">
           <div class="eyebrow">Data wrangling</div>
           <h3>A survivorship-bias-free S&amp;P 500 panel</h3>
-          <p>Every firm in the index since 1996, including the ones that left, under a permanent SEC ID that
-            survives renamed and reused tickers.</p>
+          <p>Every firm in the index since 1996, including the ones that left, with SEC IDs from 2016 on that
+            survive renamed and reused tickers.</p>
           <div class="tags"><span>SQLite</span><span>SEC EDGAR</span><span>WRDS TAQ</span><span>local LLM</span></div>
           <div class="status">in progress</div>
           <div class="go">Open project →</div>
