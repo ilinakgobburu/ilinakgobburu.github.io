@@ -18,6 +18,7 @@
   <a class="brand" href="index.html">Portfolio of work</a>
   <div class="links">
     <a href="#why">Why it's needed</a>
+    <a href="#result">First result</a>
     <a href="#built">What's built</a>
     <a href="#firm-ids">Firm IDs</a>
     <a href="#limits">Limits</a>
@@ -29,36 +30,37 @@
   <div class="eyebrow">Data engineering · Team course project, Fall 2026 · Work in progress</div>
   <h1>A <span class="accent">survivorship-bias-free</span> S&amp;P 500 panel, point in time since 1996</h1>
   <p class="lede">Every firm in the S&amp;P 500 on each date since 1996, including the ones later removed,
-    merged or delisted. Each firm is meant to sit under one permanent SEC ID, its CIK, so renamed and reused
-    tickers don't split one company or splice two together (a few known mismatches are being fixed). Index membership and, from 2016 on,
-    firm IDs are built; a daily volatility layer is being added on top.</p>
+    merged or delisted, with a permanent SEC ID (CIK) for firms from 2016 on, so renamed and reused tickers
+    don't split one company or splice two together. Built from free sources and checked against CRSP's
+    licensed list. First result: backtesting on today's member list overstates an equal-weighted S&amp;P 500
+    by 5.1 points a year. A daily volatility layer from intraday trades is being added.</p>
   <div class="prov">
     <span><b>Work in progress</b></span>
-    <span>status as of the <b>2026-11-11</b> build</span>
+    <span>status as of the <b>2026-11-17</b> build</span>
     <span>membership <b>1996-01-02</b> to <b>2026-11-04</b></span>
   </div>
 </header>
 
 <div class="tiles">
+  <div class="tile hero">
+    <div class="label">Survivorship bias</div>
+    <div class="value">+5.1</div>
+    <div class="sub">points a year that today's member list adds to an equal-weighted S&amp;P 500 backtest, 2016–2025</div>
+  </div>
+  <div class="tile">
+    <div class="label">Checked against CRSP</div>
+    <div class="value">92</div>
+    <div class="sub">of 1.27 million stock-days differ from CRSP's licensed index list</div>
+  </div>
+  <div class="tile">
+    <div class="label">Firm IDs, 2016 on</div>
+    <div class="value">92%</div>
+    <div class="sub">709 of 767 firm segments; 503 come from Wikipedia's current list</div>
+  </div>
   <div class="tile">
     <div class="label">Index history</div>
-    <div class="value">1,269</div>
-    <div class="sub">stays in the index since 1996, every one kept; 503 still open</div>
-  </div>
-  <div class="tile">
-    <div class="label">Survivorship</div>
-    <div class="value">125 of 453</div>
-    <div class="sub">firms in the index on 2016-01-04 (with an ID so far) that have left it since</div>
-  </div>
-  <div class="tile hero">
-    <div class="label">Firm IDs, 2016 on</div>
-    <div class="value">93%</div>
-    <div class="sub">707 of 764 firm segments carry an SEC CIK: 503 current members from Wikipedia's table, 204 checked through an LLM and SEC EDGAR</div>
-  </div>
-  <div class="tile">
-    <div class="label">The LLM's own ID guesses</div>
-    <div class="value">0 of 273</div>
-    <div class="sub">were right, so none is used. The model names the company; SEC EDGAR supplies the ID</div>
+    <div class="value">1,271</div>
+    <div class="sub">index stays since 1996, all kept; 503 still open</div>
   </div>
 </div>
 
@@ -78,6 +80,36 @@
   </div>
 </section>
 
+<h2 id="result">First result: <span class="accent">today's list overstates the return</span></h2>
+<section class="panel">
+  <div class="pb">
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th class="l">Growth of $1, 2016–2025</th><th>Value-weighted</th><th>Equal-weighted</th></tr></thead>
+        <tbody>
+          <tr><td class="l">True index (who was in it each day)</td><td>$4.00</td><td>$3.18</td></tr>
+          <tr><td class="l">Survivors only (116 delisted firms left out)</td><td>$4.08</td><td>$3.30</td></tr>
+          <tr><td class="l">Today's list (503 members at the end of 2025), held back to 2016</td><td>$4.45</td><td>$4.94</td></tr>
+          <tr><td class="l">Overstatement from today's list</td><td>+1.2 points a year</td><td>+5.1 points a year</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="pb prose">
+    <ul>
+      <li><strong>Today's list holds only the winners,</strong> firms that grew into the index, so the bias is
+        largest when every stock gets the same weight.</li>
+      <li><strong>It shows up in returns, not volatility.</strong> Portfolio volatility moved by at most 0.3
+        points a year across the six versions.</li>
+      <li><strong>Leaving is not failing.</strong> Of the 116 firms delisted by 2025, 106 were acquired and
+        10 failed.</li>
+      <li><strong>Checked against CRSP.</strong> The free-source membership agrees with CRSP's licensed
+        S&amp;P 500 list on all but 92 of 1.27 million stock-days, and the true index's return tracks CRSP's
+        to 0.01 basis points a day.</li>
+    </ul>
+  </div>
+</section>
+
 <h2 id="built">What is built, and what is not yet</h2>
 <div class="grid g-1-1">
   <section class="panel">
@@ -85,7 +117,7 @@
     <div class="pb prose">
       <ul>
         <li><strong>Index membership, 1996 to 2026.</strong> Every stay kept, including firms that
-          left; today's members match Wikipedia's current list.</li>
+          left; it matches CRSP's licensed list on all but 92 of 1.27 million stock-days.</li>
         <li><strong>Permanent firm IDs from 2016 on,</strong> with the evidence for each ID, or the
           reason it was withheld, stored next to it.</li>
         <li><strong>One documented SQLite database,</strong> rebuilt from the raw inputs in one step;
@@ -98,15 +130,14 @@
     <div class="ph">In progress</div>
     <div class="pb prose">
       <ul>
-        <li><strong>Daily realized volatility from intraday trades:</strong> code and a 20-firm pilot;
-          the full pull has not run yet.</li>
-        <li><strong>A covariance network between firms:</strong> planned.</li>
+        <li><strong>Daily realized volatility from intraday trades:</strong> built for the days
+          downloaded so far; the full download started on Nov 17.</li>
+        <li><strong>A covariance network between firms:</strong> built for the days downloaded so far.</li>
         <li><strong>Wikipedia attention data:</strong> an 18-firm sample so far.</li>
         <li><strong>Firm IDs before 2016:</strong> those exits are listed but not resolved yet.</li>
       </ul>
-      <p style="margin-top:12px">The aim: test whether a firm's attention or its place in the network
-        leads its realized volatility, and how much dropping delisted firms distorts a
-        backtest.</p>
+      <p style="margin-top:12px">Next: forecasting tests against a standard HAR model, using attention,
+        network position and other signals.</p>
     </div>
   </section>
 </div>
@@ -132,11 +163,11 @@
   <section class="panel">
     <div class="ph">Why the checks matter</div>
     <div class="pb prose">
-      <p>The model was also asked for each CIK. None of its 273 was right, and it rated every one
+      <p>The model was also asked for each CIK. None of its 275 was right, and it rated every one
         "high" confidence. It fits names to letters: TAP became Atmos Energy (it is Molson Coors).</p>
       <p>An early version trusted an EDGAR name match alone. An audit found that 44 of its 144 IDs
         (31%) were the wrong firm, real companies whose names happen to fit the ticker. With the second
-        source and rules for known traps, the current build finds 212 of the 273 IDs and withholds 61.</p>
+        source and rules for known traps, the current build finds 213 of the 275 IDs and withholds the rest.</p>
     </div>
   </section>
 </div>
@@ -146,14 +177,18 @@
   <div class="pb prose">
     <ul>
       <li><strong>Firm IDs start in 2016.</strong> Exits before 2016 are listed but unresolved, and
-        57 segments from 2016 on still have no ID.</li>
-      <li><strong>Known mismatches being fixed.</strong> A few current members carry a successor company's
-        ID for years before that company existed, and two firms are missing from 2016 on.</li>
+        58 segments from 2016 on still have no ID.</li>
+      <li><strong>Older tickers.</strong> The free membership file uses today's tickers for some older
+        companies. The three cases since 2016 (Tyco, the old Chubb and Arconic) are fixed; older ones are
+        still folded in.</li>
+      <li><strong>Draft results.</strong> The backtest and CRSP figures come from the team's draft brief of
+        2026-11-17; the volatility results wait for the full download.</li>
       <li><strong>The hand check is small and was not blind.</strong> On a 30-stay random sample, 24
         IDs agreed, none was wrong and 6 were blank. The answers were drafted by an AI assistant after
         seeing the pipeline's output and reviewed by a team member. With 30 rows, these are estimates.</li>
       <li><strong>Licensed data stays licensed.</strong> The membership and firm-ID layers use only
-        public sources; nothing from the licensed intraday data is published.</li>
+        public sources. The CRSP check and the backtest use licensed CRSP returns, and only aggregate results
+        are shown; nothing from the licensed intraday data is published.</li>
     </ul>
   </div>
 </section>
@@ -163,11 +198,11 @@
 <section class="panel" id="tools">
   <div class="ph">Tools and sources</div>
   <div class="pb card">
-    <div class="tags"><span>point-in-time data</span><span>survivorship bias</span><span>SQLite</span><span>SEC EDGAR</span><span>local LLM</span><span>FRED</span><span>WRDS TAQ</span><span>automated tests</span></div>
-    <p style="margin-top:12px">Sources as of the 2026-11-11 build: an open-source S&amp;P 500
+    <div class="tags"><span>point-in-time data</span><span>survivorship bias</span><span>SQLite</span><span>SEC EDGAR</span><span>local LLM</span><span>FRED</span><span>WRDS TAQ</span><span>CRSP</span><span>backtesting</span><span>automated tests</span></div>
+    <p style="margin-top:12px">Sources as of the 2026-11-17 build: an open-source S&amp;P 500
       membership history (MIT license), updated from S&amp;P Dow Jones Indices press releases;
       Wikipedia, "Historical components of the S&amp;P 500" (CC BY-SA 4.0); SEC EDGAR; FRED (Federal
-      Reserve Bank of St. Louis).</p>
+      Reserve Bank of St. Louis); CRSP via WRDS (licensed), for the check and the backtest only.</p>
   </div>
 </section>
 
