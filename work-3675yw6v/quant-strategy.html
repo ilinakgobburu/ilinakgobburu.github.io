@@ -146,7 +146,9 @@
     <p id="live-numbers"></p>
     <p>A few sessions of paper trading are noise: these numbers say more about whether the system runs than
       about the strategy. On Nov 4, after seeing its 2026 test results, I added a small
-      option-selling sleeve (the wheel, about 10% of the account); it is not part of the 2005–25 backtest.</p>
+      option-selling sleeve (the wheel, about 10% of the account); it is not part of the 2005–25 backtest.
+      From the Nov 23 roll, I also raised merger arbitrage to half of the non-trend part, above the backtest's
+      40% cap. That change is live-only too, and an earlier test of it didn't support it.</p>
   </div>
 </section>
 
@@ -187,11 +189,11 @@
 // Live numbers: updated by hand from the live-results CSVs (see the note above this script).
 const LIVE = {
   final: false,            // true after the Dec 1 close
-  asOf: '2026-11-20',      // last close included
-  sessions: 15,
+  asOf: '2026-11-23',      // last close included
+  sessions: 16,
   plannedSessions: 21,     // Nov 2 – Dec 1, 2026
-  ret:   {strategy: -0.032802, benchmark: -0.027561, spy: -0.087215},   // since the Oct 30 close
-  maxDD: {strategy: -0.035885, benchmark: -0.032641, spy: -0.100416}
+  ret:   {strategy: -0.015019, benchmark: -0.013019, spy: -0.044236},   // since the Oct 30 close
+  maxDD: {strategy: -0.036928, benchmark: -0.032641, spy: -0.100416}
 };
 
 (function () {

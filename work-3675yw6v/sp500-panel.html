@@ -21,27 +21,27 @@
     <a href="#why">Why it's needed</a>
     <a href="#result">Backtest</a>
     <a href="#forecast">Forecasting</a>
+    <a href="#cases">Case studies</a>
     <a href="#built">What's built</a>
     <a href="#firm-ids">Firm IDs</a>
     <a href="#limits">Limits</a>
-    <a href="#tools">Tools</a>
   </div>
 </nav>
 
 <header>
-  <div class="eyebrow">Data engineering · Team course project, Fall 2026 · Work in progress</div>
+  <div class="eyebrow">Data engineering · Team course project, Fall 2026</div>
   <h1>A <span class="accent">survivorship-bias-free</span> S&amp;P 500 panel, point in time since 1996</h1>
   <p class="lede">Every firm in the S&amp;P 500 on each date since 1996, including the ones later removed,
     merged or delisted, with a permanent SEC ID (CIK) for firms from 2016 on, so renamed and reused tickers
     don't split one company or splice two together. On top sits a daily volatility layer built from intraday
-    trades on 3,240 trading days, 2014–2026. Backtesting on today's member list overstates an equal-weighted
+    trades on 3,241 trading days, 2014–2026. Backtesting on today's member list overstates an equal-weighted
     S&amp;P 500 by 5.1 points a year, and volatility forecasts tested only on today's members look better than
     they are.</p>
   <div class="prov">
-    <span><b>Work in progress</b></span>
-    <span>status as of <b>2026-11-20</b></span>
+    <span>final data built <b>2026-11-21</b></span>
     <span>membership <b>1996-01-02</b> to <b>2026-11-04</b></span>
-    <span>intraday trades <b>2014–2026</b></span>
+    <span>intraday trades <b>2014-01-02</b> to <b>2026-11-19</b></span>
+    <span>due <b>Dec 1, 2026</b></span>
   </div>
 </header>
 
@@ -58,13 +58,13 @@
   </div>
   <div class="tile">
     <div class="label">Intraday data</div>
-    <div class="value">3,240</div>
+    <div class="value">3,241</div>
     <div class="sub">trading days of trades for every member, 2014–2026, with bad prints repaired</div>
   </div>
   <div class="tile">
     <div class="label">Firms that left</div>
-    <div class="value">+27%</div>
-    <div class="sub">higher forecast error a week ahead for firms that later left the index (preliminary)</div>
+    <div class="value">+24%</div>
+    <div class="sub">higher forecast error a week ahead for firms that later left the index</div>
   </div>
 </div>
 
@@ -103,8 +103,9 @@
     <ul>
       <li><strong>Today's list holds only the winners,</strong> firms that grew into the index, so the bias is
         largest when every stock gets the same weight.</li>
-      <li><strong>It shows up in returns, not volatility.</strong> Portfolio volatility moved by at most 0.3
-        points a year across the six versions.</li>
+      <li><strong>It hits volatile stocks hardest.</strong> Today's list adds 12.1 points a year to the most
+        volatile fifth of stocks and 0.3 to the least volatile. Standard factor exposures explain only 0.4 of
+        the 12.1 points.</li>
       <li><strong>Leaving is not failing.</strong> Of the 116 firms delisted by 2025, 106 were acquired and
         10 failed.</li>
       <li><strong>Checked against CRSP.</strong> The free-source membership agrees with CRSP's licensed
@@ -114,7 +115,7 @@
   </div>
 </section>
 
-<h2 id="forecast">Forecasting volatility, <span class="accent">preliminary results</span></h2>
+<h2 id="forecast">Forecasting volatility <span class="accent">on the true index</span></h2>
 <section class="panel">
   <div class="pb prose">
     <p>The project asked whether Wikipedia attention or a firm's place in the correlation network helps
@@ -127,82 +128,106 @@
       <table class="tbl">
         <thead><tr><th class="l">Added to HAR</th><th>Next day</th><th>Next week</th></tr></thead>
         <tbody>
-          <tr><td class="l">Options-implied volatility</td><td>+7.6%</td><td>+16.1%</td></tr>
-          <tr><td class="l">Earnings date coming up</td><td>+13.4%</td><td>+14.4%</td></tr>
-          <tr><td class="l">Market volatility (SPY)</td><td>+1.0%</td><td>+0.2%</td></tr>
+          <tr><td class="l">Options-implied volatility</td><td>+7.5%</td><td>+16.0%</td></tr>
+          <tr><td class="l">Earnings date coming up</td><td>+13.3%</td><td>+14.5%</td></tr>
+          <tr><td class="l">Market volatility (SPY)</td><td>+0.7%</td><td>+0.3%</td></tr>
           <tr><td class="l">Up and down moves, jumps</td><td>+0.3%</td><td>+0.5%</td></tr>
-          <tr><td class="l">Macro (VIX, rates)</td><td>+0.2%</td><td>−2.3%</td></tr>
+          <tr><td class="l">Macro (VIX, rates)</td><td>−0.1%</td><td>−2.5%</td></tr>
           <tr><td class="l">Wikipedia attention</td><td>0.0%</td><td>−0.1%</td></tr>
-          <tr><td class="l">Network position</td><td>0.0%</td><td>−0.7%</td></tr>
-          <tr><td class="l">Every signal, LASSO</td><td>+20.0%</td><td>+23.4%</td></tr>
+          <tr><td class="l">Network position</td><td>−0.2%</td><td>−0.5%</td></tr>
+          <tr><td class="l">Every signal, LASSO</td><td>+19.5%</td><td>+21.5%</td></tr>
         </tbody>
       </table>
     </div>
   </div>
   <div class="pb prose">
-    <p>Lower forecast error than HAR alone (QLIKE loss), so higher is better.</p>
+    <p>Lower forecast error than HAR alone (QLIKE loss), so higher is better. Models with every signal are
+      scored through August 2025, where the options data ends.</p>
     <ul>
       <li><strong>Attention and network add nothing.</strong> Neither improved on HAR, alone or on top of
         options-implied volatility. The useful information was in option prices and the earnings calendar.</li>
-      <li><strong>HAR is hard to beat.</strong> It already cuts forecast error by 23% against carrying today's
-        volatility forward.</li>
+      <li><strong>HAR is hard to beat.</strong> It already cuts forecast error by 18% a day ahead and 21% a
+        week ahead against carrying recent volatility forward.</li>
       <li><strong>The combined model held up in stress.</strong> LASSO with every signal beat HAR in calm
-        periods, the 2022 rate hikes and the 2023 bank failures. In the COVID crash it was no better than HAR a
-        week ahead, and gradient boosting with the same signals did much worse.</li>
+        periods, the 2022 rate selloff and the 2023 bank failures. In the COVID crash it helped a day ahead but
+        not a week ahead. Gradient boosting with the same signals broke down in COVID because it can't forecast
+        outside the range it trained on.</li>
       <li><strong>Survivorship shows up here too.</strong> 233 of the 763 stocks in the index since 2016 have
-        left it. They were more volatile (median 23.8% a year against 20.6%) and harder to forecast, with 27%
-        higher error a week ahead. Testing only on today's members makes HAR look 4% better than it is.</li>
-      <li><strong>A volatility-targeted portfolio</strong> (equal weights, 15% target, rebalanced weekly,
-        2016–2025) returned 12.2% a year on today's list against 9.1% on the true index. HAR forecast the
-        portfolio's volatility better than the last 22 days did, and adding options and earnings didn't
-        improve it further.</li>
+        left it. They had 34% more variance and were 15% (next day) to 24% (next week) harder to forecast, so
+        testing only on today's members makes HAR look 2.5% to 3.8% better than it is. Most of that comes from
+        takeovers. Acquired firms were no more volatile than the rest but much harder to forecast.</li>
+      <li><strong>Earnings days matter.</strong> They are 3.2% of stock-days but carry 8.2% of all variance.</li>
     </ul>
-    <p style="margin-top:12px">These results come from a run on the full data before the final cleaning pass,
-      so the numbers may still move. Models with every signal are scored through August 2025, where the
-      options data ends.</p>
   </div>
 </section>
 
-<h2 id="built">What is built, and what is not yet</h2>
+<h2 id="cases">Two case studies</h2>
 <div class="grid g-1-1">
   <section class="panel">
-    <div class="ph">Built</div>
+    <div class="ph">For an investor: a volatility-targeted portfolio</div>
     <div class="pb prose">
       <ul>
-        <li><strong>Index membership, 1996 to 2026.</strong> 1,271 index stays, all kept, including firms that
-          left. It matches CRSP's licensed list on all but 92 of 1.27 million stock-days.</li>
-        <li><strong>Permanent firm IDs from 2016 on</strong> for 709 of 767 firm segments, with the evidence
-          for each ID, or the reason it was withheld, stored next to it.</li>
-        <li><strong>Intraday trades for every member</strong> on 3,240 trading days, 2014–2026, pulled as
-          batch jobs on the WRDS Cloud. From them come daily realized volatility (with its up and down parts
-          and jumps) for about 1.6 million stock-days, and a daily correlation network between firms.</li>
-        <li><strong>Bad-print repair.</strong> One trade reported far from the market can fake a large move
-          (UNH on 2016-03-17 showed 179 times an outside source's volatility). Suspect windows are pulled again
-          and cleaned with a published filter.</li>
-        <li><strong>Outside checks.</strong> SPY's volatility tracks Oxford-Man's library with a correlation
-          of 0.99 over 1,537 days (2016 until it closed in 2022). Forty large caps track VOLARE's at 0.98
-          (2016). TAQ closing prices match CRSP's on all 2,834 stock-days checked.</li>
-        <li><strong>Forecasting signals.</strong> Wikipedia pageviews for 568 of 675 firms, FRED macro
-          series, options-implied volatility and earnings dates.</li>
-        <li><strong>Tools for users.</strong> A loader that returns the index on any date, and a checker that
-          reports how far a backtest's ticker list is from the true index.</li>
-        <li><strong>One documented SQLite database,</strong> rebuilt from the raw inputs in one step. Over 350
-          automated tests run on every pull request, on Linux and a Mac. In a planted-bug test they caught 41
-          of 43 deliberate bugs.</li>
+        <li><strong>The setup.</strong> Equal weights, a 15% volatility target, rebalanced weekly, 2016–2025,
+          run on the true index and on today's list.</li>
+        <li><strong>Today's list flatters it.</strong> With the HAR forecast it returns 12.9% a year against
+          9.8% on the true index (+3.1 points, 95% interval 2.0 to 4.4). $1 million grows to $3.05 million
+          instead of $2.36 million.</li>
+        <li><strong>Most of the gap isn't delistings.</strong> About 2.3 to 2.6 of the 3.1 points come from
+          firms that left the index but still trade, mostly removed for size. Dropping only delisted firms
+          adds 0.5 points.</li>
+        <li><strong>The forecast mattered for risk, not return.</strong> No forecast changed the return
+          detectably. HAR forecast the portfolio's risk better than the naive forecast did.</li>
       </ul>
     </div>
   </section>
   <section class="panel">
-    <div class="ph">In progress</div>
+    <div class="ph">For a researcher: rerunning a published comparison</div>
     <div class="pb prose">
       <ul>
-        <li><strong>The final rebuild of the volatility tables,</strong> after a review of the last suspect
-          prints. The forecasting results will be rerun on it.</li>
-        <li><strong>Firm IDs before 2016:</strong> those exits are listed but not resolved yet.</li>
+        <li><strong>The paper.</strong> Brini (2026) compares HAR models with a time-series foundation model
+          (TTM) on 40 stocks that survived the whole sample.</li>
+        <li><strong>Reproduced first.</strong> The paper's own code, run unchanged on its own data, matches
+          its published results to within 0.0024 (QLIKE).</li>
+        <li><strong>Then rerun on three lists:</strong> the paper's 40 stocks, the 40 largest each year picked
+          without hindsight, and every S&amp;P 500 member on each date (611 stocks).</li>
+        <li><strong>The result holds, weakly.</strong> TTM's error is 1.4% to 3.1% lower than Log-HAR's, but
+          only one result (every member, a week ahead) is clearly different from zero, and on the full index
+          much of the edge comes from 2020. Survivorship doesn't drive it.</li>
       </ul>
     </div>
   </section>
 </div>
+
+<h2 id="built">What is built</h2>
+<section class="panel">
+  <div class="pb prose">
+    <ul>
+      <li><strong>Index membership, 1996 to 2026.</strong> 1,272 index stays, all kept, including firms that
+        left. It matches CRSP's licensed list on all but 92 of 1.27 million stock-days.</li>
+      <li><strong>Permanent firm IDs from 2016 on</strong> for 713 of 767 firm segments, with the evidence
+        for each ID, or the reason it was withheld, stored next to it.</li>
+      <li><strong>Intraday trades for every member</strong> on 3,241 trading days, 2014–2026, pulled as
+        batch jobs on the WRDS Cloud. From them come daily realized volatility (with its up and down parts and
+        jumps) for 1.63 million stock-days, and a daily correlation network between firms.</li>
+      <li><strong>Bad-print repair.</strong> One trade reported far from the market can fake a large move
+        (UNH on 2016-03-17 showed 179 times an outside source's volatility). Suspect windows are pulled again
+        and cleaned with a published filter. Nine stock-days the repair couldn't fix were excluded after a
+        review.</li>
+      <li><strong>Outside checks.</strong> Forty large caps track VOLARE's volatility with a correlation of
+        0.988 over 116,938 stock-days, and their covariances at 0.992. SPY's volatility tracks Oxford-Man's
+        library at 0.976 over 2,041 days (2014 until it closed in 2022). TAQ closing prices match CRSP's on
+        all 2,834 stock-days checked.</li>
+      <li><strong>Forecasting signals.</strong> Wikipedia pageviews for 570 of 678 firms, FRED macro series,
+        options-implied volatility and earnings dates.</li>
+      <li><strong>Tools for users.</strong> A loader that returns the index on any date, and a checker that
+        reports how far a backtest's ticker list is from the true index. There is also a fixed volatility
+        forecasting benchmark and a Parquet and DuckDB export.</li>
+      <li><strong>One documented SQLite database</strong> of 16 tables, rebuilt from the raw inputs in one
+        step. Over 600 automated tests run on every pull request, on Linux and a Mac. In a planted-bug test
+        they caught 41 of 43 deliberate bugs.</li>
+    </ul>
+  </div>
+</section>
 
 <h2 id="firm-ids">Firm IDs: <span class="accent">an LLM proposes, two sources check</span></h2>
 <div class="grid g-3-2">
@@ -229,7 +254,7 @@
         "high" confidence. It fits names to letters: TAP became Atmos Energy (it is Molson Coors).</p>
       <p>An early version trusted an EDGAR name match alone. An audit found that 44 of its 144 IDs
         (31%) were the wrong firm, real companies whose names happen to fit the ticker. With the second
-        source and rules for known traps, the current build finds 213 of the 275 IDs and withholds the rest.</p>
+        source and rules for known traps, the final build finds 217 of the 275 IDs and withholds the rest.</p>
     </div>
   </section>
 </div>
@@ -239,16 +264,16 @@
   <div class="pb prose">
     <ul>
       <li><strong>Coverage.</strong> Realized volatility and the network start in 2014, every other layer in
-        2016. Firm IDs before 2016 are unresolved, and 58 segments from 2016 on still have no ID.</li>
+        2016. Firm IDs before 2016 are unresolved, and 54 segments from 2016 on still have no ID.</li>
       <li><strong>Older tickers.</strong> The free membership file uses today's tickers for some older
         companies. The three cases since 2016 (Tyco, the old Chubb and Arconic) are fixed; older ones are
         still folded in.</li>
-      <li><strong>Draft results.</strong> The backtest and CRSP figures come from the team's draft brief of
-        2026-11-17. The forecasting results are preliminary.</li>
       <li><strong>Earnings dates are treated as known in advance.</strong> Firms announce them weeks ahead,
         but a date that later moved is a small look-ahead.</li>
-      <li><strong>The hand check is small and was not blind.</strong> On a 30-stay random sample, 24
-        IDs agreed, none was wrong and 6 were blank. The answers were drafted by an AI assistant after
+      <li><strong>The portfolio levels are loose.</strong> Nine years of weekly returns leave wide intervals
+        on each portfolio's return. Only the gap between the true index and today's list is precise.</li>
+      <li><strong>The hand check is small and was not blind.</strong> On a 30-stay random sample, 25
+        IDs agreed, none was wrong and 5 were blank. The answers were drafted by an AI assistant after
         seeing the pipeline's output and reviewed by a team member. With 30 rows, these are estimates.</li>
       <li><strong>Licensed data stays licensed.</strong> The membership, firm-ID and attention layers use only
         public sources. The intraday trades (TAQ), CRSP returns, options-implied volatility (OptionMetrics)
@@ -262,20 +287,21 @@
 <section class="panel" id="tools">
   <div class="ph">Tools and sources</div>
   <div class="pb card">
-    <div class="tags"><span>point-in-time data</span><span>survivorship bias</span><span>realized volatility</span><span>HAR</span><span>LASSO</span><span>SQLite</span><span>SEC EDGAR</span><span>local LLM</span><span>WRDS TAQ</span><span>WRDS Cloud</span><span>CRSP</span><span>OptionMetrics</span><span>backtesting</span><span>CI</span></div>
-    <p style="margin-top:12px">Sources as of 2026-11-20: an open-source S&amp;P 500 membership history
-      (MIT license), updated from S&amp;P Dow Jones Indices press releases; Wikipedia, "Historical components
-      of the S&amp;P 500" (CC BY-SA 4.0); Wikimedia pageviews; SEC EDGAR; FRED (Federal Reserve Bank of
-      St. Louis); TAQ, CRSP, OptionMetrics and Compustat via WRDS (licensed). Outside checks: the Oxford-Man
-      Realized Library and VOLARE (Cipollini et al., 2026).</p>
+    <div class="tags"><span>point-in-time data</span><span>survivorship bias</span><span>realized volatility</span><span>HAR</span><span>LASSO</span><span>SQLite</span><span>DuckDB</span><span>SEC EDGAR</span><span>local LLM</span><span>WRDS TAQ</span><span>WRDS Cloud</span><span>CRSP</span><span>OptionMetrics</span><span>backtesting</span><span>CI</span></div>
+    <p style="margin-top:12px">Sources: an open-source S&amp;P 500 membership history (MIT license), updated
+      from S&amp;P Dow Jones Indices press releases; Wikipedia, "Historical components of the S&amp;P 500"
+      (CC BY-SA 4.0); Wikimedia pageviews; SEC EDGAR; FRED (Federal Reserve Bank of St. Louis); Kenneth
+      French's data library; TAQ, CRSP, OptionMetrics and Compustat via WRDS (licensed). Outside checks: the
+      Oxford-Man Realized Library and VOLARE (Cipollini et al., 2026). Case study: Brini (2026), arXiv
+      2607.05291, and its public code.</p>
   </div>
 </section>
 
 <p class="reach">For further details or the full analysis, please reach out.</p>
 
 <footer>
-  Team course project, data wrangling, Fall 2026. Work in progress. Figures are as of 2026-11-20 unless a
-  date says otherwise.
+  Team course project, data wrangling, Fall 2026. Figures are from the final data build of 2026-11-21 unless
+  a date says otherwise.
 </footer>
 
 </div>
