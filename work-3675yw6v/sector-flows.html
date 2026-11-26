@@ -20,6 +20,7 @@
   <div class="links">
     <a href="#how">How it was measured</a>
     <a href="#found">What it found</a>
+    <a href="#monday">Monday rebound</a>
     <a href="#limits">Limits</a>
   </div>
 </nav>
@@ -28,14 +29,15 @@
   <div class="eyebrow">Market note · Sector ETFs · Algorithmic trading course, Fall 2026</div>
   <h1>Tracking tech's <span class="accent">ripple effect</span> on the market</h1>
   <p class="lede">NVIDIA lost 23% of its value in the five sessions of November 16–20, 2026, and the
-    technology sector fund (XLK) fell 12.5%. This note measures what the other ten S&amp;P 500 sectors did
-    that week and how much of it tech's move explains. It looks at prices (each sector's beta to tech), money
+    technology sector fund (XLK) fell 12.5% in price. This note measures what the other ten S&amp;P 500
+    sectors did that week and how much of it tech's move explains. It looks at prices (each sector's beta to tech), money
     moving in and out of sector funds (ETF creations and redemptions) and option prices (implied
-    volatility).</p>
+    volatility). It ends with Monday, Nov 23, when NVIDIA rose 31.5% and closed above where the week
+    began.</p>
   <div class="prov">
-    <span><b>10</b> sector funds, plus SPY, TLT, GLD, SGOV</span>
+    <span><b>11</b> sector funds (XLK and ten others), plus SPY, TLT, GLD, SGOV</span>
     <span>two-year baseline, <b>504</b> sessions</span>
-    <span>event week <b>Nov 16–20, 2026</b></span>
+    <span>event week <b>Nov 16–20, 2026</b>, plus <b>Nov 23</b></span>
     <span>market data from <b>LSEG</b></span>
   </div>
 </header>
@@ -44,7 +46,8 @@
   <div class="tile hero">
     <div class="label">Beta missed</div>
     <div class="value">9 of 10</div>
-    <div class="sub">sectors fell more than their beta to tech predicted, by 1.7 to 5.5 points over the week</div>
+    <div class="sub">sectors fell more than their beta to tech predicted, by 1.7 to 5.5 points over the week, and
+      the gaps were still there after Monday's rebound</div>
   </div>
   <div class="tile">
     <div class="label">How unusual</div>
@@ -54,12 +57,13 @@
   <div class="tile">
     <div class="label">Biggest outflow</div>
     <div class="value">$1.38bn</div>
-    <div class="sub">left the energy fund Monday to Thursday, more than in 99% of four-day stretches</div>
+    <div class="sub">left the energy fund Monday to Thursday by trade date, more than in 99% of four-day stretches</div>
   </div>
   <div class="tile">
     <div class="label">Option prices</div>
     <div class="value">≈2×</div>
-    <div class="sub">S&amp;P 500 implied vol went from 14.9 to 29.4, and a 30-day at-the-money SPY call from $1.71 to $3.37</div>
+    <div class="sub">S&amp;P 500 implied vol went from 14.9 to 29.4. The Black-Scholes price of a 30-day at-the-money call on
+      $100 of SPY went from $1.71 to $3.37</div>
   </div>
 </div>
 
@@ -73,11 +77,11 @@
         with tech's implied volatility.</li>
       <li><strong>ETF flows.</strong> The change in each fund's shares outstanding times its NAV. Shares are
         created when money comes in and redeemed when it leaves. Counts post about a day late, so flows are
-        shown both by trade date and by the date they posted.</li>
+        dated both ways, by trade date and by the date they posted. Neither view was chosen in advance, and the figures on this page are by trade date.</li>
       <li><strong>Implied volatility.</strong> Each fund's 30-day at-the-money implied vol, compared with the
         rise its usual link to tech's implied vol predicted.</li>
       <li><strong>Written down first.</strong> The funds, the baseline and the beta and flow measures were set
-        before any data was pulled. Four checks added after seeing the results are labeled as such.</li>
+        before any data was pulled. The greeks, the three-month beta tracker and the implied-vol data were added after the first price and share pull, before any of them was computed. Checks added after seeing the results are labeled as such.</li>
     </ul>
   </div>
 </section>
@@ -89,41 +93,72 @@
       <table class="tbl">
         <thead><tr><th class="l">Fund</th><th>Beta to tech</th><th>Predicted week</th><th>Actual week</th><th>Flows, Mon–Thu</th></tr></thead>
         <tbody>
-          <tr><td class="l">Financials (XLF)</td><td>0.28</td><td>−3.7%</td><td>−7.3%</td><td>−$588m</td></tr>
-          <tr><td class="l">Energy (XLE)</td><td>0.16</td><td>−1.9%</td><td>−7.1%</td><td>−$1,381m</td></tr>
-          <tr><td class="l">Health care (XLV)</td><td>0.08</td><td>−0.9%</td><td>−6.3%</td><td>−$912m</td></tr>
-          <tr><td class="l">Industrials (XLI)</td><td>0.45</td><td>−6.0%</td><td>−7.6%</td><td>−$496m</td></tr>
-          <tr><td class="l">Consumer discretionary (XLY)</td><td>0.50</td><td>−6.8%</td><td>−6.5%</td><td>−$197m</td></tr>
-          <tr><td class="l">Consumer staples (XLP)</td><td>−0.08</td><td>+1.2%</td><td>−2.1%</td><td>−$154m</td></tr>
-          <tr><td class="l">Utilities (XLU)</td><td>0.09</td><td>−1.1%</td><td>−3.1%</td><td>+$37m</td></tr>
-          <tr><td class="l">Materials (XLB)</td><td>0.32</td><td>−4.3%</td><td>−7.7%</td><td>−$183m</td></tr>
-          <tr><td class="l">Real estate (XLRE)</td><td>0.12</td><td>−1.6%</td><td>−4.4%</td><td>+$30m</td></tr>
-          <tr><td class="l">Communication services (XLC)</td><td>0.32</td><td>−4.3%</td><td>−8.3%</td><td>+$319m</td></tr>
-          <tr><td class="l">Long Treasuries (TLT)</td><td>0.03</td><td>−0.6%</td><td>+2.6%</td><td>+$959m</td></tr>
-          <tr><td class="l">Gold (GLD)</td><td>0.18</td><td>−2.1%</td><td>−9.6%</td><td>−$1,372m</td></tr>
+          <tr><td class="l">Financials (XLF)</td><td>0.28</td><td>−3.7%</td><td>−7.3%</td><td>−⁠$588m</td></tr>
+          <tr><td class="l">Energy (XLE)</td><td>0.16</td><td>−1.9%</td><td>−7.1%</td><td>−⁠$1,381m</td></tr>
+          <tr><td class="l">Health care (XLV)</td><td>0.08</td><td>−0.9%</td><td>−6.3%</td><td>−⁠$912m</td></tr>
+          <tr><td class="l">Industrials (XLI)</td><td>0.45</td><td>−6.0%</td><td>−7.6%</td><td>−⁠$496m</td></tr>
+          <tr><td class="l">Consumer discretionary (XLY)</td><td>0.50</td><td>−6.8%</td><td>−6.5%</td><td>−⁠$197m</td></tr>
+          <tr><td class="l">Consumer staples (XLP)</td><td>−0.08</td><td>+1.2%</td><td>−2.1%</td><td>−⁠$154m</td></tr>
+          <tr><td class="l">Utilities (XLU)</td><td>0.09</td><td>−1.1%</td><td>−3.1%</td><td>+⁠$37m</td></tr>
+          <tr><td class="l">Materials (XLB)</td><td>0.32</td><td>−4.3%</td><td>−7.7%</td><td>−⁠$183m</td></tr>
+          <tr><td class="l">Real estate (XLRE)</td><td>0.12</td><td>−1.6%</td><td>−4.4%</td><td>+⁠$30m</td></tr>
+          <tr><td class="l">Communication services (XLC)</td><td>0.32</td><td>−4.3%</td><td>−8.3%</td><td>+⁠$319m</td></tr>
+          <tr><td class="l">Long Treasuries (TLT)</td><td>0.03</td><td>−0.6%</td><td>+2.6%</td><td>+⁠$959m</td></tr>
+          <tr><td class="l">Gold (GLD)</td><td>0.18</td><td>−2.1%</td><td>−9.6%</td><td>−⁠$1,372m</td></tr>
         </tbody>
       </table>
     </div>
   </div>
   <div class="pb prose">
-    <p>Weeks are sums of the five daily log returns. Flows are by trade date, Monday to Thursday, because
-      Friday's had not posted.</p>
+    <p>Weeks are sums of the five daily log returns, which differ a little from price changes (XLK's week
+      was −13.3 by this measure). Flows are by trade date, Monday to Thursday, because Friday's had not posted
+      for 13 of the 15 funds.</p>
     <ul>
       <li><strong>The extra losses came before Friday.</strong> On Friday, when XLK fell 7.3%, every sector
-        landed within 0.3 points of its prediction or fell less. The gap built up Tuesday to Thursday, on days
+        landed within 0.3 points of its prediction or fell less. The gap built up mostly Tuesday to Thursday, on days
         tech moved −0.9%, +0.3% and −1.9%. (This day-by-day split was added after seeing the results.)</li>
       <li><strong>Beta had already faded.</strong> The two-year beta includes the April 2025 tariff crash,
         when everything moved together. Over the three months before the selloff, most sectors had little or
         no beta to tech, so on that measure the misses are even bigger.</li>
       <li><strong>No rotation into defensive sectors.</strong> Through Thursday, health care lost $912m and
-        staples $154m, while utilities and real estate took in only $37m and $30m. Energy and gold each lost
-        about $1.4bn. The money that came in went to long Treasuries ($959m) and T-bills ($2.06bn).</li>
+        staples $154m, while utilities and real estate took in only $37m and $30m. (By the date posted, staples
+        took in $230m.) Energy and gold each lost about $1.4bn. Long Treasuries took in $959m, more than usual
+        (89th percentile), and T-bills $2.06bn, about normal for a fund that grows most weeks. Communication
+        services took in $319m, most of it on Wednesday.</li>
       <li><strong>Implied vol rose in every sector.</strong> Real estate's rose 18 points against about 3
-        predicted. Energy and consumer discretionary rose less than predicted.</li>
-      <li><strong>Tech's implied vol explains part of the gap.</strong> Adding it to the prediction (an
+        predicted, though its series is one of the three noisy ones (see Limits). Financials' rose 12.8 points against 8.9. Energy and consumer discretionary rose less than predicted.</li>
+      <li><strong>Adding tech's implied vol narrows the gap.</strong> Adding it to the prediction (an
         after-the-fact check) closed 20–48% of the week's gap for the sectors that fell more than predicted,
-        but it overshot Friday's drop for every sector.</li>
+        but it overshot Friday's drop for every sector by 0.4 to 1.8 points and moved consumer discretionary's prediction too low. On Monday, with the fit fixed in advance, it did worse than beta alone.</li>
     </ul>
+  </div>
+</section>
+
+<h2 id="monday">The rebound on Monday, Nov 23</h2>
+<section class="panel">
+  <div class="pb prose">
+    <p>NVIDIA's price rose 31.5% on Monday and closed 1.4% above its Nov 13 close. Its beta to tech accounts
+      for about 11 of its 27 log points. The rest was specific to NVIDIA, a miss of 9.5 standard deviations.
+      XLK rose 9.0% and made back about two-thirds of the week's loss. It still closed 4.6% below its Nov 13
+      close.</p>
+    <ul>
+      <li><strong>Other sectors moved with their betas.</strong> Nine of the ten landed within 0.8 standard
+        deviations of their beta prediction. In daily log returns, industrials rose 3.83% against 3.86%
+        predicted and SPY 4.60% against 4.58%. Energy fell 1.06% where beta predicted a 1.47% rise (−1.7
+        standard deviations).</li>
+      <li><strong>The week's extra losses stayed.</strong> Because Monday's moves matched beta, the losses
+        beyond beta from Nov 16–20 were still there at Monday's close. Every sector fund was still down over
+        the six sessions. Eight sectors made back 19% (health care) to 60% (consumer discretionary) of the
+        week's loss, and staples and energy fell further.</li>
+      <li><strong>Adding vega did not help.</strong> The beta + vega prediction, added after seeing the week's
+        results, was fixed before Monday's data. It was closer for five sectors and further off for five, and
+        its average miss (0.75 points) was larger than beta's alone (0.64).</li>
+      <li><strong>Implied vol came down with tech's.</strong> XLK's 30-day at-the-money implied vol fell from
+        47.6 to 38.4 and the S&amp;P 500's from 29.4 to 21.9. Six of the eight series that are not noisy fell
+        within 1.5 points of their vol-beta prediction.</li>
+    </ul>
+    <p>Monday's prices and implied vol were pulled on Nov 24, and the measures for this section were written
+      down before that pull. Every prediction uses the two-year coefficients, not refitted.</p>
   </div>
 </section>
 
@@ -136,8 +171,9 @@
       <li><strong>ETF flows are only part of the money.</strong> Mutual funds, single stocks and futures
         aren't seen, some creations are arbitrage rather than investors, and flows can't be traced from one
         fund to another.</li>
-      <li><strong>Friday's flows are missing.</strong> By the second pull on Nov 24, Friday's trades had
-        still not posted for 13 of the 15 funds, so they are left out rather than counted as zero.</li>
+      <li><strong>Friday's and Monday's flows are missing.</strong> By the second pull on Nov 24, Friday's
+        trades had still not posted for 13 of the 15 funds, so they are left out rather than counted as zero.
+        Monday's are not shown either, because share counts post a day or more late.</li>
       <li><strong>Noisy option series.</strong> The implied vol series for materials, utilities and real
         estate jump around, so their changes should be read with care.</li>
     </ul>
@@ -156,8 +192,8 @@
 <p class="reach">For further details or the full analysis, please reach out.</p>
 
 <footer>
-  Market note, algorithmic trading course, Fall 2026. Market data from LSEG, through the Nov 20 close
-  (share counts pulled again Nov 24).
+  Market note, algorithmic trading course, Fall 2026. Market data from LSEG, pulled Nov 23 and 24, through
+  the Nov 20 close for the week and the Nov 23 close for the Monday section.
 </footer>
 
 </div>

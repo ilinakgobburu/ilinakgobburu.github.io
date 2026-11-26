@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<meta name="referrer" content="no-referrer">
+<title>Two-Sided Variance Trade</title>
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css?v=9d4624e66b">
+</head>
+<body>
+<div class="wrap">
+
+<nav aria-label="Page">
+  <a class="brand" href="index.html">Portfolio of work</a>
+  <div class="links">
+    <a href="#ladder">Model ladder</a>
+    <a href="#results">Results</a>
+    <a href="#why">Where the P&amp;L came from</a>
+    <a href="#nvda">NVDA, 2024–26</a>
+    <a href="#limits">Limits</a>
+  </div>
+</nav>
+
+<header>
+  <div class="eyebrow">Options · Volatility · Algorithmic trading course, Fall 2026</div>
+  <h1>The <span class="accent">two-sided</span> variance trade</h1>
+  <p class="lede">Options price a stock's downside and its upside separately. This strategy sells whichever
+    side is expensive against the stock's own realized moves on that side and buys the other. Shares hedge the
+    direction away, so the profit should come from the gap between implied and realized volatility. Four decision rules,
+    from always selling the put side to a random forest, were registered (written down and committed) before any of the strategy's
+    quantities were computed on real quotes. The results are from development, plus one run on NVIDIA (NVDA) that is reported but not scored as a test. The final
+    test has not been run.</p>
+  <div class="prov">
+    <span><b>5</b> stocks in development</span>
+    <span>walk-forward, <b>36</b> scored months (2021–23)</span>
+    <span>final test <b>not run</b></span>
+    <span>option data from <b>LSEG</b></span>
+  </div>
+</header>
+
+<div class="tiles">
+  <div class="tile hero">
+    <div class="label">Sharpe after costs</div>
+    <div class="value">−1.24</div>
+    <div class="sub">for the logistic regression in development (the model chosen for the final test), against
+      −0.81 for always selling the put side</div>
+  </div>
+  <div class="tile">
+    <div class="label">Sharpe at mid</div>
+    <div class="value">−0.45</div>
+    <div class="sub">for the same model before costs, against +0.04 for always selling the put side, the bar it
+      had to beat</div>
+  </div>
+  <div class="tile">
+    <div class="label">Hedged put alone</div>
+    <div class="value">+0.02</div>
+    <div class="sub">Sharpe ratio at mid for selling the delta-hedged put by itself, and −0.49 after costs
+      (reported only)</div>
+  </div>
+  <div class="tile">
+    <div class="label">Spread and hedge costs</div>
+    <div class="value">0.43–1.07</div>
+    <div class="sub">of Sharpe ratio lost by the four rules when fills move from mid to the bid/ask, plus 5 basis points per hedge
+      trade</div>
+  </div>
+</div>
+
+<h2 id="idea">How the trade works</h2>
+<section class="panel">
+  <div class="pb prose">
+    <ul>
+      <li><strong>Measure each side.</strong> The model-free variance sum behind the VIX, split at the
+        at-the-money strike, gives the puts and the calls each their own implied variance. Each side's premium
+        is the log ratio of that variance to the stock's down-day (or up-day) variance over the last 63
+        returns. It is taken net of the split a flat smile (the same implied vol at every strike) would give.</li>
+      <li><strong>Trade.</strong> Sell the rich side's 0.25-delta option and buy the cheap side's, about $200
+        of vega each, so the pair starts with roughly no exposure to a parallel move in implied vol. Both legs
+        are held to the next monthly expiry. One stock over one such cycle is a stock-cycle.</li>
+      <li><strong>Hedge and fills.</strong> Shares offset the options' delta at every open, on a $100,000 book
+        per stock. Results are shown at mid (halfway between bid and ask) and at a stress fill that crosses the bid/ask and pays 5 bp on
+        every hedge trade.</li>
+    </ul>
+  </div>
+</section>
+
+<h2 id="ladder">The model ladder and how it was tested</h2>
+<section class="panel">
+  <div class="pb prose">
+    <ul>
+      <li><strong>Four rungs.</strong> Rule 0 always sells the put side, as option sellers habitually do, and
+        is the bar. Rule 1 sells whichever side's premium is higher. A logistic regression and a shallow random
+        forest (500 trees of depth 3) predict whether selling the put side will make money. Their nine inputs
+        are known at entry and include the two side premiums, the smile's tilt and the VIX.</li>
+      <li><strong>Stay out when unsure.</strong> A model sells the put side when its probability is above
+        0.55, the call side when it is below 0.45, and does nothing in between.</li>
+      <li><strong>Walk-forward.</strong> Each month the models are refit only on stock-cycles that had already
+        expired, from 77 training rows in January 2021 to 200 in November 2023.</li>
+      <li><strong>One rung for the final test.</strong> A more complex rung goes to the final test (six stocks,
+        2024–26, allowed a single run) only if its development Sharpe ratio at mid beats the simpler candidates'. Rule 0 is the pass bar, not a candidate.</li>
+      <li><strong>Written down first.</strong> Every rule, down to the pass bar, was committed on November 11
+        and 15, 2026, before any of this strategy's implied variances, features or P&amp;L were computed on
+        real quotes. Two amendments that net the flat-smile split out of the signal were made after tests on
+        synthetic data, before any run on real data. The rules were written knowing an SPY pilot of the
+        measures and the wheel's results on these stocks in these years. Neither computed this strategy's
+        quantities.</li>
+    </ul>
+  </div>
+</section>
+
+<h2 id="results">Development results, 2021–23</h2>
+<section class="panel">
+  <div class="pb">
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th class="l">Rung</th><th>Trades</th><th>Hit rate, mid</th><th>Sharpe, mid</th><th>Sharpe, stress</th><th>Total, mid</th><th>Total, stress</th></tr></thead>
+        <tbody>
+          <tr><td class="l">Rule 0, always the put side (the bar)</td><td>128</td><td>55%</td><td>+0.04</td><td>−0.81</td><td>+0.5%</td><td>−10.7%</td></tr>
+          <tr><td class="l">Rule 1, the higher premium</td><td>128</td><td>48%</td><td>−0.47</td><td>−1.54</td><td>−4.7%</td><td>−15.9%</td></tr>
+          <tr><td class="l">Logistic regression (chosen for the test)</td><td>79</td><td>43%</td><td>−0.45</td><td>−1.24</td><td>−4.0%</td><td>−11.1%</td></tr>
+          <tr><td class="l">Random forest</td><td>35</td><td>37%</td><td>−1.34</td><td>−1.77</td><td>−5.4%</td><td>−8.6%</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="pb prose">
+    <p>Monthly returns of the five stocks' pooled book (their P&amp;L over 5 × $100,000), January 2021 to
+      December 2023, with no T-bill subtracted. Sharpe ratios are annualized. Trades are out of 128 scored
+      stock-cycles, a hit is a trade that made money at mid, and totals sum the monthly returns.</p>
+    <ul>
+      <li><strong>The logistic regression was chosen for the final test</strong> by the registered rule, because its
+        Sharpe ratio at mid (−0.45) edged rule 1's (−0.47). It was chosen on these same months, so its
+        development figure likely flatters it.</li>
+      <li><strong>Below the pass bar in development.</strong> To pass, its Sharpe ratio must be above zero after
+        costs and above rule 0's both at mid and after costs. It missed all three. At mid it was above zero for
+        only 1 of 5 stocks (NVDA, +0.40).</li>
+      <li><strong>The final test was not run.</strong> On November 16, the day of the development run, the
+        final-test window (six stocks, 2024–26) was kept for a better-designed trade.</li>
+    </ul>
+  </div>
+</section>
+
+<h2 id="why">Where the P&amp;L came from</h2>
+<section class="panel">
+  <div class="pb prose">
+    <p>Each trade's daily P&amp;L was split with each leg's greeks into stock moves (gamma), time decay
+      (theta) and implied-vol changes (vega). The hedge's P&amp;L and a residual are kept separate. The split is reported only. Dollars
+      are summed over the five stocks and the 36 scored months.</p>
+    <ul>
+      <li><strong>The hedged put alone about broke even before costs.</strong> Its time decay (+⁠$606,249) was
+        more than used up by stock moves (−⁠$540,821) and implied-vol changes (−⁠$109,257). With a residual of
+        +⁠$45,606 and −⁠$569 from the delta hedge, it ended at +⁠$1,209 at mid and −⁠$32,126 after costs.</li>
+      <li><strong>Costs were far larger than the edge.</strong> Always selling the put side made $2,724 at
+        mid. The spread and hedge costs at the stress fill were $56,401, which left a loss of $53,677.</li>
+      <li><strong>The signal did not pick the winning side.</strong> Rule 1, which trades the side premiums
+        directly, did worse than always selling the put side (Sharpe ratio −0.47 against +0.04 at mid). Hit rates fell
+        from 55% for rule 0 to 37% for the forest.</li>
+      <li><strong>The forest was rarely confident.</strong> Its probabilities ran from 0.41 to 0.63 and fell
+        inside the no-trade band for 93 of 128 stock-cycles.</li>
+    </ul>
+  </div>
+</section>
+
+<h2 id="nvda">NVDA alone, 2024–26</h2>
+<section class="panel">
+  <div class="pb prose">
+    <p>Reported, not judged. This run was added on November 17, after the development run. Its registration
+      and script were committed before anything was computed. The same rules ran on NVDA alone with one
+      $100,000 book, over 33 monthly cycles from January 2024 to October 2026 (29 measured). For this run, no
+      other test stock's 2024–26 data was read.</p>
+    <p>Two things limit what it shows. NVDA is one of the six final-test stocks, so these are its test-window
+      months. NVDA is also one of the five development stocks, and the only one where the logistic
+      regression's development Sharpe ratio at mid was above zero (+0.40). Its 2019–23 cycles are in both
+      logistic versions' training rows.</p>
+  </div>
+  <div class="pb">
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th class="l">Version</th><th>Trades</th><th>Sharpe, mid</th><th>Sharpe, stress</th></tr></thead>
+        <tbody>
+          <tr><td class="l desc">Logistic regression, refit at each entry on the development rows plus NVDA's finished cycles (the six-stock test would also add the other five stocks' cycles)</td><td>19</td><td>+0.18</td><td>−0.18</td></tr>
+          <tr><td class="l desc">Logistic regression, fit once on the 205 development rows, as the strategy's nightly order script fits it</td><td>19</td><td>+0.50</td><td>+0.13</td></tr>
+          <tr><td class="l desc">Rule 0, always the put side</td><td>29</td><td>−0.52</td><td>−0.86</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="pb prose">
+    <p>At mid the fit-once version ended $7,279 ahead of the refit version. One March 2025 cycle, which the refit
+      version traded and the fit-once version sat out, accounts for more than that whole gap. One stock over 34 calendar months gives a noisy Sharpe
+      ratio. These rules would also have entered one later NVDA cycle on October 19. It was never traded and is not
+      a test result.</p>
+  </div>
+</section>
+
+<h2 id="limits">Limits</h2>
+<section class="panel">
+  <div class="pb prose">
+    <ul>
+      <li><strong>Development only.</strong> No final-test result exists. The five stocks share 36 calendar
+        months, so one bad month for the market moves every book at once.</li>
+      <li><strong>Closing quotes.</strong> Options fill at the entry close, since the data holds closing quotes
+        only. Live fills come at the next open, and the stress fill cannot show overnight moves.</li>
+      <li><strong>A corridor of strikes.</strong> Each side's variance uses only strikes within 1.5 standard
+        deviations of the forward, so it leaves out the far tails. Of 295 development stock-cycles, 205 were
+        measured and the rest skipped for thin quotes (Disney was measured in only 22 of 59).</li>
+      <li><strong>Earnings and exercise.</strong> The earnings input uses actual report dates, while a live
+        trader knows only the expected ones. Early exercise and assignment are not modeled.</li>
+    </ul>
+  </div>
+</section>
+
+<div style="height:14px"></div>
+
+<section class="panel">
+  <div class="ph">Tools and skills</div>
+  <div class="pb card">
+    <div class="tags"><span>delta hedging</span><span>implied vs realized variance</span><span>volatility smile</span><span>logistic regression</span><span>random forest</span><span>walk-forward</span><span>greeks P&amp;L attribution</span><span>pre-registration</span><span>Python</span><span>LSEG data</span></div>
+  </div>
+</section>
+
+<p class="reach">For further details or the full analysis, please reach out.</p>
+
+<footer>
+  Course strategy project, algorithmic trading, Fall 2026. Option data from LSEG. Development run on
+  November 16, 2026, and the NVDA run on November 17. Final test not run.
+</footer>
+
+</div>
+</body>
+</html>

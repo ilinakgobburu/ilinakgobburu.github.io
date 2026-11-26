@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<meta name="referrer" content="no-referrer">
+<title>Trend Condor Strategy</title>
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css?v=9d4624e66b">
+</head>
+<body>
+<div class="wrap">
+
+<nav aria-label="Page">
+  <a class="brand" href="index.html">Portfolio of work</a>
+  <div class="links">
+    <a href="#rules">Rules</a>
+    <a href="#results">Results</a>
+    <a href="#sources">Profit sources</a>
+    <a href="#forward">Forward walk</a>
+    <a href="#limits">Limits</a>
+  </div>
+</nav>
+
+<header>
+  <div class="eyebrow">Options · NVDA · Algorithmic trading course, Fall 2026</div>
+  <h1>The put-tilted <span class="accent">trend condor</span> on NVDA</h1>
+  <p class="lede">An iron condor sells a put and a call and buys a farther put and call as protection, so its
+    loss is capped. This one trades the weekly options of NVIDIA (NVDA), and only in weeks when they look expensive against
+    NVDA's own recent volatility. The sold call sits farther out than the sold put. In the headline version, a trigger also hedges the
+    direction away once NVDA moves far from the entry. The rules were registered before any of the
+    strategy's results were computed. A second version without the trigger, called tilt only, was picked after seeing the test.</p>
+  <div class="prov">
+    <span>one <b>$100,000</b> book on NVDA</span>
+    <span>weekly test <b>Jan 2024 – Oct 2026</b></span>
+    <span>a condor in <b>101</b> of the 147 weeks with options</span>
+    <span>forward walk from <b>Nov 30, 2026</b> (expected)</span>
+  </div>
+</header>
+
+<div class="tiles">
+  <div class="tile hero">
+    <div class="label">Weekly test, registered</div>
+    <div class="value">0.987</div>
+    <div class="sub">Sharpe ratio of the headline version, above the 0.5 bar set before its one run (t-statistic 1.66). With next-day limit fills it was −0.795.</div>
+  </div>
+  <div class="tile">
+    <div class="label">Picked after the test</div>
+    <div class="value">1.127</div>
+    <div class="sub">Sharpe ratio of tilt only, the same condor without the trigger. Only the forward walk tests it.</div>
+  </div>
+  <div class="tile">
+    <div class="label">Profit from direction</div>
+    <div class="value">79%</div>
+    <div class="sub">of the headline's P&amp;L above T-bill interest came from delta, its exposure to NVDA's direction. Time decay, gamma and vega together lost $6,562.</div>
+  </div>
+  <div class="tile">
+    <div class="label">Forward walk</div>
+    <div class="value">52 weeks</div>
+    <div class="sub">that have not happened yet, both versions. Not started, 0 weeks scored.</div>
+  </div>
+</div>
+
+<h2 id="rules">The rules</h2>
+<section class="panel">
+  <div class="pb prose">
+    <ul>
+      <li><strong>One condor a week.</strong> Decided at the close of the week's first session and held to
+        that week's expiry. Each leg trades one contract for every 100 shares that $100,000 buys at the
+        close.</li>
+      <li><strong>A richness gate.</strong> The condor trades only when its edge is positive. The edge is the
+        sold options' bid minus their fair value, plus the bought options' fair value minus their ask. Fair value is priced at NVDA's realized volatility over the last 21 sessions, so a positive
+        edge means the options look expensive even after paying the spread.</li>
+      <li><strong>The tilt.</strong> The sold put has at most a 20% chance of finishing in the money and the
+        sold call at most 10%, so the call sits farther out. Of the condors that pass four risk limits, one of
+        them a $10,000 maximum loss, it takes the one with the largest edge.</li>
+      <li><strong>The trigger, headline only.</strong> Once NVDA closes more than one weekly standard deviation
+        from the entry close, the book trades shares to remove its exposure to direction (delta-neutral). It
+        stays neutral until expiry. The standard deviation uses the implied volatility at entry. Tilt only is the same strategy without the trigger.</li>
+      <li><strong>The judged fill.</strong> This is the fill the bar is judged on. Every option trades at the
+        entry close's bid or ask, and each share trade costs 5 basis points. Cash earns T-bill interest, and a
+        short option is assigned only at the expiry close.</li>
+    </ul>
+  </div>
+</section>
+
+<h2 id="results">Results of the weekly NVDA test</h2>
+<section class="panel">
+  <div class="pb">
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th class="l">Strategy</th><th>Sharpe, judged</th><th>Sharpe, next-day limit</th><th>Sharpe, at the mid</th><th>Return above T-bills</th><th>Largest drop</th></tr></thead>
+        <tbody>
+          <tr><td class="l">Headline (registered)</td><td>+0.987</td><td>−0.795</td><td>+1.246</td><td>+8.91%</td><td>−2.47%</td></tr>
+          <tr><td class="l">Tilt only (chosen after the test)</td><td>+1.127</td><td>−0.521</td><td>+1.268</td><td>+14.64%</td><td>−5.01%</td></tr>
+          <tr><td class="l">Plain condor (comparison)</td><td>−0.379</td><td>−0.725</td><td>−0.298</td><td>−9.20%</td><td>−18.22%</td></tr>
+          <tr><td class="l">Trigger only (comparison)</td><td>−0.747</td><td>−0.864</td><td>−0.624</td><td>−15.32%</td><td>−15.72%</td></tr>
+          <tr><td class="l">NVDA, bought and held</td><td>+1.404</td><td>—</td><td>—</td><td>+155.24%</td><td>−21.59%</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="pb prose">
+    <p>One $100,000 book each, 34 months. Sharpe ratios use monthly returns. The judged fill trades every
+      option at the closing bid or ask. The next-day limit column places a limit order at the mid (halfway
+      between bid and ask) for the next day, filled only if that day's mid reaches it. The mid column fills
+      every option at the mid. Return above T-bills adds up the monthly returns less the T-bill, not
+      compounded. The largest drop is from a peak with T-bill interest included, so it can be smaller than the worst month above T-bills (−2.83% for the headline, −5.37% for tilt only). The plain condor sells both options at up to a 20% chance of finishing in the money, and
+      trigger only adds the trigger to it.</p>
+    <ul>
+      <li><strong>Registered and run once.</strong> The headline's 0.987 cleared the 0.5 bar set before the
+        test (t-statistic 1.66). Its book grew 23.5% over the test, T-bill interest included, against 13.2% for
+        cash in T-bills.</li>
+      <li><strong>Tilt only was chosen after seeing this test,</strong> because it had the highest judged
+        Sharpe of the condor books. So its 1.127 is not a test of it.</li>
+      <li><strong>Without the tilt, the condor lost to T-bills.</strong> The plain condor scored −0.379 and
+        trigger only −0.747.</li>
+      <li><strong>The pass depends on the fill and assignment rules.</strong> Both tilted versions stayed
+        positive at the mid but turned negative with a next-day limit order. The course server assigns a short option at any close where it
+        is in the money. Under that rule, they scored −0.172 and −0.273.</li>
+      <li><strong>Holding NVDA scored higher,</strong> 1.404, with a largest drop of −21.59% against −2.47% for
+        the headline.</li>
+      <li><strong>A screen came first.</strong> Each version had to pass a monthly screen on
+        six stocks, using data already seen, to enter the weekly test. It needed a Sharpe above 0 in two
+        windows, July 2024 to December 2025 and January to October 2026. The headline scored 0.940 and 2.234.</li>
+    </ul>
+  </div>
+</section>
+
+<h2 id="sources">Where the profit came from</h2>
+<section class="panel">
+  <div class="pb">
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th class="l">Source</th><th>Headline</th><th>Tilt only</th><th>Plain condor</th></tr></thead>
+        <tbody>
+          <tr><td class="l">Theta + gamma</td><td>+⁠$4,477</td><td>+⁠$4,217</td><td>+⁠$719</td></tr>
+          <tr><td class="l">Vega</td><td>−⁠$11,039</td><td>−⁠$11,273</td><td>−⁠$5,862</td></tr>
+          <tr><td class="l"><b>Volatility lines</b></td><td><b>−⁠$6,562</b></td><td><b>−⁠$7,056</b></td><td><b>−⁠$5,143</b></td></tr>
+          <tr><td class="l">Delta</td><td>+⁠$7,997</td><td>+⁠$14,462</td><td>−⁠$2,063</td></tr>
+          <tr><td class="l">Residual</td><td>+⁠$11,062</td><td>+⁠$11,609</td><td>+⁠$242</td></tr>
+          <tr><td class="l">Costs</td><td>−⁠$2,407</td><td>−⁠$2,058</td><td>−⁠$2,256</td></tr>
+          <tr><td class="l"><b>Above the T-bill interest</b></td><td><b>+⁠$10,090</b></td><td><b>+⁠$16,957</b></td><td><b>−⁠$9,220</b></td></tr>
+          <tr><td class="l">T-bill interest on cash</td><td>+⁠$13,429</td><td>+⁠$13,599</td><td>+⁠$11,457</td></tr>
+          <tr><td class="l">Borrow fee on short shares</td><td>−⁠$12</td><td>−⁠$5</td><td>−⁠$23</td></tr>
+          <tr><td class="l"><b>Total P&amp;L</b></td><td><b>+⁠$23,506</b></td><td><b>+⁠$30,551</b></td><td><b>+⁠$2,214</b></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="pb prose">
+    <p>Dollars on each $100,000 book over the weekly test at the judged fill, split each day by the
+      option greeks. Theta is time decay, delta and gamma come from price moves, and vega from implied
+      volatility. Rows may not add exactly, due to rounding. The headline's +⁠$10,090 above T-bill interest is
+      10.09% of the starting book, while the results table's +8.91% sums monthly returns.</p>
+    <ul>
+      <li><strong>Time decay and gamma nearly cancel.</strong> The headline collected $50,518 of time decay and
+        gave back $46,041 to gamma, the cost of NVDA's moves against the short options.</li>
+      <li><strong>Vega lost money in all three.</strong> On balance, implied volatility rose while the condors
+        were short it. With theta and gamma added, the volatility lines still lost money in every book.</li>
+      <li><strong>Direction is where the tilted versions earned.</strong> Delta made $7,997 for the headline and
+        $14,462 for tilt only, 79% and 85% of each one's P&amp;L above the T-bill interest. The residual is also
+        large in both. It is the part the daily greeks leave unexplained, so the share from direction counts
+        delta alone.</li>
+    </ul>
+    <p>This is not a pure volatility bet. It does not forecast direction, but it is designed around NVDA's
+      upward drift. In the backtest, most of its profit came from how it handled direction.</p>
+  </div>
+</section>
+
+<h2 id="forward">The 52-week forward walk</h2>
+<section class="panel">
+  <div class="pb prose">
+    <ul>
+      <li><strong>Not started.</strong> The walk covers 52 weekly entries, starting with the first one after
+        the code freeze. They are expected to run from Nov 30, 2026 to Nov 22, 2027, scoring December 2026 to
+        November 2027. The code is not frozen yet, and 0 weeks are scored.</li>
+      <li><strong>Registered first.</strong> The walk was registered on November 23, 2026, before any forward
+        week was pulled or computed. The headline and tilt only each run on a fresh $100,000 book with the same
+        code. One amendment the same day, also before any forward week, changed how partial months are
+        scored.</li>
+      <li><strong>The bar.</strong> Each version needs a pooled monthly Sharpe of at least 0.5 at the judged
+        fill, the same bar and measure as the weekly test. Nothing changes once it starts, and there is no early
+        stop.</li>
+      <li><strong>What one year can say.</strong> With 12 monthly returns, a strategy with no edge still clears
+        0.5 about 3 times in 10, and one with a true Sharpe of 1.0 about 7 times in 10. The bar filters out
+        clear losers but does not prove an edge.</li>
+    </ul>
+  </div>
+</section>
+
+<h2 id="limits">Limits</h2>
+<section class="panel">
+  <div class="pb prose">
+    <ul>
+      <li><strong>One stock in a rising market.</strong> Most of the profit came from direction, in a period
+        when NVDA itself returned +155.24% above T-bills (monthly returns summed, or +326.1% compounded with T-bill interest). The backtest says little about a flat or falling
+        NVDA.</li>
+      <li><strong>Historical weeks.</strong> The weekly test was registered and run once, but it covers 2024–26,
+        the same years the six-stock screen used. Only the forward walk tests weeks that have not happened
+        yet.</li>
+      <li><strong>Fill and assignment assumptions.</strong> The judged fill assumes the trade is decided and filled near
+        the close. Assigning short options only at expiry is an assumption, since NVDA's options are
+        American-style and a holder can exercise earlier.</li>
+      <li><strong>A large residual.</strong> $11,062 of the headline's P&amp;L, more than its whole +⁠$10,090 above T-bill interest, is not explained by the daily
+        greeks.</li>
+    </ul>
+  </div>
+</section>
+
+<div style="height:14px"></div>
+
+<section class="panel">
+  <div class="ph">Tools and skills</div>
+  <div class="pb card">
+    <div class="tags"><span>iron condors</span><span>Black-76</span><span>option greeks</span><span>P&amp;L attribution</span><span>delta hedging</span><span>pre-registration</span><span>forward testing</span><span>Python</span><span>LSEG data</span></div>
+  </div>
+</section>
+
+<p class="reach">For further details or the full analysis, please reach out.</p>
+
+<footer>
+  Course strategy project, algorithmic trading, Fall 2026. Option data from LSEG. Forward walk not started
+  as of November 25, 2026.
+</footer>
+
+</div>
+</body>
+</html>

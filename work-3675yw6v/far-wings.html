@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<meta name="referrer" content="no-referrer">
+<title>Far Wings Strategy</title>
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css?v=9d4624e66b">
+</head>
+<body>
+<div class="wrap">
+
+<nav aria-label="Page">
+  <a class="brand" href="index.html">Portfolio of work</a>
+  <div class="links">
+    <a href="#how">How it was tested</a>
+    <a href="#results">Results</a>
+    <a href="#hedge">The hedge</a>
+    <a href="#live">Live run</a>
+    <a href="#limits">Limits</a>
+  </div>
+</nav>
+
+<header>
+  <div class="eyebrow">Options · Short volatility · Algorithmic trading course, Fall 2026</div>
+  <h1>Selling the far wings, <span class="accent">held to expiry</span></h1>
+  <p class="lede">A nightly options algorithm for the course's paper-trading server. Once a month it sells
+    one far out-of-the-money put and one far out-of-the-money call on each stock and holds them to expiry,
+    with no hedge. The registered version, written down before the final test, hedged with shares and did not pass. The
+    hedge was removed after that result. The unhedged re-run passes, but because of that change it is not a clean
+    out-of-sample result.</p>
+  <div class="prov">
+    <span>development <b>2019–23</b>, 5 stocks</span>
+    <span>final test <b>Jan 2024 to Oct 2026</b>, 6 stocks</span>
+    <span><b>$100,000</b> book per stock</span>
+    <span>live on <b>31</b> stocks from Nov 18, 2026</span>
+  </div>
+</header>
+
+<div class="tiles">
+  <div class="tile hero">
+    <div class="label">Final test, limit fill</div>
+    <div class="value">+2.74</div>
+    <div class="sub">pooled Sharpe ratio with no hedge, against a bar of 0.5. This re-run was made after the registered,
+      hedged version scored −0.28</div>
+  </div>
+  <div class="tile">
+    <div class="label">Final test, stress fill</div>
+    <div class="value">+0.30</div>
+    <div class="sub">Sharpe ratio selling at the bid (t-statistic +0.50), where the bar was above 0. The hedged version
+      scored −0.85</div>
+  </div>
+  <div class="tile">
+    <div class="label">Development drawdown</div>
+    <div class="value">−115.9%</div>
+    <div class="sub">of the pooled book at the limit fill (monthly returns added, not compounded), with a −99.0% month in March 2020</div>
+  </div>
+  <div class="tile">
+    <div class="label">Live, never backtested</div>
+    <div class="value">27 of 31</div>
+    <div class="sub">stocks in the live run. There is no live result, because the course server does not resolve
+      orders yet</div>
+  </div>
+</div>
+
+<h2 id="how">How it was tested</h2>
+<section class="panel">
+  <div class="pb prose">
+    <ul>
+      <li><strong>Why the far wings.</strong> Two exploratory studies of the development option chains found that a
+        median 63% of the put side's extra implied variance sat in puts under 0.10 delta. They found the far calls
+        priced up too. Sold delta-hedged, the far wings earned the most before costs, but after costs no delta zone
+        clearly paid. These studies chose the strategy and are not evidence that it works.</li>
+      <li><strong>The rules.</strong> Each month, on each stock, sell the put nearest 0.05 delta and the call
+        nearest 0.03 delta and hold both to expiry. Each wing is sized at about $200 of Black-76 vega on a
+        $100,000 book.</li>
+      <li><strong>Two stages.</strong> Development ran January 2019 to December 2023 on five stocks (NVDA,
+        AMD, DIS, COST, DAL). The final test ran January 2024 to October 2026 on six (NVDA, MA, V, APA, ADI,
+        FISV).</li>
+      <li><strong>Three fills.</strong> The course server fills orders only in the
+        next session. So the headline limit fill sells at the entry close's mid, halfway between bid and ask, only if the
+        next session's closing mid is at least that price. Otherwise the wing sits out. The stress fill always sells at the bid.
+        A third run sells every wing at the mid with no costs, as a reference that was not judged against the bar.</li>
+      <li><strong>Written down first.</strong> Each study was registered before its code ran on real data.
+        The registration set the pass bar (Sharpe ratio at least 0.5 at the limit fill and above 0 at the
+        stress fill), a share hedge, and four crash cycles to check.</li>
+    </ul>
+  </div>
+</section>
+
+<h2 id="results">Results</h2>
+<section class="panel">
+  <div class="pb">
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th class="l">Stage and fill</th><th>Total return</th><th>Volatility</th><th>Sharpe</th><th>Worst month</th><th>Max drawdown</th><th>Months up</th></tr></thead>
+        <tbody>
+          <tr><td class="l">Development 2019–23, limit fill</td><td>−41.7%</td><td>45.7%</td><td>−0.18</td><td>−99.0% (Mar 2020)</td><td>−115.9%</td><td>52 of 60</td></tr>
+          <tr><td class="l">Development, stress fill</td><td>−41.8%</td><td>51.5%</td><td>−0.16</td><td>−96.3% (Mar 2020)</td><td>−111.0%</td><td>47 of 60</td></tr>
+          <tr><td class="l">Development, at the mid (reference)</td><td>−17.4%</td><td>50.9%</td><td>−0.07</td><td>−94.3% (Mar 2020)</td><td>−108.5%</td><td>49 of 60</td></tr>
+          <tr><td class="l">Final test 2024–26, limit fill</td><td>+31.7%</td><td>4.1%</td><td>+2.74</td><td>−3.3% (Jul 2025)</td><td>−3.8%</td><td>32 of 34</td></tr>
+          <tr><td class="l">Final test, stress fill</td><td>+11.3%</td><td>13.4%</td><td>+0.30</td><td>−17.8% (Oct 2025)</td><td>−29.4%</td><td>28 of 34</td></tr>
+          <tr><td class="l">Final test, at the mid (reference)</td><td>+49.2%</td><td>12.9%</td><td>+1.35</td><td>−15.6% (Oct 2025)</td><td>−17.2%</td><td>28 of 34</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="pb prose">
+    <p>Figures are for each stage's pooled book, which combines one $100,000 book per stock, from the no-hedge re-run. They do not cover the live basket.
+      Returns are monthly returns on a fixed book added up, not compounded, so a drawdown can exceed 100%.
+      Volatility is the monthly standard deviation × √12, and Sharpe is the mean month × 12 divided by it.</p>
+    <ul>
+      <li><strong>Development lost money.</strong> At the limit fill 52 of 60 months were up and every year
+        but 2020 gained. March 2020 alone lost 99.0% of the pooled book, and DAL's cycle entered in February
+        2020 lost 413.7% of its own book. This stage would not have passed the bar.</li>
+      <li><strong>The no-hedge re-run passed the registered bar in the final test.</strong> The pooled Sharpe ratio
+        was +2.74 at the limit fill (t-statistic +4.61, 34 months) and +0.30 at the stress fill (t-statistic +0.50). Leaving out
+        any one of the four crash cycles named before the test keeps it at +2.71 or more at the limit fill
+        and +0.29 or more at the stress fill.</li>
+      <li><strong>The headline depends on which orders did not fill.</strong> In the final test the limit
+        fill sold 84 puts and 77 calls over 198 stock-cycles (one stock in one monthly cycle), against 198 and 161 at the stress fill. It
+        left wings unsold in all four named crash cycles. In the cycle entered October 20, 2025, which held
+        FISV's −44% day, the limit fill never sold FISV's put and FISV's cycle made $1,678. The stress fill sold
+        it and FISV's cycle lost $132,669, 132.7% of its own book.</li>
+      <li><strong>In development the limit fill did slightly worse.</strong> Its Sharpe ratio was −0.18, against −0.16 at the stress fill, which pays the spread. A limit at the mid fills only when the option's
+        price has not fallen by the next close, so it skipped the wings already moving the seller's way. Only
+        121 of 295 puts and 106 of 295 calls filled, and they lost $185,609 on their first night.</li>
+    </ul>
+  </div>
+</section>
+
+<h2 id="hedge">The registered hedge and its removal</h2>
+<section class="panel">
+  <div class="pb prose">
+    <p>The version registered before the final test hedged with shares whenever the book's dollar delta moved outside a $5,000 band. It
+      did not pass, with Sharpe ratios of −0.28 at the limit fill and −0.85 at the stress fill. After that
+      result the hedge was removed and the registered runs were repeated with the band set to infinity. Every
+      cycle's options matched the registered run's, so the hedge is the only difference. Apart from the hedged results in this section, all backtest figures
+      on this page come from that re-run.</p>
+    <ul>
+      <li><strong>In the final test the hedge lost more than the options made.</strong> The options alone
+        made $190,096 at the limit fill and $67,611 at the stress fill, while the hedge's shares lost $235,083
+        and $436,566. The hedge sells after drops and buys after rises, so it loses when moves reverse, as
+        after the rally of April 9, 2025.</li>
+      <li><strong>In 2020 the hedge saved the book.</strong> In development its shares made $366,200 at the
+        stress fill. Without them March 2020 lost 96% of the pooled book. With them the worst month was
+        −21.3%, in February 2020.</li>
+    </ul>
+    <p>This split into options and shares was also made after the verdict and is not a test.</p>
+  </div>
+</section>
+
+<h2 id="live">The live run on the course server</h2>
+<section class="panel">
+  <div class="pb prose">
+    <p>The live run trades the same rules, with no hedge, on NVDA and the 30 largest S&amp;P 500 companies by
+      market value on December 31, 2018. Each stock is its own $100,000 book. Of those 30, only Disney (DIS),
+      Mastercard (MA) and Visa (V) were in either backtest, so 27 of the 31 live stocks were never backtested.</p>
+    <p>Each weeknight a script checks its settings and the clock, then writes the next session's orders. On
+      the first session after a monthly expiry it places a limit sell for each wing at the closing mid, and it
+      closes any assigned shares at the next open.</p>
+    <p>The first entry was a one-off, off the monthly schedule, chosen from the November 17, 2026 close for November 18, into the December 18
+      expiry. The script wrote 60 option orders, both wings on 29 stocks and the put alone on two that had
+      no eligible call. The course server does not resolve orders yet, so there is no live result. The next
+      entry will be chosen from the December 21, 2026 close.</p>
+  </div>
+</section>
+
+<h2 id="limits">Limits</h2>
+<section class="panel">
+  <div class="pb prose">
+    <ul>
+      <li><strong>Not a clean out-of-sample pass.</strong> The no-hedge version was chosen after the
+        registered, hedged version failed, and it was judged on the same final-test data. It also would not
+        have passed in development. The live run is its first test on new data.</li>
+      <li><strong>A thin margin at the stress fill.</strong> The Sharpe ratio of +0.30 has a t-statistic of
+        +0.50, and the stress fill lost 24.0% of the pooled book in 2025.</li>
+      <li><strong>Unhedged crash risk.</strong> The strategy collects small premiums most months and can lose
+        nearly the whole pooled book in one month, as March 2020 showed. Neither the no-hedge re-run nor the live run has a
+        hedge or a cap on crash losses.</li>
+      <li><strong>Exposure to the stocks' direction.</strong> With no hedge the book keeps the options'
+        exposure to which way the stocks move (delta). In the final test the P&amp;L split credits delta with
+        +⁠$189,160 of the +⁠$190,096 made at the limit fill, and +⁠$335,002 at the stress fill, where the total was
+        +⁠$67,611. So nearly all of the final-test profit came from how the six stocks moved. In development the
+        same part lost $52,717 and $210,949.</li>
+      <li><strong>Small samples.</strong> The final test covers six stocks over 34 months, and most of the
+        live basket was never backtested.</li>
+      <li><strong>Modeled fills.</strong> How the course server will fill the live limit orders is not known
+        yet.</li>
+    </ul>
+  </div>
+</section>
+
+<div style="height:14px"></div>
+
+<section class="panel">
+  <div class="ph">Tools and skills</div>
+  <div class="pb card">
+    <div class="tags"><span>options</span><span>short volatility</span><span>Black-76</span><span>fill modeling</span><span>pre-registration</span><span>backtesting</span><span>Python</span><span>GitHub Actions</span><span>LSEG data</span></div>
+  </div>
+</section>
+
+<p class="reach">For further details or the full analysis, please reach out.</p>
+
+<footer>
+  Course strategy project, algorithmic trading, Fall 2026. Option data from LSEG. Live on the course's
+  paper-trading server from November 18, 2026.
+</footer>
+
+</div>
+</body>
+</html>

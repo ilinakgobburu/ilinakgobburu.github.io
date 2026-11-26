@@ -48,7 +48,7 @@
           
           <a class="row" href="sector-flows.html">
             <h3>Tracking tech's ripple effect on the market</h3>
-            <p>What the other ten sectors did in the November 2026 tech selloff, measured through beta to tech, ETF flows and implied volatility.</p>
+            <p>What the other ten sectors did in the November 2026 tech selloff and Monday's rebound, measured through beta to tech, ETF flows and implied volatility.</p>
             <div class="tags"><span>beta</span><span>ETF flows</span><span>implied volatility</span></div>
           </a>
           <a class="row also" href="sp500-panel.html#why">
@@ -84,6 +84,10 @@
             <h3>A survivorship-bias-free S&amp;P 500 panel</h3>
             <p><b>Also relevant:</b> volatility forecasts with HAR, LASSO and gradient boosting. Option prices and earnings dates helped. Attention and network position didn't.</p>
           </a>
+          <a class="row also" href="vol-arb.html#ladder">
+            <h3>The two-sided variance trade</h3>
+            <p><b>Also relevant:</b> a logistic regression and a random forest, refit walk-forward to pick which side of a stock's options to sell. Neither beat always selling the put side in development.</p>
+          </a>
         </div>
       </div>
     </section>
@@ -100,6 +104,21 @@
           <div class="go">Open project →</div>
         </a>
         <div class="rows">
+          <a class="row" href="trend-condor.html">
+            <h3>The put-tilted trend condor on NVDA</h3>
+            <p>A weekly iron condor on NVDA, sold only when its options look expensive. It passed its registered 2024–26 test with a Sharpe of 0.987, mostly from direction. A 52-week forward walk is set to start Nov 30.</p>
+            <div class="tags"><span>iron condor</span><span>P&amp;L attribution</span><span>forward walk</span></div>
+          </a>
+          <a class="row" href="far-wings.html">
+            <h3>Selling the far wings, held to expiry</h3>
+            <p>A far out-of-the-money put and call sold each month and held to expiry, now trading nightly on the course's paper server. The registered, hedged version failed its final test, and the unhedged re-run passed.</p>
+            <div class="tags"><span>short volatility</span><span>fill modeling</span><span>paper trading</span></div>
+          </a>
+          <a class="row" href="vol-arb.html">
+            <h3>The two-sided variance trade</h3>
+            <p>Sells whichever side of a stock's options looks expensive against its own moves and hedges the direction. All four decision rules, up to a random forest, lost money after costs in development.</p>
+            <div class="tags"><span>delta hedging</span><span>implied vs realized</span><span>random forest</span></div>
+          </a>
           <a class="row" href="pmcc-delta.html">
             <h3>Poor Man's Covered Call on Delta Air Lines</h3>
             <p>A long-dated call in place of 100 shares, 2019–2023: +$324 on $1,262 to open, against −$222 for the covered call.</p>
