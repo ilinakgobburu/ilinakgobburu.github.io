@@ -86,9 +86,6 @@
         <li><strong>Rules written first.</strong> 60+ pre-registered strategy and overlay tests; most were rejected.</li>
         <li><strong>Walk-forward backtests</strong> on three windows, with block-bootstrap Sharpe tests and Holm
           correction for multiple testing.</li>
-        <li><strong>Bias checks</strong> caught a look-ahead bias that fully explained one variant's 1.15 Sharpe,
-          a data field that leaked deal outcomes, a futures-roll bug, and stale option quotes (re-marked, Sharpe
-          restated).</li>
         <li><strong>Live trading</strong> through the Interactive Brokers API: automated scheduling with guarded
           manual recovery.</li>
       </ul>
@@ -96,7 +93,7 @@
   </section>
 </div>
 
-<h2 id="backtest">Backtest: <span class="accent">lower drawdown than SPY</span>, not higher return</h2>
+<h2 id="backtest">Backtest results across <span class="accent">three sample periods</span></h2>
 <p class="lede">The final design in each window. The rules were designed on 2015–22. 2023–25 was tested
   before the design was final, so it counts as a second look; 2005–14 was opened only after the design was frozen. Sharpe ratios assume cash earns 0%.</p>
 
