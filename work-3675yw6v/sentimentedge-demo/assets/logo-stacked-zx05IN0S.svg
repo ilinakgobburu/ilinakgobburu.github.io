@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="340" height="70" viewBox="0 0 340 70">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&amp;display=swap');
+    </style>
+  </defs>
+  <!-- Diamond outline -->
+  <polygon points="35,3 58,35 35,67 12,35" fill="none" stroke="rgba(255,255,255,0.10)" stroke-width="1"/>
+  <!-- Diamond filled inner -->
+  <polygon points="35,10 52,35 35,60 18,35" fill="rgba(0,212,170,0.08)" stroke="#00D4AA" stroke-width="1.5"/>
+  <!-- Trend arrow inside -->
+  <polyline points="24,45 30,32 35,38 44,22" fill="none" stroke="#00D4AA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <polygon points="44,18 49,27 39,27" fill="#00D4AA"/>
+  <!-- Divider -->
+  <line x1="75" y1="14" x2="75" y2="56" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+  <!-- Wordmark - single line -->
+  <text x="90" y="46" font-family="'IBM Plex Mono', monospace" font-size="24" font-weight="500" fill="white" letter-spacing="2.5" text-transform="uppercase">SENTIMENT<tspan fill="#00D4AA">EDGE</tspan></text>
+</svg>

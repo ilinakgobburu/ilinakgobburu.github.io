@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<meta name="referrer" content="no-referrer">
+<title>SentimentEdge</title>
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css?v=9d4624e66b">
+</head>
+<body>
+<div class="wrap">
+
+<nav aria-label="Page">
+  <a class="brand" href="index.html">Portfolio of work</a>
+  <div class="links">
+    <a href="#demo">Demo</a>
+    <a href="#app">The app</a>
+    <a href="#research">Research</a>
+    <a href="#build">How it was built</a>
+    <a href="#limits">Limits</a>
+  </div>
+</nav>
+
+<header>
+  <div class="eyebrow">Software engineering · Team project · Spring 2026</div>
+  <h1>SentimentEdge, a <span class="accent">news-sentiment</span> paper-trading app</h1>
+  <p class="lede">A five-person team built a web app that scores company news with two sentiment models,
+    shows the scores next to prices, and lets users and four automated bots trade with simulated money. It was
+    built over six sprints for a software engineering course. The demo below is the team's own frontend,
+    running on data recorded from one local run of the app.</p>
+  <div class="prov">
+    <span><b>5</b> people, <b>6</b> sprints</span>
+    <span><b>150</b> merge requests</span>
+    <span>news for <b>50</b> large stocks</span>
+    <span>demo data from <b>Nov 27, 2026</b></span>
+  </div>
+</header>
+
+<div class="tiles">
+  <div class="tile hero">
+    <div class="label">Interactive demo</div>
+    <div class="value">9 pages</div>
+    <div class="sub">of the team's frontend, with recorded data. It opens signed in to a demo account.
+      <a href="sentimentedge-demo/index.html#/dashboard">Open the demo</a>.</div>
+  </div>
+  <div class="tile">
+    <div class="label">Sentiment models</div>
+    <div class="value">2</div>
+    <div class="sub">VADER and FinBERT score every article. Scores are averaged per stock over windows from one
+      hour to one week.</div>
+  </div>
+  <div class="tile">
+    <div class="label">Return ranking</div>
+    <div class="value">0.083</div>
+    <div class="sub">walk-forward Spearman correlation between predicted and realized 5-day return ranks. A weak
+      signal, measured in development.</div>
+  </div>
+  <div class="tile">
+    <div class="label">Tests</div>
+    <div class="value">336</div>
+    <div class="sub">302 backend test functions and 34 frontend tests, alongside a CI pipeline that builds and
+      deploys the app.</div>
+  </div>
+</div>
+
+<h2 id="demo">The demo</h2>
+<section class="panel">
+  <div class="pb">
+    <a class="card" href="sentimentedge-demo/index.html#/dashboard">
+      <div class="eyebrow">Dashboard · demo account</div>
+      <img src="sentimentedge-demo/preview.jpg" alt="The SentimentEdge dashboard, showing the demo account's value, an equity curve, holdings with sentiment labels and a news feed" width="1280" height="800" style="width:100%;height:auto;display:block;border-radius:6px">
+      <div class="go">Open the interactive demo →</div>
+    </a>
+  </div>
+  <div class="pb prose">
+    <p>The demo is the team's React frontend from the final version of the code, rebuilt so it runs without a
+      server. Each request a page makes is answered from responses recorded on November 27, 2026, from a local
+      copy of the app with live news and prices. Charts, filters, ticker search and the two research papers all
+      work. Placing trades and running new backtests are turned off, and nothing is sent anywhere.</p>
+    <p>The demo account's trades are sample trades, placed on past dates at real closing prices so its charts
+      have a month of history. The bots started on the day of the recording. The demo is built for a laptop or
+      desktop screen.</p>
+  </div>
+</section>
+
+<h2 id="app">What the app does</h2>
+<section class="panel">
+  <div class="pb prose">
+    <ul>
+      <li><strong>Scores the news.</strong> Company news for 50 large stocks comes from the Finnhub API. Each
+        article is scored by VADER, a rule-based model, and by FinBERT, a language model trained on financial
+        text. The scores are combined per stock over several time windows.</li>
+      <li><strong>Shows sentiment next to prices.</strong> The dashboard has the account, a sentiment heatmap
+        and a news feed. Each stock's page shows its price history, its sentiment scores and the scored
+        articles, and for some stocks a chart of features a language model extracted from the articles.</li>
+      <li><strong>Trades with simulated money.</strong> Users buy and sell at live prices. Four bots trade once
+        a day. Two follow the VADER or FinBERT scores, one follows the team's machine-learning model, and one
+        buys and holds.</li>
+      <li><strong>Checks the signals.</strong> A reports page measures how often sentiment called the next
+        day's direction, with a Brier score and a calibration chart, and splits the account's profit and loss
+        by news source.</li>
+    </ul>
+  </div>
+</section>
+
+<h2 id="research">The research track</h2>
+<section class="panel">
+  <div class="pb prose">
+    <p>The team first tried to predict each stock's next-day direction from its news sentiment. Over 16 tuned
+      experiments the validation AUC rose from 0.55 to 0.65, but on held-out data it stayed near 0.5, which is
+      no better than chance.</p>
+    <p>The team then changed the question to ranking the 50 stocks by their next 5-day return. With walk-forward
+      validation over 10 folds, the final model reached a Spearman correlation of 0.083 between predicted and
+      realized ranks, on 10,779 stock-days from April 2025 to March 2026. It averages five LightGBM models
+      trained on 34 features. Features that a large language model extracted from the articles did not improve
+      on the VADER and FinBERT scores.</p>
+    <p>These are development results. An automated experiment loop kept each change that raised the
+      walk-forward score, so 0.083 is the score the model was tuned on and is likely optimistic.</p>
+  </div>
+</section>
+
+<h2 id="build">How it was built</h2>
+<section class="panel">
+  <div class="pb">
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th class="l">Layer</th><th class="l">Technology</th><th class="l">Size</th></tr></thead>
+        <tbody>
+          <tr><td class="l">Backend API</td><td class="l">Flask 3.1, Python</td><td class="l">10 blueprints, 34 JSON routes</td></tr>
+          <tr><td class="l">Database</td><td class="l">PostgreSQL 15</td><td class="l">10 tables, 6 migrations</td></tr>
+          <tr><td class="l">Cache</td><td class="l">Redis 7</td><td class="l">live prices and rate limits</td></tr>
+          <tr><td class="l">Background jobs</td><td class="l">APScheduler</td><td class="l">4 scheduled jobs</td></tr>
+          <tr><td class="l">Frontend</td><td class="l">React 18, Vite, Plotly</td><td class="l">14 routes</td></tr>
+          <tr><td class="l">Deployment</td><td class="l">Docker Compose, GitLab CI</td><td class="l">3 services on a course server</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="pb prose">
+    <p>The team worked in six sprints, with a review and a retrospective after each one. Changes were merged
+      through 150 merge requests, and every commit on the main branch, apart from merges, follows the
+      Conventional Commits format. The backend tests run with pytest on SQLite, and the frontend tests with
+      Vitest. The app also has rate limiting, audit logging and Google sign-in.</p>
+  </div>
+</section>
+
+<h2 id="limits">Limitations</h2>
+<section class="panel">
+  <div class="pb prose">
+    <ul>
+      <li><strong>A recording, not the running app.</strong> The demo's prices, news and scores come from one
+        run on November 27, 2026, and do not change. No language-model key was used for the recording, so the
+        feature chart on the stock pages is empty.</li>
+      <li><strong>Sample data in the demo account.</strong> Its trades were placed for the demo. The bots
+        traded once, on the day of the recording. That day the app's volatility rule flagged a crash regime,
+        which moves every bot into an equal-weight portfolio of all 50 stocks, so the VADER, FinBERT and
+        buy-and-hold bots hold the same positions. The machine-learning bot holds cash because the prediction
+        file it reads ends in March 2026.</li>
+      <li><strong>A weak, optimistic signal.</strong> A rank correlation of 0.083 is small, it comes from about a
+        year of news for 50 large stocks, and it is the score the model was tuned on.</li>
+      <li><strong>Unfinished parts.</strong> The Reddit filter on the stock pages shows no articles, because
+        collecting Reddit posts was never finished. The home page and the stock chart's legend describe a
+        sentiment line over the price chart, but the final code draws only the price.</li>
+      <li><strong>One correction in the demo.</strong> The app's research card for the ranking paper showed
+        0.1157, which is the score of a separate volatility model. The demo shows the ranking model's
+        0.0830.</li>
+    </ul>
+  </div>
+</section>
+
+<div style="height:14px"></div>
+
+<section class="panel">
+  <div class="ph">Tools and skills</div>
+  <div class="pb card">
+    <div class="tags"><span>Flask</span><span>React</span><span>PostgreSQL</span><span>Redis</span><span>FinBERT</span><span>VADER</span><span>LightGBM</span><span>Plotly</span><span>Docker</span><span>GitLab CI</span><span>Scrum</span></div>
+  </div>
+</section>
+
+<p class="reach">For further details or the full analysis, please reach out.</p>
+
+<footer>
+  Team project for a software engineering course, Spring 2026. Demo data recorded on November 27, 2026, from
+  Finnhub news and quotes and Yahoo Finance prices. Trades in the demo use simulated money.
+</footer>
+
+</div>
+</body>
+</html>
