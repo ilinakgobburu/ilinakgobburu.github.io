@@ -20,6 +20,7 @@
   <div class="links">
     <a href="#how">How it was measured</a>
     <a href="#found">What it found</a>
+    <a href="#ten">The ten stocks</a>
     <a href="#monday">Monday rebound</a>
     <a href="#limits">Limits</a>
   </div>
@@ -32,13 +33,14 @@
     technology sector fund (XLK) fell 12.5% in price. This note measures what the other ten S&amp;P 500
     sectors did that week and how much of it tech's move explains. It looks at prices (each sector's beta to tech), money
     moving in and out of sector funds (ETF creations and redemptions) and option prices (implied
-    volatility). It ends with Monday, Nov 23, when NVIDIA rose 31.5% and closed above where the week
-    began.</p>
+    volatility). It then looks at the ten largest tech stocks themselves, and ends with Monday, Nov 23, when
+    NVIDIA rose 31.5% and closed above where the week began.</p>
   <div class="prov">
     <span><b>11</b> sector funds (XLK and ten others), plus SPY, TLT, GLD, SGOV</span>
+    <span>the <b>10</b> largest tech stocks</span>
     <span>two-year baseline, <b>504</b> sessions</span>
-    <span>event week <b>Nov 16–20, 2026</b>, plus <b>Nov 23</b></span>
-    <span>market data from <b>LSEG</b></span>
+    <span>event week <b>Nov 16–20, 2026</b>, then through <b>Nov 25</b></span>
+    <span>data from <b>LSEG</b>, <b>FINRA</b> and <b>OCC</b></span>
   </div>
 </header>
 
@@ -80,8 +82,16 @@
         dated both ways, by trade date and by the date they posted. Neither view was chosen in advance, and the figures on this page are by trade date.</li>
       <li><strong>Implied volatility.</strong> Each fund's 30-day at-the-money implied vol, compared with the
         rise its usual link to tech's implied vol predicted.</li>
+      <li><strong>The ten largest tech stocks.</strong> Apple, NVIDIA, Microsoft, Alphabet, Amazon, Meta,
+        Broadcom, Tesla, Micron and AMD, the largest US tech stocks by market value at the Nov 13 close. A
+        trading minute counts as buyer-initiated if it traded above the minute before and seller-initiated if
+        below (the tick rule). Short-sale volume comes from FINRA's daily files and options volume from OCC's.</li>
       <li><strong>Written down first.</strong> The funds, the baseline and the beta and flow measures were set
-        before any data was pulled. The greeks, the three-month beta tracker and the implied-vol data were added after the first price and share pull, before any of them was computed. Checks added after seeing the results are labeled as such.</li>
+        before any data was pulled. The greeks, the three-month beta tracker and the implied-vol data were added after the first price and share pull, before any of them was computed. Checks added after seeing the results are labeled as such.
+        The ten-stocks measures were written down before their data was pulled on Nov 27, after the week's
+        prices and flows were already known. The rule that picks the ten was fixed before any market value was
+        pulled. The plan was amended twice after the pull, before any measure was computed, to replace a
+        report-date field LSEG refused.</li>
     </ul>
   </div>
 </section>
@@ -134,6 +144,42 @@
   </div>
 </section>
 
+<h2 id="ten">The ten largest tech stocks, Nov&nbsp;16⁠–⁠25</h2>
+<section class="panel">
+  <div class="pb prose">
+    <p>Four of the ten are not in XLK. Alphabet and Meta are in communication services, and Amazon and Tesla
+      in consumer discretionary.</p>
+    <ul>
+      <li><strong>Value lost is not money out.</strong> From the Nov 13 to the Nov 20 close, the ten lost $2.96
+        trillion of market value (11.3%), a larger five-session fall than any in the year before. That is the
+        price change times the shares already held. Every share sold was bought, so no money left. Monday to
+        Thursday, the ten lost $1.44 trillion of value while $739bn of their shares traded, and XLK's
+        creations and redemptions came to −⁠$0.07bn.</li>
+      <li><strong>Seller-initiated trading moved with the price.</strong> Over the week, seller-initiated
+        dollars exceeded buyer-initiated dollars by $31.0bn, more one-sided than all but one of the past year's
+        195 five-session stretches. But a minute that trades lower counts as seller-initiated, so the two go
+        together by construction. For the size of each day's drop, the selling was no heavier than usual, and
+        on Friday it was lighter than the drop implied.</li>
+      <li><strong>Monday's rebound came before the open.</strong> Over the week, the ten fell 12.8 log points
+        between the open and the close and gained 0.8 overnight. On Monday they opened 8.6 log points above
+        Friday's close, then slipped 0.8 from the open to the close. Monday added back $1.89 trillion, and at
+        the Nov 25 close the ten were still $1.86 trillion below Nov 13.</li>
+      <li><strong>Short-sale volume was unusually low.</strong> On four of the eight days, the short-marked
+        share of the ten's off-exchange volume was lower than on any day of the past year (28.9% to 32.0%,
+        against a 41.0% average). That share is not a count of bets against the stocks, because market makers
+        mark many sales short when they fill customers' buys. Going in, 1.21% of the ten's shares were held
+        short. The count that covers the selloff is published in December.</li>
+      <li><strong>The busiest options expiry of the past year.</strong> On Friday, Nov 20, the monthly
+        expiration, the ten's options traded 1.8 times a median day, and puts were 47% of customer contracts
+        against 37% on an average day. Both were higher than on any of the past year's 12 monthly expirations.
+        The data show how many contracts traded, not who bought or sold. Every one of the ten's 30-day implied
+        vols rose, by 8.5 to 27.9 points.</li>
+    </ul>
+    <p>Measured against the ten instead of XLK, the sectors' average miss for the week was −3.0 points instead
+      of −3.1, though some sectors shift. Industrials' miss grows from −1.7 to −2.4 points.</p>
+  </div>
+</section>
+
 <h2 id="monday">The rebound on Monday, Nov 23</h2>
 <section class="panel">
   <div class="pb prose">
@@ -168,9 +214,14 @@
     <ul>
       <li><strong>One week is one event.</strong> These data show what moved, not why. NVIDIA reported
         earnings on Nov 17, and its biggest drop came three days later.</li>
-      <li><strong>ETF flows are only part of the money.</strong> Mutual funds, single stocks and futures
-        aren't seen, some creations are arbitrage rather than investors, and flows can't be traced from one
-        fund to another.</li>
+      <li><strong>ETF flows are only part of the money.</strong> Mutual funds and futures aren't seen, and
+        single stocks have no creations or redemptions, so the ten-stocks section shows trading, not money in or
+        out. Some creations are arbitrage rather than investors, and flows can't be traced from one fund to
+        another.</li>
+      <li><strong>Buyer and seller labels depend on the rule.</strong> They come from 1-minute bars, not single
+        trades, and leave out the opening and closing auctions. A second rule, comparing each minute's last trade
+        with the quote, did not line up with the tick rule (correlation 0.00) and put all eight days on the buy
+        side.</li>
       <li><strong>Friday's and Monday's flows are missing.</strong> By the second pull on Nov 24, Friday's
         trades had still not posted for 13 of the 15 funds, so they are left out rather than counted as zero.
         Monday's are not shown either, because share counts post a day or more late.</li>
@@ -185,7 +236,7 @@
 <section class="panel">
   <div class="ph">Tools and skills</div>
   <div class="pb card">
-    <div class="tags"><span>beta regression</span><span>event study</span><span>ETF flows</span><span>implied volatility</span><span>Black-Scholes greeks</span><span>pre-registration</span><span>Python</span><span>LSEG data</span></div>
+    <div class="tags"><span>beta regression</span><span>event study</span><span>ETF flows</span><span>implied volatility</span><span>Black-Scholes greeks</span><span>trade classification</span><span>pre-registration</span><span>Python</span><span>LSEG data</span></div>
   </div>
 </section>
 
@@ -193,7 +244,8 @@
 
 <footer>
   Market note, algorithmic trading course, Fall 2026. Market data from LSEG, pulled Nov 23 and 24, through
-  the Nov 20 close for the week and the Nov 23 close for the Monday section.
+  the Nov 20 close for the week and the Nov 23 close for the Monday section. The ten-stocks section uses
+  LSEG, FINRA and OCC data pulled Nov 27, through the Nov 25 close.
 </footer>
 
 </div>
