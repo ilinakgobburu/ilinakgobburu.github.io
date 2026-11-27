@@ -18,22 +18,24 @@
   <a class="brand" href="index.html">Portfolio of work</a>
   <div class="links">
     <a href="#strategy">Strategy</a>
-    <a href="#research">Research</a>
+    <a href="#research">Methodology</a>
     <a href="#backtest">Backtest</a>
     <a href="#live">Live run</a>
-    <a href="#limits">Limits</a>
+    <a href="#limits">Limitations</a>
   </div>
 </nav>
 
 <header>
   <div class="eyebrow">Quant trading · Live paper run · Course project, Fall 2026</div>
-  <h1>A multi-asset strategy, traded live on a <span class="accent">paper $50M</span> account</h1>
-  <p class="lede">One book with four parts, chosen from 60+ tests whose rules were written before they ran. It is
-    trading on an Interactive Brokers paper (simulated) account from Nov 2 to Dec 1, 2026, against a simple
-    benchmark of one-third SPY, two-thirds T-bills. The case for it is lower drawdown than SPY, not higher return.</p>
+  <h1>Backtest and live paper-trading evaluation of a <span class="accent">multi-asset strategy</span></h1>
+  <p class="lede">This project develops a single portfolio with four components, selected from more than 60
+    strategy and overlay tests whose rules were specified before each test was run. The portfolio is traded on
+    an Interactive Brokers paper (simulated) account from November 2 to December 1, 2026, and is evaluated
+    against a benchmark of one-third SPY and two-thirds Treasury bills. In the backtests, its main advantage
+    over SPY is a smaller drawdown rather than a higher return.</p>
   <div class="prov">
-    <span><b>$50M</b> paper (simulated)</span>
-    <span><b>2005–2025</b> history</span>
+    <span><b>$50M</b> paper (simulated) capital</span>
+    <span><b>2005–2025</b> sample</span>
     <span><b>3</b> backtest windows</span>
     <span><b>21</b> live sessions</span>
   </div>
@@ -41,61 +43,68 @@
 
 <div class="tiles">
   <div class="tile hero">
-    <div class="label">Max drawdown</div>
+    <div class="label">Maximum drawdown</div>
     <div class="value">−8.3%</div>
-    <div class="sub">Backtest, 2015–22 design window, vs −33.7% for SPY. Smaller than SPY's drawdown in all three windows.</div>
+    <div class="sub">in the 2015–22 design window, compared with −33.7% for SPY. The drawdown was smaller than
+      SPY's in all three backtest windows.</div>
   </div>
   <div class="tile">
-    <div class="label">Backtest Sharpe</div>
+    <div class="label">Backtest Sharpe ratio</div>
     <div class="value">0.99</div>
-    <div class="sub">vs 0.75 for the benchmark, 2015–22 design window. Cash assumed to earn 0%. The edge is not statistically significant.</div>
+    <div class="sub">compared with 0.75 for the benchmark in the 2015–22 design window, assuming cash earns 0%.
+      The difference is not statistically significant.</div>
   </div>
   <div class="tile">
-    <div class="label">Research</div>
+    <div class="label">Tests conducted</div>
     <div class="value">60+</div>
-    <div class="sub">strategy and overlay tests, rules written before each ran. Most were rejected.</div>
+    <div class="sub">strategy and overlay tests, each specified before it was run. Most were rejected.</div>
   </div>
   <div class="tile">
     <div class="label">Live return</div>
     <div class="value" id="tile-live-value">—</div>
-    <div class="sub" id="tile-live-sub">Return on the paper account since the start. Live numbers load with the page.</div>
+    <div class="sub" id="tile-live-sub">Return on the paper account since inception. Live figures load with the
+      page.</div>
   </div>
 </div>
 
-<h2 id="strategy">The strategy: <span class="accent">four sleeves</span>, one book</h2>
+<h2 id="strategy">Strategy design</h2>
 
 <div class="grid g-1-1">
   <section class="panel">
-    <div class="ph">The four sleeves</div>
+    <div class="ph">Components</div>
     <div class="pb prose">
       <ul>
-        <li><strong>Trend-following.</strong> Long or short futures on stock indexes, bonds, currencies and
-          commodities, following each market's price trend.</li>
-        <li><strong>Merger arbitrage.</strong> Buys announced takeover targets to earn the small gap to the
-          offer price if the deal closes.</li>
-        <li><strong>Put-writing.</strong> Sells cash-secured put options on four ETFs and collects the premium.</li>
-        <li><strong>Crash hedge.</strong> Part of the put premium buys far out-of-the-money puts that pay off
-          only in a large fall.</li>
+        <li><strong>Trend-following.</strong> Long and short positions in equity index, bond, currency and
+          commodity futures, taken in the direction of each market's price trend.</li>
+        <li><strong>Merger arbitrage.</strong> Long positions in the targets of announced acquisitions, which
+          earn the spread to the offer price if the deal is completed.</li>
+        <li><strong>Put-writing.</strong> Cash-secured short put options on four ETFs, which earn the option
+          premium.</li>
+        <li><strong>Crash hedge.</strong> Part of the put premium funds far out-of-the-money puts, which pay off
+          only in a severe market decline.</li>
       </ul>
     </div>
   </section>
   <section class="panel" id="research">
-    <div class="ph">How it was chosen and built</div>
+    <div class="ph">Methodology</div>
     <div class="pb prose">
       <ul>
-        <li><strong>Rules written first.</strong> 60+ pre-registered strategy and overlay tests; most were rejected.</li>
-        <li><strong>Walk-forward backtests</strong> on three windows, with block-bootstrap Sharpe tests and Holm
-          correction for multiple testing.</li>
-        <li><strong>Live trading</strong> through the Interactive Brokers API: automated scheduling with guarded
-          manual recovery.</li>
+        <li><strong>Pre-registration.</strong> More than 60 strategy and overlay tests were specified before
+          they were run. Most were rejected.</li>
+        <li><strong>Evaluation.</strong> Walk-forward backtests over three windows, with block-bootstrap tests
+          of the Sharpe ratio and a Holm correction for multiple testing.</li>
+        <li><strong>Execution.</strong> Orders are placed through the Interactive Brokers API on an automated
+          schedule, with safeguards for manual recovery.</li>
       </ul>
     </div>
   </section>
 </div>
 
 <h2 id="backtest">Backtest results across <span class="accent">three sample periods</span></h2>
-<p class="lede">The final design in each window. The rules were designed on 2015–22. 2023–25 was tested
-  before the design was final, so it counts as a second look; 2005–14 was opened only after the design was frozen. Sharpe ratios assume cash earns 0%.</p>
+<p class="lede">Results for the final design in each window. The rules were developed on 2015–22. The
+  2023–25 window was examined before the design was final, so it serves as a second look rather than a
+  holdout. The 2005–14 window was opened only after the design was frozen. Sharpe ratios assume that cash
+  earns 0%.</p>
 
 <div class="grid g-3-2">
   <section class="panel">
@@ -108,7 +117,7 @@
             <tr><td class="l" colspan="4"><b>Sharpe ratio</b></td></tr>
             <tr><td class="l">Strategy</td><td><b>0.70</b></td><td><b>0.99</b></td><td><b>1.69</b></td></tr>
             <tr><td class="l muted">Benchmark</td><td class="muted">0.64</td><td class="muted">0.75</td><td class="muted">2.04</td></tr>
-            <tr><td class="l" colspan="4"><b>Max drawdown</b></td></tr>
+            <tr><td class="l" colspan="4"><b>Maximum drawdown</b></td></tr>
             <tr><td class="l">Strategy</td><td><b>−14.1%</b></td><td><b>−8.3%</b></td><td><b>−6.6%</b></td></tr>
             <tr><td class="l muted">Benchmark</td><td class="muted">−20.9%</td><td class="muted">−11.5%</td><td class="muted">−6.1%</td></tr>
             <tr><td class="l muted">SPY</td><td class="muted">−55.2%</td><td class="muted">−33.7%</td><td class="muted">−18.8%</td></tr>
@@ -118,43 +127,46 @@
     </div>
   </section>
   <section class="panel">
-    <div class="ph">How to read it</div>
+    <div class="ph">Interpretation</div>
     <div class="pb prose">
       <ul>
-        <li><strong>Lower drawdown than SPY.</strong> Drawdowns were far smaller than SPY's in every window,
-          including the 2008 crisis.</li>
-        <li><strong>Not higher return.</strong> Returns were well below SPY's in every window, and growth was
-          close to the benchmark's, except in 2023–25, when it was about 2.3 points a year lower.</li>
-        <li><strong>Not ahead every time.</strong> In 2023–25 the benchmark had the higher Sharpe and the
-          smaller drawdown.</li>
+        <li><strong>Drawdowns.</strong> The maximum drawdown was far smaller than SPY's in every window,
+          including the 2008 financial crisis.</li>
+        <li><strong>Returns.</strong> Returns were well below SPY's in every window. Growth was close to the
+          benchmark's except in 2023–25, when it was about 2.3 percentage points a year lower.</li>
+        <li><strong>Comparison with the benchmark.</strong> In 2023–25 the benchmark had both the higher
+          Sharpe ratio and the smaller drawdown.</li>
       </ul>
     </div>
   </section>
 </div>
 
-<h2 id="live">The live run: <span class="accent">Nov 2 – Dec 1, 2026</span>, on a paper account</h2>
+<h2 id="live">Live paper-trading evaluation, <span class="accent">Nov 2 – Dec 1, 2026</span></h2>
 <section class="panel">
   <div class="pb prose">
-    <p id="live-status">The same rules, plus one sleeve added mid-run (below), trading $50M of paper (simulated) capital for 21 sessions. Live numbers load with the page.</p>
+    <p id="live-status">The same rules, with one component added during the run (described below), are traded
+      on $50M of paper (simulated) capital for 21 sessions. Live figures load with the page.</p>
     <p id="live-numbers"></p>
-    <p>A few sessions of paper trading are noise: these numbers say more about whether the system runs than
-      about the strategy. On Nov 4, after seeing its 2026 test results, I added a small
-      option-selling sleeve (the wheel, about 10% of the account); it is not part of the 2005–25 backtest.
-      From the Nov 23 roll, I also raised merger arbitrage to half of the non-trend part, above the backtest's
-      40% cap. That change is live-only too, and an earlier test of it didn't support it.</p>
+    <p>Over a few weeks, returns are dominated by noise, so these figures speak more to the reliability of the
+      trading system than to the merit of the strategy. Two changes made during the run are not part of the
+      2005–25 backtest. On Nov 4, after reviewing its 2026 test results, I added a small option-selling
+      component (the wheel, about 10% of the account). From the Nov 23 roll, I raised merger arbitrage to half
+      of the non-trend allocation, above the backtest's 40% cap, although an earlier test had not supported
+      this change.</p>
   </div>
 </section>
 
-<h2 id="limits">Limits</h2>
+<h2 id="limits">Limitations</h2>
 <section class="panel">
   <div class="pb prose">
     <ul>
-      <li><strong>No significant edge.</strong> The backtest Sharpe edge over the benchmark is not statistically
-        significant. "Competitive risk-adjusted returns (backtest)" is the fair summary.</li>
-      <li><strong>One window reused.</strong> 2023–25 was looked at again after the first look, so it is a second
-        look, not an untouched holdout.</li>
-      <li><strong>Paper money, short run.</strong> No real money is at risk, simulated fills may differ from real
-        ones, and 21 sessions can't confirm or reject a strategy.</li>
+      <li><strong>Statistical significance.</strong> The backtest Sharpe ratio's advantage over the benchmark
+        is not statistically significant. The results support competitive risk-adjusted returns in backtests,
+        not outperformance.</li>
+      <li><strong>Reuse of the 2023–25 window.</strong> This window was examined more than once during
+        development, so it is not an untouched holdout sample.</li>
+      <li><strong>Paper trading over a short horizon.</strong> No capital is at risk, simulated fills may
+        differ from actual executions, and 21 sessions are too few to confirm or reject the strategy.</li>
     </ul>
   </div>
 </section>
@@ -171,8 +183,8 @@
 <p class="reach">For further details or the full analysis, please reach out.</p>
 
 <footer>
-  Solo final project for a FinTech course, Fall 2026. All trading is on an Interactive Brokers paper (simulated)
-  account; no real money is involved. Live numbers are final only after the Dec 1 close.
+  Individual final project for a FinTech course, Fall 2026. All trading takes place on an Interactive Brokers
+  paper (simulated) account, and no real capital is involved. Live figures become final after the Dec 1 close.
 </footer>
 
 </div>
@@ -201,13 +213,13 @@ const LIVE = {
 
   put('tile-live-value', pct(LIVE.ret.strategy));
   put('tile-live-sub', 'Paper account, ' + (LIVE.final ? 'final' : 'through ' + short) + ' (' + n + '). Benchmark ' +
-    pct(LIVE.ret.benchmark) + ', SPY ' + pct(LIVE.ret.spy) + '. Too short to judge.');
+    pct(LIVE.ret.benchmark) + ', SPY ' + pct(LIVE.ret.spy) + '. The sample is too short for conclusions.');
   put('live-status', LIVE.final
-    ? 'Run complete: Nov 2 – Dec 1, 2026, ' + LIVE.sessions + ' sessions on $50M of paper (simulated) capital. Final numbers.'
-    : 'In progress on $50M of paper (simulated) capital: numbers through the ' + long + ' close, after ' + n + '.');
-  put('live-numbers', 'Return since the Oct 30 close: ' + pct(LIVE.ret.strategy) + ', against ' +
-    pct(LIVE.ret.benchmark) + ' for the benchmark and ' + pct(LIVE.ret.spy) + ' for SPY. Max drawdown so far: ' +
-    pct(LIVE.maxDD.strategy) + ', against ' + pct(LIVE.maxDD.benchmark) + ' and ' + pct(LIVE.maxDD.spy) + '.');
+    ? 'The run is complete. It covered Nov 2 – Dec 1, 2026, ' + LIVE.sessions + ' sessions on $50M of paper (simulated) capital, and these are the final figures.'
+    : 'The run is in progress on $50M of paper (simulated) capital. Figures are through the ' + long + ' close, after ' + n + '.');
+  put('live-numbers', 'Since the Oct 30 close, the strategy has returned ' + pct(LIVE.ret.strategy) + ', compared with ' +
+    pct(LIVE.ret.benchmark) + ' for the benchmark and ' + pct(LIVE.ret.spy) + ' for SPY. Its maximum drawdown to date is ' +
+    pct(LIVE.maxDD.strategy) + ', compared with ' + pct(LIVE.maxDD.benchmark) + ' and ' + pct(LIVE.maxDD.spy) + '.');
 })();
 </script>
 </body>
